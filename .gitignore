@@ -1,0 +1,14 @@
+# Python virtual environment
+venv/
+.venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.pyc
+# Django media uploads
+ecommerce/media/
+
+# Database
+ecommerce/db.sqlite3
