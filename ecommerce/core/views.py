@@ -32,3 +32,7 @@ def customer_login(request):
             return redirect("home")
     
     return render(request,"core/login.html",{"form":form})
+
+def customer_logout(request):
+    logout(request)
+    return redirect("customer_login")
