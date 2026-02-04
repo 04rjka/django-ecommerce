@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block body %}
+    <div class="container text-center " style="height: 700px;">
+        <div class="row  align-items-center" style="height: 700px;">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button class="btn btn-primary" type="submit">Sign Up</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
