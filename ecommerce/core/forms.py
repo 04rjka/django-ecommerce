@@ -8,3 +8,11 @@ class UserForm(forms.ModelForm):
         help_texts = {
             "username":""
         }
+        
+class UserLoginForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("username","password")
+        help_texts = {
+            "username":""
+        }
