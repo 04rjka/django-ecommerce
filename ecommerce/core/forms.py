@@ -8,11 +8,10 @@ class UserForm(forms.ModelForm):
         help_texts = {
             "username":""
         }
-        
-class UserLoginForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ("username","password")
-        help_texts = {
-            "username":""
+        widgets = {
+            "password": forms.PasswordInput()
         }
+        
+class UserLoginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
