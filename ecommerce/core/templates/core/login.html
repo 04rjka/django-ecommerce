@@ -3,13 +3,15 @@
 {% block title %}Login{% endblock %}
 
 {% block body %}
-    <div class="container text-center " style="height: 700px;">
-        <div class="row  align-items-center" style="height: 700px;">
-            <form action="" method="post">
-                {% csrf_token %}
-                {{form.as_p}}
-                <button class="btn btn-primary" type="submit">Login Up</button>
-            </form>
+    <div class="container text-start d-flex justify-content-center align-items-center min-vh-100">
+        <div class="row w-100 justify-content-center">
+            <div class="col-lg-6">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <button class="btn btn-primary w-100" type="submit">Login</button>
+                </form>
+            </div>
         </div>
     </div>
 {% endblock %}
