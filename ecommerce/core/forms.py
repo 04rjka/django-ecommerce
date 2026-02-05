@@ -9,7 +9,11 @@ class UserForm(forms.ModelForm):
             "username":""
         }
         widgets = {
-            "password": forms.PasswordInput()
+            "first_name":forms.TextInput(attrs={"class":"form-control"}),
+            "last_name":forms.TextInput(attrs={"class":"form-control"}),
+            "email":forms.EmailInput(attrs={"class":"form-control"}),
+            "username":forms.TextInput(attrs={"class":"form-control"}),
+            "password": forms.PasswordInput(attrs={"class":"form-control"})
         }
         
 class UserLoginForm(forms.Form):
