@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="container text-start d-flex justify-content-center align-items-center min-vh-100">    
-            <form action="" method="post">
+            <form class="w-25" action="" method="post">
                 {% csrf_token %}
                 {% if messages %}
                 {% for message in messages %}
