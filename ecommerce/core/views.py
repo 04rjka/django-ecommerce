@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
-from .forms import UserForm,UserLoginForm
+from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet
 from django.contrib import messages
 
 def home(request):
@@ -40,3 +40,17 @@ def customer_login(request):
 def customer_logout(request):
     logout(request)
     return redirect("customer_login")
+
+def add_product(request):
+    if request.method == "POST":
+        form = ProductForm(request.POST)
+        formset = ProductImageFormSet(request.POST,request.FILES)
+        if form.is_valid() and formset.is_valid():
+            product = form.save()
+            formset.instance = product
+            formset.save()
+            return redirect("home")
+    else:
+        form = ProductForm()
+        formset = ProductImageFormSet()
+    return render(request,"core/add_product.html",{"form":form,"formset":formset})

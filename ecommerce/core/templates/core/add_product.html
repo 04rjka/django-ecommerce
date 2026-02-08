@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Add Product{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+<h2>Add Product</h2>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p}}
+    {{formset.management_form}}
+    {% for f in formset %}
+        {{f.as_p}}
+    {% endfor %}
+    <button type="submit">ADD</button>
+</form>
+{% endblock %}
