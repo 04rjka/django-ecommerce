@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
+from .models import Product,ProductImage
+from django.forms import inlineformset_factory
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -23,3 +25,21 @@ class UserLoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={"class":"form-control"}
     ))
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = "__all__"
+
+class ProductImageForm(forms.ModelForm):
+    class Meta:
+        model = ProductImage
+        fields = "__all__"
+
+ProductImageFormSet = inlineformset_factory(
+    Product,
+    ProductImage,
+    form=ProductImageForm,
+    extra=3,
+    can_delete=True
+)
