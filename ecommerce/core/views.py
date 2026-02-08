@@ -3,9 +3,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet
 from django.contrib import messages
+from .models import Product
 
 def home(request):
-    return render(request,"core/home.html")
+    products = Product.objects.prefetch_related("images")
+    return render(request,"core/home.html",{"products":products})
 
 def customer_signup(request):
     if request.method == "POST":

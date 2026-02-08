@@ -4,6 +4,20 @@
 
 {% block body %}
 {% include "navbar.html" %}
-<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ea, amet tenetur, illo obcaecati tempore quia veniam quo tempora, quam inventore ullam facilis. Dolores tempore dolorum enim facilis est accusantium laboriosam ipsam quas hic! Similique, dolor perferendis? Aliquid dicta, vel expedita est porro ducimus harum amet dignissimos cum asperiores necessitatibus minus fugit perferendis provident laborum adipisci nobis. Eveniet ipsum eaque non possimus! Explicabo assumenda, tempore a, quam laboriosam nostrum sapiente, nesciunt repudiandae in quo pariatur. Pariatur minus quasi libero.</p>
-
+<div class="container mt-5">
+    <div class="row">
+        {% for product in products %}
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                    <img src="{{product.images.first.image.url}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">{{product.name}}</h5>
+                    <p class="card-text">Rs : {{product.price}}</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
