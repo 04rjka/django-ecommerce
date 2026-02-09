@@ -34,7 +34,7 @@ class ProductForm(forms.ModelForm):
         widgets = {
             "name" : forms.TextInput(attrs={"class":"form-control"}),
             "price" : forms.NumberInput(attrs={"class":"form-control"}),
-            "info" : forms.TextInput(attrs={"class":"form-control"})
+            "info" : forms.Textarea(attrs={"class":"form-control","rows":8})
         }
 
 class ProductImageForm(forms.ModelForm):
