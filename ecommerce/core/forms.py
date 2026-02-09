@@ -31,10 +31,20 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = "__all__"
 
+        widgets = {
+            "name" : forms.TextInput(attrs={"class":"form-control"}),
+            "price" : forms.NumberInput(attrs={"class":"form-control"}),
+            "info" : forms.TextInput(attrs={"class":"form-control"})
+        }
+
 class ProductImageForm(forms.ModelForm):
     class Meta:
         model = ProductImage
         fields = "__all__"
+
+        widgets = {
+            "image" : forms.FileInput(attrs={"class":"form-control"}),
+        }
 
 ProductImageFormSet = inlineformset_factory(
     Product,

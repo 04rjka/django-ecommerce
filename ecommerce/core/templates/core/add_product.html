@@ -5,7 +5,8 @@
 {% block body %}
 {% include "navbar.html" %}
 <h2>Add Product</h2>
-<form action="" method="post" enctype="multipart/form-data">
+<div class="container">
+    <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p}}
     {{formset.management_form}}
@@ -14,4 +15,5 @@
     {% endfor %}
     <button type="submit">ADD</button>
 </form>
+</div>
 {% endblock %}
