@@ -9,3 +9,15 @@
     /* aspect-ratio: 1 / 1; */
     object-fit: cover;
 }
+
+.navbar-main{
+    background-color: rgb(8, 21, 23);
+}
+
+.navbar-main .nav-link, .navbar-main .navbar-brand{
+    color: white;
+}
+
+.body-main{
+    background-color: rgb(240, 240, 240);
+}
