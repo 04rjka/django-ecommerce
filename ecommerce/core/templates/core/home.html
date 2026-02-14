@@ -4,10 +4,10 @@
 
 {% block body %}
 {% include "navbar.html" %}
-<div class="container mt-2">
+<div class="container-fluid px-lg-3 mt-2">
     <div class="row gy-3">
         {% for product in products %}
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
                 <div class="card product-card">
                     <img src="{{product.images.first.image.url}}" class="card-img-top product-card-image" alt="...">
                     <div class="card-body">
