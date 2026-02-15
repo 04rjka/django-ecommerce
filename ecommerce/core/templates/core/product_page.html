@@ -33,5 +33,35 @@
             <h4>Rs : {{product.price}}</h4>
         </div>
     </div>
+    <hr class="mb-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="mb-5">Customer Reviews</h3>
+            {% for review in product.reviews.all %}
+                <ul class="list-group mb-1">
+                    <li class="list-group-item">{{review.user}}</li>
+                    <li class="list-group-item fw-bold">{{review.title}}</li>
+                    <li class="list-group-item">{{review.content}}</li>
+                    <li class="list-group-item text-muted">{{review.created_at}}</li>
+                </ul>
+            {% empty %}
+                <div class="alert alert-info">
+                    No reviews yet.
+                </div>
+            {% endfor %}
+            <hr class="mb-5">
+            {% if already_reviewed %}
+                <div class="alert alert-info">
+                    You have already reviewed this product.
+                </div>
+            {% else %}
+                <form action="" method="post">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button class="btn btn-primary" type="submit">Submit</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}

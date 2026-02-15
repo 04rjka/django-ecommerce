@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Product,ProductImage
+from .models import Product,ProductImage,ProductReview
 from django.forms import inlineformset_factory
 
 class UserForm(forms.ModelForm):
@@ -53,3 +53,13 @@ ProductImageFormSet = inlineformset_factory(
     extra=3,
     can_delete=True
 )
+
+class ProductReviewForm(forms.ModelForm):
+    class Meta:
+        model = ProductReview
+        fields = ["title","content"]
+
+        widgets = {
+            "title" : forms.TextInput(attrs={"class":"form-control"}),
+            "content" : forms.Textarea(attrs={"class":"form-control","rows":4})
+        }

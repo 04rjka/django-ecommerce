@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
-from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet
+from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet,ProductReviewForm
 from django.contrib import messages
 from .models import Product
 
@@ -58,5 +58,16 @@ def add_product(request):
     return render(request,"core/add_product.html",{"form":form,"formset":formset})
 
 def product_page(request,pk):
-    product = Product.objects.prefetch_related("images").get(pk=pk)
-    return render(request,"core/product_page.html",{"product":product})
+    product = Product.objects.prefetch_related("images","reviews").get(pk=pk)
+    already_reviewed = product.reviews.filter(user=request.user).exists()
+    if request.method == "POST":
+        form = ProductReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = product
+            review.user = request.user
+            review.save()
+            return redirect("product_page",pk=pk)
+    else:
+        form = ProductReviewForm()
+    return render(request,"core/product_page.html",{"product":product,"form":form,"already_reviewed":already_reviewed})

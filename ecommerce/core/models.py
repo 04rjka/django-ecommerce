@@ -19,7 +19,7 @@ class ProductReview(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     content = models.CharField()
-    created_at = models.DateTimeField(timezone.now)
+    created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         unique_together = ("product","user")
