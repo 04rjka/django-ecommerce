@@ -13,3 +13,13 @@ class Product(models.Model):
 class ProductImage(models.Model):
     product = models.ForeignKey(Product,related_name="images",on_delete=models.CASCADE)
     image = models.ImageField(upload_to="products/")
+
+class ProductReview(models.Model):
+    product = models.ForeignKey(Product,related_name="reviews",on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    content = models.CharField()
+    created_at = models.DateTimeField(timezone.now)
+
+    class Meta:
+        unique_together = ("product","user")
