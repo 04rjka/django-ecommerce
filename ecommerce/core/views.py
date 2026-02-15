@@ -71,3 +71,7 @@ def product_page(request,pk):
     else:
         form = ProductReviewForm()
     return render(request,"core/product_page.html",{"product":product,"form":form,"already_reviewed":already_reviewed})
+
+def profile(request):
+    user = request.user
+    return render(request,"core/profile.html",{"user":user})
