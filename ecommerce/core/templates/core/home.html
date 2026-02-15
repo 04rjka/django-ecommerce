@@ -14,6 +14,7 @@
                     <h5 class="card-title">{{product.name}}</h5>
                     <p class="card-text">Rs : {{product.price}}</p>
                     <a href="{% url 'product_page' product.pk %}" class="btn btn-primary">View</a>
+                    <a href="{% url 'product_page' product.pk %}" class="btn btn-primary"><i class="bi bi-bag-plus-fill"></i></a>
                 </div>
                 </div>
             </div>
