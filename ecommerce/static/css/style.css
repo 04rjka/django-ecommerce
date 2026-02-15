@@ -11,7 +11,11 @@
 }
 
 .navbar-main{
-    background-color: rgb(8, 21, 23);
+    background-color: rgb(10, 26, 28);
+}
+
+.navbar-main .navbar-toggler{
+    background-color: rgb(6, 15, 17);
 }
 
 .navbar-main .nav-link, .navbar-main .navbar-brand{
