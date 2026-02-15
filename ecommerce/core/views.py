@@ -56,3 +56,7 @@ def add_product(request):
         form = ProductForm()
         formset = ProductImageFormSet()
     return render(request,"core/add_product.html",{"form":form,"formset":formset})
+
+def product_page(request,pk):
+    product = Product.objects.prefetch_related("images").get(pk=pk)
+    return render(request,"core/product_page.html",{"product":product})
