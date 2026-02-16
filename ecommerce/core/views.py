@@ -84,3 +84,8 @@ def add_to_cart(request,pk):
         cart_item.quantity += 1
         cart_item.save()
     return redirect("product_page",pk=pk)
+
+def cart(request):
+    cart,_ = Cart.objects.get_or_create(user = request.user)
+    cart = Cart.objects.prefetch_related("items__product__images").get(pk=cart.pk)
+    return render(request,"core/cart.html",{"cart":cart})

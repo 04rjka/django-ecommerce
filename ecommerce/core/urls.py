@@ -10,4 +10,5 @@ urlpatterns = [
     path("product/<int:pk>/",views.product_page,name="product_page"),
     path("profile/",views.profile,name="profile"),
     path("addtocart/<int:pk>/",views.add_to_cart,name="add_to_cart"),
+    path("cart/",views.cart,name="cart"),
 ]
