@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet,ProductReviewForm
 from django.contrib import messages
-from .models import Product
+from .models import Product,Cart,CartItem
 
 def home(request):
     products = Product.objects.prefetch_related("images")
@@ -75,3 +75,12 @@ def product_page(request,pk):
 def profile(request):
     user = request.user
     return render(request,"core/profile.html",{"user":user})
+
+def add_to_cart(request,pk):
+    product = Product.objects.get(pk=pk)
+    cart , created = Cart.objects.get_or_create(user = request.user)
+    cart_item,item_created = CartItem.objects.get_or_create(cart = cart,product=product)
+    if not item_created:
+        cart_item.quantity += 1
+        cart_item.save()
+    return redirect("product_page",pk=pk)
