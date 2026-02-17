@@ -5,8 +5,8 @@
 {% block body %}
 {% include "navbar.html" %}
     <div class="container text-center mt-5">
-        <h1 class="mb-5">Profile</h1>
-        <div class="row gy-3 text-center justify-content-center">
+        <h1 class="mb-5">Cart</h1>
+        <div class="row gy-3 text-center justify-content-center mb-3">
             {% for item in cart.items.all %}
             <div class="col-12 col-sm-6 col-md-4 col-lg-4">
                 <div class="card">
@@ -22,6 +22,11 @@
                 {% empty %}
                 empty
                 {% endfor %}
+        </div>
+        <div class="row justify-content-center mb-3">
+            <div class="col">
+                <a href="{% url 'checkout'  %}" class="btn btn-warning">Checkout</a>
+            </div>
         </div>
     </div>
 {% endblock %}

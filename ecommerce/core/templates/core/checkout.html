@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Cart{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+    <div class="container text-center mt-5">
+        <h1 class="mb-5">Complete Purchase</h1>
+        {% for item in cart_items %}
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <ul class="list-group mb-1">
+                    <li class="list-group-item">Product : {{item.name}}</li>
+                    <li class="list-group-item">Quantity : {{item.qty}} Total : {{item.total}}</li>
+                </ul>
+            </div>
+        </div>
+        {% empty %}
+                empty
+        {% endfor %}
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item fw-bold">Grand Total : Rs {{grand_total}}</li>
+                </ul>
+                <a href="{% url 'checkout'  %}" class="btn btn-warning">Place Order</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
