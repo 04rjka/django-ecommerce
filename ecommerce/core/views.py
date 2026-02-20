@@ -93,15 +93,8 @@ def cart(request):
 def checkout(request):
     cart,_ = Cart.objects.get_or_create(user = request.user)
     cart = Cart.objects.prefetch_related("items__product__images").get(pk=cart.pk)
-
-    cart_items = []
-    grand_total = 0
-    for item in cart.items.all():
-        cart_item = {"name":item.product.name,"qty":item.quantity,"total":(item.quantity*item.product.price)}
-        grand_total += cart_item["total"]
-        cart_items.append(cart_item)
             
-    return render(request,"core/checkout.html",{"cart_items":cart_items,"grand_total":grand_total})
+    return render(request,"core/checkout.html",{"cart":cart})
 
 def remove_cart_item(request,pk):
     print(pk)
