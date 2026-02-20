@@ -102,3 +102,12 @@ def checkout(request):
         cart_items.append(cart_item)
             
     return render(request,"core/checkout.html",{"cart_items":cart_items,"grand_total":grand_total})
+
+def remove_cart_item(request,pk):
+    print(pk)
+    cart ,_ = Cart.objects.get_or_create(user = request.user)
+    cart_items = Cart.objects.prefetch_related("items").get(pk = cart.pk)
+    item = cart_items.items.get(pk=pk)
+    print(item)
+    item.delete()
+    return redirect("cart")
