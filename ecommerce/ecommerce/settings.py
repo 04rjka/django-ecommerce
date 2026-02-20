@@ -130,3 +130,5 @@ CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
 CSRF_TRUSTED_ORIGINS = ['https://*.trycloudflare.com']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+LOGIN_URL = "customer_login"

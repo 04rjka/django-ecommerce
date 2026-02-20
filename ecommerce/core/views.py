@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet,ProductReviewForm
 from django.contrib import messages
 from .models import Product,Cart,CartItem
@@ -43,6 +45,7 @@ def customer_logout(request):
     logout(request)
     return redirect("customer_login")
 
+@staff_member_required
 def add_product(request):
     if request.method == "POST":
         form = ProductForm(request.POST)
@@ -72,10 +75,12 @@ def product_page(request,pk):
         form = ProductReviewForm()
     return render(request,"core/product_page.html",{"product":product,"form":form,"already_reviewed":already_reviewed})
 
+@login_required
 def profile(request):
     user = request.user
     return render(request,"core/profile.html",{"user":user})
 
+@login_required
 def add_to_cart(request,pk):
     product = Product.objects.get(pk=pk)
     cart , created = Cart.objects.get_or_create(user = request.user)
@@ -85,17 +90,20 @@ def add_to_cart(request,pk):
         cart_item.save()
     return redirect("product_page",pk=pk)
 
+@login_required
 def cart(request):
     cart,_ = Cart.objects.get_or_create(user = request.user)
     cart = Cart.objects.prefetch_related("items__product__images").get(pk=cart.pk)
     return render(request,"core/cart.html",{"cart":cart})
 
+@login_required
 def checkout(request):
     cart,_ = Cart.objects.get_or_create(user = request.user)
     cart = Cart.objects.prefetch_related("items__product__images").get(pk=cart.pk)
             
     return render(request,"core/checkout.html",{"cart":cart})
 
+@login_required
 def remove_cart_item(request,pk):
     print(pk)
     cart ,_ = Cart.objects.get_or_create(user = request.user)
