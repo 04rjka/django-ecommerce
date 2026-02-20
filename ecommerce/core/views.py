@@ -37,6 +37,9 @@ def customer_login(request):
             user = authenticate(request,username=username,password=password)
             if user is not None:
                 login(request,user)
+                if user.is_staff:
+                    print("STAFF")
+                    return redirect("staff_home")
                 return redirect("home")
     form = UserLoginForm()
     return render(request,"core/login.html",{"form":form})
@@ -112,3 +115,11 @@ def remove_cart_item(request,pk):
     print(item)
     item.delete()
     return redirect("cart")
+
+def staff_home(request):
+    products = Product.objects.prefetch_related("images")
+    return render(request,"core/staff_home.html",{"products":products})
+
+def staff_product_page(request,pk):
+    product = Product.objects.prefetch_related("images","reviews").get(pk=pk)
+    return render(request,"core/staff_product_page.html",{"product":product})

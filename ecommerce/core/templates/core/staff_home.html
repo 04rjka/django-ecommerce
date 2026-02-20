@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}STAFF HOME{% endblock %}
+
+{% block body %}
+{% include "staff_navbar.html" %}
+<div class="container-fluid px-lg-3 mt-2">
+    <div class="row gy-3">
+        {% for product in products %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <div class="card product-card">
+                    <img src="{{product.images.first.image.url}}" class="card-img-top product-card-image" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">{{product.name}}</h5>
+                    <p class="card-text">Rs : {{product.price}}</p>
+                    <a href="{% url 'staff_product_page' product.pk %}" class="btn btn-primary">View</a>
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
