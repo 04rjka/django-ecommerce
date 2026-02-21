@@ -108,7 +108,6 @@ def checkout(request):
 
 @login_required
 def remove_cart_item(request,pk):
-    print(pk)
     cart ,_ = Cart.objects.get_or_create(user = request.user)
     cart_items = Cart.objects.prefetch_related("items").get(pk = cart.pk)
     item = cart_items.items.get(pk=pk)
@@ -130,4 +129,16 @@ def increment_cart_item(request,pk):
     item = cart_items.items.get(pk=pk)
     item.quantity += 1
     item.save()
+    return redirect("cart")
+
+def decrement_cart_item(request,pk):
+    cart ,_ = Cart.objects.get_or_create(user = request.user)
+    cart_items = Cart.objects.prefetch_related("items").get(pk = cart.pk)
+    item = cart_items.items.get(pk=pk)
+    if item.quantity > 1:
+        item.quantity -= 1
+        item.save()
+    else:
+        item.delete()
+        
     return redirect("cart")

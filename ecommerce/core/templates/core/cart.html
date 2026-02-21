@@ -16,7 +16,7 @@
                     <p class="card-text">Rs : {{item.product.price}}</p>
                     <p class="card-text">Qty : {{item.quantity}}</p>
                     <div class="mb-3">
-                        <a href=""><button class="btn btn-warning">-</button></a>
+                        <a href="{% url 'decrement' item.pk %}"><button class="btn btn-warning">-</button></a>
                         <a href="{% url 'increment' item.pk %}"><button class="btn btn-warning">+</button></a>
                     </div>
                     
