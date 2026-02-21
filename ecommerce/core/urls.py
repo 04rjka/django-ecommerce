@@ -15,4 +15,5 @@ urlpatterns = [
     path("remove/<int:pk>",views.remove_cart_item,name="remove"),
     path("staffhome/",views.staff_home,name="staff_home"),
     path("staffproduct/<int:pk>/",views.staff_product_page,name="staff_product_page"),
+    path("inc/<int:pk>",views.increment_cart_item,name="increment"),
 ]

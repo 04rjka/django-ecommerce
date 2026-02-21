@@ -123,3 +123,11 @@ def staff_home(request):
 def staff_product_page(request,pk):
     product = Product.objects.prefetch_related("images","reviews").get(pk=pk)
     return render(request,"core/staff_product_page.html",{"product":product})
+
+def increment_cart_item(request,pk):
+    cart ,_ = Cart.objects.get_or_create(user = request.user)
+    cart_items = Cart.objects.prefetch_related("items").get(pk = cart.pk)
+    item = cart_items.items.get(pk=pk)
+    item.quantity += 1
+    item.save()
+    return redirect("cart")

@@ -15,9 +15,15 @@
                     <h5 class="card-title">{{item.product.name}}</h5>
                     <p class="card-text">Rs : {{item.product.price}}</p>
                     <p class="card-text">Qty : {{item.quantity}}</p>
+                    <div class="mb-3">
+                        <a href=""><button class="btn btn-warning">-</button></a>
+                        <a href="{% url 'increment' item.pk %}"><button class="btn btn-warning">+</button></a>
+                    </div>
+                    
                     <a href="{% url 'product_page' item.product.pk %}" class="btn btn-primary">View</a>
                     <a href="{% url 'remove' item.pk %}" class="btn btn-danger">Remove</a>
                 </div> </div> 
+                
             </div>
                 {% empty %}
                 <div class="alert alert-info fw-bold w-50">
