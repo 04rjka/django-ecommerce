@@ -115,14 +115,17 @@ def remove_cart_item(request,pk):
     item.delete()
     return redirect("cart")
 
+@staff_member_required
 def staff_home(request):
     products = Product.objects.prefetch_related("images")
     return render(request,"core/staff_home.html",{"products":products})
 
+@staff_member_required
 def staff_product_page(request,pk):
     product = Product.objects.prefetch_related("images","reviews").get(pk=pk)
     return render(request,"core/staff_product_page.html",{"product":product})
 
+@login_required
 def increment_cart_item(request,pk):
     cart ,_ = Cart.objects.get_or_create(user = request.user)
     cart_items = Cart.objects.prefetch_related("items").get(pk = cart.pk)
@@ -131,6 +134,7 @@ def increment_cart_item(request,pk):
     item.save()
     return redirect("cart")
 
+@login_required
 def decrement_cart_item(request,pk):
     cart ,_ = Cart.objects.get_or_create(user = request.user)
     cart_items = Cart.objects.prefetch_related("items").get(pk = cart.pk)
@@ -140,5 +144,5 @@ def decrement_cart_item(request,pk):
         item.save()
     else:
         item.delete()
-        
+
     return redirect("cart")
