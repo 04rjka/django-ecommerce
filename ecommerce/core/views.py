@@ -41,6 +41,8 @@ def customer_login(request):
                     print("STAFF")
                     return redirect("staff_home")
                 return redirect("home")
+            else:
+                messages.error(request,"Incorrect Username or Password.")
     form = UserLoginForm()
     return render(request,"core/login.html",{"form":form})
 
