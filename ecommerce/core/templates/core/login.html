@@ -3,16 +3,23 @@
 {% block title %}Login{% endblock %}
 
 {% block body %}
-    <div class="container text-start d-flex justify-content-center align-items-center min-vh-100">
-        <div class="row w-100 justify-content-center">
-            <div class="col-lg-6">
-                <form action="" method="post">
+    <div class="container d-flex justify-content-center align-items-center  vh-100">
+        <div class="card p-5 shadow">
+            <form action="" method="post">
                     {% csrf_token %}
-                    {{form.as_p}}
+                     <div class="mb-3">
+                        <label class="form-label">{{form.username.label}}</label>
+                        {{form.username}}
+                     </div>
+                     <div class="mb-3">
+                        <label class="form-label">{{form.password.label}}</label>
+                     {{form.password}}
+                     </div>
                     <button class="btn btn-primary w-100 mb-3" type="submit">Login</button>
-                    <a href="{% url 'customer_signup'  %}" >Don't have an account?</a>
+                    <div class="text-center">
+                        <a href="{% url 'customer_signup'  %}" >Don't have an account?</a>
+                    </div>
                 </form>
-            </div>
         </div>
     </div>
 {% endblock %}
