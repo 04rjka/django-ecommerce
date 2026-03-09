@@ -9,9 +9,11 @@
         <div class="row gy-3 text-center justify-content-center mb-3">
             {% for item in cart.items.all %}
             <div class="col-12 col-sm-6 col-md-4 col-lg-2">
-                <div class="card">
-                    <img src="{{item.product.images.first.image.url}}" class="card-img-top product-card-image" alt="...">
+                <div class="card product-card">
+                    <a href="{% url 'product_page' item.product.pk %}" class="text-decoration-none">
+                        <img src="{{item.product.images.first.image.url}}" class="card-img-top product-card-image" alt="...">
                     <div class="card-body">
+                    </a>
                     <h5 class="card-title">{{item.product.name}}</h5>
                     <p class="card-text">Rs : {{item.product.price}}</p>
                     <p class="card-text">Qty : {{item.quantity}}</p>
@@ -20,8 +22,7 @@
                         <a href="{% url 'increment' item.pk %}"><button class="btn btn-warning">+</button></a>
                     </div>
                     
-                    <a href="{% url 'product_page' item.product.pk %}" class="btn btn-primary">View</a>
-                    <a href="{% url 'remove' item.pk %}" class="btn btn-danger">Remove</a>
+                    <a href="{% url 'remove' item.pk %}"><button class="btn btn-danger w-100">Remove</button></a>
                 </div> </div> 
                 
             </div>
