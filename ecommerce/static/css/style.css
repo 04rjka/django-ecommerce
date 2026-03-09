@@ -1,6 +1,15 @@
+*{
+    font-family: 'Poppins',sans-serif;
+}
+p{
+    font-family: 'Inter',sans-serif;
+}
 .product-card{
     height : 100%;
     width : 100%;
+}
+.product-card:hover{
+    border: 1px solid gray;
 }
 .product-card-image{
 
