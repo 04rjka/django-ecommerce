@@ -6,9 +6,17 @@ from django.contrib.admin.views.decorators import staff_member_required
 from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet,ProductReviewForm
 from django.contrib import messages
 from .models import Product,Cart,CartItem
+from django.db.models import Q
 
 def home(request):
     products = Product.objects.prefetch_related("images")
+    query = request.GET.get("q","")
+    if request.method == "GET":
+        if query:
+            products = products.filter(
+            Q(name__icontains=query)|
+            Q(info__icontains=query)
+        ).distinct()
     return render(request,"core/home.html",{"products":products})
 
 def customer_signup(request):

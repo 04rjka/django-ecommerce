@@ -1,4 +1,4 @@
- <nav class="navbar navbar-expand-lg sticky-top navbar-main">
+ <!-- <nav class="navbar navbar-expand-lg sticky-top navbar-main">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Ecommerce</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -9,8 +9,34 @@
         <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
         <a class="nav-link" href="{% url 'cart' %}">My Cart <i class="bi bi-cart"></i></a>
         <a class="nav-link" href="{% url 'profile' %}">Profile <i class="bi bi-person-fill"></i></a>
-        <!-- <a class="nav-link" href="{% url 'customer_logout' %}">Logout</a> -->
       </div>
+    </div>
+  </div>
+</nav> -->
+
+<nav class="navbar navbar-expand-lg navbar-main sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'home' %}">ECOM</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'cart' %}">My Cart <i class="bi bi-cart"></i></a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'profile' %}">Profile <i class="bi bi-person-fill"></i></a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search" action="/home/" method="GET">
+        <input class="form-control me-2" type="search" placeholder="Search products" name="q" aria-label="Search"/>
+        <button class="btn btn-primary" type="submit">Search</button>
+      </form>
     </div>
   </div>
 </nav>

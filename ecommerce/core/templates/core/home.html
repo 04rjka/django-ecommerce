@@ -5,8 +5,9 @@
 {% block body %}
 {% include "navbar.html" %}
 <div class="container-fluid px-lg-3 mt-2">
-    <div class="row gy-3">
-        {% for product in products %}
+    <div class="row gy-3 justify-content-center">
+        {% if products %}
+            {% for product in products %}
             <div class="col-12 col-sm-6 col-md-4 col-lg-2">
                 <div class="card product-card">
                     <img src="{{product.images.first.image.url}}" class="card-img-top product-card-image" alt="...">
@@ -19,6 +20,11 @@
                 </div>
             </div>
         {% endfor %}
+        {% else %}
+        <div class="col-lg-4 col-sm-8">
+             <div class="card text-center p-4 fw-bold">No results found.</div>
+         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
