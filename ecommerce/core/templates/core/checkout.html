@@ -11,7 +11,7 @@
             <div class="col-6">
                 <ul class="list-group mb-1">
                     <li class="list-group-item">Product : {{item.product.name}}</li>
-                    <li class="list-group-item">Quantity : {{item.quantity}} Total : {{item.total_price}}</li>
+                    <li class="list-group-item">Quantity : {{item.quantity}} Total : Rs {{item.total_price}}</li>
                 </ul>
             </div>
         </div>
@@ -23,7 +23,29 @@
                 <ul class="list-group mb-3">
                     <li class="list-group-item fw-bold">Grand Total : Rs {{cart.cart_total}}</li>
                 </ul>
-                <a href="{% url 'checkout'  %}" class="btn btn-warning">Place Order</a>
+                
+            </div>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-6">
+                <p class="h4">Select Address</p>
+                <form action="" method="post" class="">
+                    {% csrf_token %}
+                    {% for address in addresses %}
+                        <div class="address-card p-1 m-1 mb-3">
+                            <label for="address_{{address.id}}" class="d-flex justify-content-center gap-1">
+                            <input type="radio" name="address_id" id="address_{{address.id}}" value="{{address.id}}">
+                            <div>
+                        <p class="m-0 fw-bold">{{address.first_name}} {{address.last_name}}</p>
+                        <p class="m-0">{{address.address_line_1}}, {{address.address_line_2}}</p>
+                        <p class="m-0">{{address.city}}</p>
+                        <p class="m-0">{{address.phone}}</p>
+                    </div>
+                        </label>
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary mb-3">Place Order</button>
+                </form>
             </div>
         </div>
     </div>

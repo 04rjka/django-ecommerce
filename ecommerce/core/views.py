@@ -113,8 +113,13 @@ def cart(request):
 def checkout(request):
     cart,_ = Cart.objects.get_or_create(user = request.user)
     cart = Cart.objects.prefetch_related("items__product__images").get(pk=cart.pk)
+    addresses = Address.objects.filter(user=request.user)
+
+    if request.method == "POST":
+        address_id = request.POST.get("address_id")
+        print(address_id)
             
-    return render(request,"core/checkout.html",{"cart":cart})
+    return render(request,"core/checkout.html",{"cart":cart,"addresses":addresses})
 
 @login_required
 def remove_cart_item(request,pk):
