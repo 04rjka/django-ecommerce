@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="mb-5">Add New Address</h1>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-primary alert-dismissible fade show text-center" role="alert">
+                        {{message}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% if form.errors %}
+                    <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                        {% for field in form %}
+                        {% for error in field.errors %}
+                        <div>{{ error }}</div>
+                        {% endfor %}
+                        {% endfor %}
+
+                        {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                        {% endfor %}
+
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label class="form-label">{{form.first_name.label}}</label>
+                        {{form.first_name}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{form.last_name.label}}</label>
+                        {{form.last_name}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{form.address_line_1.label}}</label>
+                        {{form.address_line_1}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{form.address_line_2.label}}</label>
+                        {{form.address_line_2}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{form.phone.label}}</label>
+                        {{form.phone}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{form.city.label}}</label>
+                        {{form.city}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{form.state.label}}</label>
+                        {{form.state}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{form.pincode.label}}</label>
+                        {{form.pincode}}
+                    </div>
+                    <button class="btn btn-primary w-100 mb-3" type="submit">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

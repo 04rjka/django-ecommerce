@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet,ProductReviewForm
+from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet,ProductReviewForm,AddressForm
 from django.contrib import messages
 from .models import Product,Cart,CartItem
 from django.db.models import Q
@@ -156,3 +156,15 @@ def decrement_cart_item(request,pk):
         item.delete()
 
     return redirect("cart")
+
+def address(request):
+    if request.method == "POST":
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.user = request.user
+            address.save()
+            return redirect("profile")
+    else:
+        form = AddressForm()
+    return render(request,"core/address.html",{"form":form})

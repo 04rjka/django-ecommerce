@@ -46,3 +46,17 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.product.name} ({self.quantity})"
+    
+class Address(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="addresses")
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    address_line_1 = models.CharField(max_length=150)
+    address_line_2 = models.CharField(max_length=150,blank=True)
+    phone = models.CharField(max_length=15)
+    city = models.CharField(max_length=150)
+    state = models.CharField(max_length=150)
+    pincode = models.CharField(max_length=10)
+
+    def __str__(self):
+        return f"{self.last_name}, {self.address_line_1}, {str(self.pincode)}"

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Product,ProductImage,ProductReview
+from .models import Product,ProductImage,ProductReview,Address
 from django.forms import inlineformset_factory
 
 class UserForm(forms.ModelForm):
@@ -62,4 +62,20 @@ class ProductReviewForm(forms.ModelForm):
         widgets = {
             "title" : forms.TextInput(attrs={"class":"form-control"}),
             "content" : forms.Textarea(attrs={"class":"form-control","rows":4})
+        }
+
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ["first_name","last_name","address_line_1","address_line_2","phone","city","state","pincode"]
+
+        widgets = {
+            "first_name" : forms.TextInput(attrs={"class":"form-control"}),
+            "last_name" : forms.TextInput(attrs={"class":"form-control"}),
+            "address_line_1" : forms.TextInput(attrs={"class":"form-control"}),
+            "address_line_2" : forms.TextInput(attrs={"class":"form-control"}),
+            "phone" : forms.TextInput(attrs={"class":"form-control"}),
+            "city" : forms.TextInput(attrs={"class":"form-control"}),
+            "state" : forms.TextInput(attrs={"class":"form-control"}),
+            "pincode" : forms.TextInput(attrs={"class":"form-control"}),
         }
