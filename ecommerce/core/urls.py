@@ -17,5 +17,6 @@ urlpatterns = [
     path("staffproduct/<int:pk>/",views.staff_product_page,name="staff_product_page"),
     path("inc/<int:pk>",views.increment_cart_item,name="increment"),
     path("dec/<int:pk>",views.decrement_cart_item,name="decrement"),
-    path("address/",views.address,name="address"),
+    path("address/",views.add_address,name="add_address"),
+    path("addresses/",views.view_address,name="view_address"),
 ]

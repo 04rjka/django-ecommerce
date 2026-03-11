@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+    <div class="container text-center mt-5">
+        <div class="row text-center justify-content-center">
+            {% if addresses %}
+            <h1 class="mb-5">Your addresses</h1>
+                {% for address in addresses %}
+                <div class="col-lg-6">
+                    <ul class="list-group mb-3  text-start">
+                    <li class="list-group-item">First Name : {{address.first_name}}</li>
+                    <li class="list-group-item">Last Name : {{address.last_name}}</li>
+                    <li class="list-group-item">Address Line 1 : {{address.address_line_1}}</li>
+                    <li class="list-group-item">Address Line 2 : {{address.address_line_2}}</li>
+                    <li class="list-group-item">Phone : {{address.phone}}</li>
+                    <li class="list-group-item">City : {{address.city}}</li>
+                    <li class="list-group-item">State : {{address.state}}</li>
+                    <li class="list-group-item">Pincode : {{address.pincode}}</li>  
+                </ul>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="col-lg-6">
+                <div class="alert alert-info">
+                    No addresses added yet.
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <a href="{% url 'add_address' %}" class="btn btn-primary">Add Address</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -14,6 +14,7 @@
                     <li class="list-group-item">E-mail : {{user.email}}</li>
                     <li class="list-group-item">Date Joined : {{user.date_joined}}</li>
                 </ul>
+                <a class="btn btn-primary w-100 mb-3" href="{% url 'view_address' %}">Addresses</a>
                 <a class="btn btn-primary w-100" href="{% url 'customer_logout' %}">Logout</a>
             </div>
         </div>

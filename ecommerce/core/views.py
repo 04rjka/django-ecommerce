@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet,ProductReviewForm,AddressForm
 from django.contrib import messages
-from .models import Product,Cart,CartItem
+from .models import Product,Cart,CartItem,Address
 from django.db.models import Q
 
 def home(request):
@@ -157,14 +157,18 @@ def decrement_cart_item(request,pk):
 
     return redirect("cart")
 
-def address(request):
+def add_address(request):
     if request.method == "POST":
         form = AddressForm(request.POST)
         if form.is_valid():
             address = form.save(commit=False)
             address.user = request.user
             address.save()
-            return redirect("profile")
+            return redirect("view_address")
     else:
         form = AddressForm()
     return render(request,"core/address.html",{"form":form})
+
+def view_address(request):
+    addresses = Address.objects.filter(user = request.user)
+    return render(request,"core/user_address.html",{"addresses":addresses})
