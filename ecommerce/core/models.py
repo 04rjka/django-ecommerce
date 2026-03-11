@@ -60,3 +60,20 @@ class Address(models.Model):
 
     def __str__(self):
         return f"{self.last_name}, {self.address_line_1}, {str(self.pincode)}"
+
+class Order(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    address_line_1 = models.CharField(max_length=150)
+    address_line_2 = models.CharField(max_length=150,blank=True)
+    phone = models.CharField(max_length=15)
+    city = models.CharField(max_length=150)
+    state = models.CharField(max_length=150)
+    pincode = models.CharField(max_length=10)
+    price = models.IntegerField()
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order,on_delete=models.CASCADE,related_name="orderitems")
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    price = models.IntegerField()

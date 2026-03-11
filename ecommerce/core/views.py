@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet,ProductReviewForm,AddressForm
 from django.contrib import messages
-from .models import Product,Cart,CartItem,Address
+from .models import Product,Cart,CartItem,Address,Order,OrderItem
 from django.db.models import Q
 
 def home(request):
@@ -117,7 +117,27 @@ def checkout(request):
 
     if request.method == "POST":
         address_id = request.POST.get("address_id")
-        print(address_id)
+        address = addresses.get(pk=address_id)
+        order = Order.objects.create(
+            user=request.user,
+            name = f"{address.first_name} {address.last_name}",
+            address_line_1 = address.address_line_1,
+            address_line_2 = address.address_line_2,
+            phone = address.phone,
+            pincode = address.pincode,
+            city = address.city,
+            state = address.state,
+            price = cart.cart_total()
+        )
+        for item in cart.items.all():
+            OrderItem.objects.create(
+                order = order,
+                product = item.product,
+                price = item.product.price,
+                quantity = item.quantity
+            )
+        cart.delete()
+        return redirect("order_success",pk=order.pk)
             
     return render(request,"core/checkout.html",{"cart":cart,"addresses":addresses})
 
@@ -182,3 +202,8 @@ def delete_address(request,pk):
     address = Address.objects.get(pk=pk)
     address.delete()
     return redirect("view_address")
+
+def order_success(request,pk):
+    order = Order.objects.get(pk = pk,user=request.user)
+    order_items = OrderItem.objects.filter(order=order).select_related("product")
+    return render(request,"core/order_success.html",{"order":order,"order_items":order_items})

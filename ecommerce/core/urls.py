@@ -20,4 +20,5 @@ urlpatterns = [
     path("address/",views.add_address,name="add_address"),
     path("addresses/",views.view_address,name="view_address"),
     path("delete-address/<int:pk>/",views.delete_address,name="delete_address"),
+    path("order-success/<int:pk>/",views.order_success,name="order_success"),
 ]

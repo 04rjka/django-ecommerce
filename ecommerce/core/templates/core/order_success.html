@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Order Success{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+    <div class="container text-center mt-3">
+        <h1 class="mb-2">Order Placed</h1>
+        {% for item in order_items %}
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <ul class="list-group mb-1">
+                    <li class="list-group-item">Product : {{item.product.name}}</li>
+                    <li class="list-group-item">Quantity : {{item.quantity}} Total : Rs {{item.price}}</li>
+                </ul>
+            </div>
+        </div>
+        {% empty %}
+                empty
+        {% endfor %}
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item fw-bold">Grand Total : Rs {{order.price}}</li>
+                </ul>
+            </div>
+        </div>
+        <h3 class="mb-2">Delivering to</h3>
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <ul class="list-group mb-2">
+                    <li class="list-group-item">Name : {{order.name}}</li>
+                    <li class="list-group-item">Ph : {{order.phone}}</li>
+                    <li class="list-group-item">{{order.address_line_1}},{{order.address_line_2}}</li>
+                    <li class="list-group-item">City : {{order.city}}, State : {{order.state}}, Pincode : {{order.pincode}}</li>
+                </ul>
+                <a href="{% url 'home' %}" class="btn btn-primary">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
