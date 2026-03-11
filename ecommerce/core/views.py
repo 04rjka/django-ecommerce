@@ -207,3 +207,8 @@ def order_success(request,pk):
     order = Order.objects.get(pk = pk,user=request.user)
     order_items = OrderItem.objects.filter(order=order).select_related("product")
     return render(request,"core/order_success.html",{"order":order,"order_items":order_items})
+
+def orders(request):
+    orders = Order.objects.filter(user=request.user).prefetch_related("orderitems__product")
+    # order_items = OrderItem.objects.filter(order=order).select_related("product")
+    return render(request,"core/orders.html",{"orders":orders})

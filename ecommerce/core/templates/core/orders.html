@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Order Success{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+    <div class="container text-center mt-3">
+        <h1 class="mb-2">My Orders</h1>
+        {% for order in orders %}
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <ul class="list-group mb-1">
+                    <li class="list-group-item">Order ID : {{order.pk}}</li>
+                    {% for item in order.orderitems.all %}
+                    <li class="list-group-item">{{item.product.name}}</li>
+                    {% empty %}
+                    empty
+                    {% endfor %}
+                    <li class="list-group-item">Total : Rs {{order.price}}</li>
+                    <li class="list-group-item"><a href="" class="btn btn-primary">More Details</a></li>
+                </ul>
+            </div>
+        </div>
+        {% empty %}
+                <div class="alert alert-info fw-bold">
+                    You have not placed any orders.
+                </div>
+        {% endfor %}
+    </div>
+{% endblock %}
