@@ -170,5 +170,10 @@ def add_address(request):
     return render(request,"core/address.html",{"form":form})
 
 def view_address(request):
-    addresses = Address.objects.filter(user = request.user)
+    addresses = Address.objects.filter(user = request.user) 
     return render(request,"core/user_address.html",{"addresses":addresses})
+
+def delete_address(request,pk):
+    address = Address.objects.get(pk=pk)
+    address.delete()
+    return redirect("view_address")

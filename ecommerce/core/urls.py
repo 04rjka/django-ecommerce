@@ -19,4 +19,5 @@ urlpatterns = [
     path("dec/<int:pk>",views.decrement_cart_item,name="decrement"),
     path("address/",views.add_address,name="add_address"),
     path("addresses/",views.view_address,name="view_address"),
+    path("delete-address/<int:pk>/",views.delete_address,name="delete_address"),
 ]
