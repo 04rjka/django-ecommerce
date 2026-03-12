@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Order Success{% endblock %}
+{% block title %}My Orders{% endblock %}
 
 {% block body %}
 {% include "navbar.html" %}
@@ -17,7 +17,7 @@
                     empty
                     {% endfor %}
                     <li class="list-group-item">Total : Rs {{order.price}}</li>
-                    <li class="list-group-item"><a href="" class="btn btn-primary">More Details</a></li>
+                    <li class="list-group-item"><a href="{% url 'order_details' pk=order.pk %}" class="btn btn-primary">More Details</a></li>
                 </ul>
             </div>
         </div>

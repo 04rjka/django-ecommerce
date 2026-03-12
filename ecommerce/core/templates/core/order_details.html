@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Order Details{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+    <div class="container text-center mt-3">
+        <h1 class="mb-3">Order Details</h1>
+        <h3 class="mb-2">Order Items</h3>
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <ul class="list-group mb-1">
+                    <li class="list-group-item">Order ID : {{order.pk}}</li>
+                    {% for item in order_items %}
+                    <li class="list-group-item">{{item.product.name}}, Quantity : {{item.quantity}}, Price Per Unit Rs {{item.price}}</li>
+                    {% empty %}
+                    empty
+                    {% endfor %}
+                    <li class="list-group-item">Total : Rs {{order.price}}</li>
+                    <!-- <li class="list-group-item"><a href="" class="btn btn-primary">More Details</a></li> -->
+                </ul>
+            </div>
+        </div>
+        <h3 class="mb-2">Delivery Address</h3>
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <ul class="list-group mb-2">
+                    <li class="list-group-item">Name : {{order.name}}</li>
+                    <li class="list-group-item">Ph : {{order.phone}}</li>
+                    <li class="list-group-item">{{order.address_line_1}},{{order.address_line_2}}</li>
+                    <li class="list-group-item">City : {{order.city}}, State : {{order.state}}, Pincode : {{order.pincode}}</li>
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+{% endblock %}
