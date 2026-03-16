@@ -62,6 +62,16 @@ class Address(models.Model):
         return f"{self.last_name}, {self.address_line_1}, {str(self.pincode)}"
 
 class Order(models.Model):
+    class Status(models.TextChoices):
+        PLACED = "placed", "Placed"
+        CONFIRMED = "confirmed", "Confirmed"
+        PENDING = "pending", "Pending"
+        PROCESSING = "processing", "Processing"
+        SHIPPED = "shipped", "Shipped"
+        DELIVERED = "delivered", "Delivered"
+        CANCELLED = "cancelled", "Cancelled"
+        RETURNED = "returned", "Returned"
+
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     address_line_1 = models.CharField(max_length=150)
@@ -71,6 +81,7 @@ class Order(models.Model):
     state = models.CharField(max_length=150)
     pincode = models.CharField(max_length=10)
     price = models.IntegerField()
+    status = models.CharField(choices=Status.choices,default=Status.PLACED)
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order,on_delete=models.CASCADE,related_name="orderitems")
