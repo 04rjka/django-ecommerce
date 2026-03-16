@@ -217,3 +217,16 @@ def order_details(request,pk):
     order = Order.objects.get(pk = pk,user=request.user)
     order_items = OrderItem.objects.filter(order=order).select_related("product")
     return render(request,"core/order_details.html",{"order":order,"order_items":order_items})
+
+def edit_address(request,pk):
+    address = Address.objects.get(pk = pk)
+    if request.method == "POST":
+        form = AddressForm(request.POST,instance=address)
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.user = request.user
+            address.save()
+            return redirect("view_address")
+    else:
+        form = AddressForm(instance=address)
+    return render(request,"core/edit_address.html",{"form":form})

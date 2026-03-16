@@ -19,7 +19,7 @@
                     <li class="list-group-item">City : {{address.city}}</li>
                     <li class="list-group-item">State : {{address.state}}</li>
                     <li class="list-group-item">Pincode : {{address.pincode}}</li> 
-                    <li class="list-group-item"><a href="{% url 'delete_address' pk=address.pk %}" class="btn btn-danger">Delete Address</a></li> 
+                    <li class="list-group-item text-center"><a href="{% url 'delete_address' pk=address.pk %}" class="btn btn-danger">Delete Address</a> <a href="{% url 'edit_address' pk=address.pk %}" class="btn btn-primary">Edit Address</a></li> 
                      
                 </ul>
                 </div>
