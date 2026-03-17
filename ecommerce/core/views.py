@@ -11,13 +11,13 @@ from django.db.models import Q
 def home(request):
     products = Product.objects.prefetch_related("images")
     query = request.GET.get("q","")
-    if request.method == "GET":
-        if query:
-            products = products.filter(
+    if query:
+        products = products.filter(
             Q(name__icontains=query)|
             Q(info__icontains=query)
         ).distinct()
-    return render(request,"core/home.html",{"products":products})
+    featured = products.filter(is_featured=True)
+    return render(request,"core/home.html",{"products":products,"query":query,"featured":featured})
 
 def customer_signup(request):
     if request.method == "POST":
