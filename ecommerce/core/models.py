@@ -72,6 +72,11 @@ class Order(models.Model):
         DELIVERED = "delivered", "Delivered"
         CANCELLED = "cancelled", "Cancelled"
         RETURNED = "returned", "Returned"
+    
+    class PaymentStatus(models.TextChoices):
+        PENDING = "pending", "Pending"
+        PAID = "paid", "Paid"
+        FAILED = "failed", "Failed"
 
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -82,7 +87,9 @@ class Order(models.Model):
     state = models.CharField(max_length=150)
     pincode = models.CharField(max_length=10)
     price = models.IntegerField()
-    status = models.CharField(choices=Status.choices,default=Status.PLACED)
+    status = models.CharField(choices=Status.choices,default=Status.PENDING)
+    payment_status = models.CharField(choices=PaymentStatus.choices,default=PaymentStatus.PENDING)
+    cashfree_order_id = models.CharField(blank=True,null=True)
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order,on_delete=models.CASCADE,related_name="orderitems")

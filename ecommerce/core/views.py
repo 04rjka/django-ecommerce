@@ -7,6 +7,22 @@ from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet,Produc
 from django.contrib import messages
 from .models import Product,Cart,CartItem,Address,Order,OrderItem
 from django.db.models import Q
+from django.conf import settings
+import requests
+
+CASHFREE_BASE_URL = (
+    'https://sandbox.cashfree.com/pg'
+    if settings.CASHFREE_ENV == 'TEST'
+    else 'https://api.cashfree.com/pg'
+)
+
+def get_headers():
+    return {
+        'x-client-id': settings.CASHFREE_APP_ID,
+        'x-client-secret': settings.CASHFREE_SECRET_KEY,
+        'x-api-version': '2025-01-01',   # latest version from docs
+        'Content-Type': 'application/json',
+    }
 
 def home(request):
     products = Product.objects.prefetch_related("images")
@@ -137,7 +153,7 @@ def checkout(request):
                 quantity = item.quantity
             )
         cart.delete()
-        return redirect("order_success",pk=order.pk)
+        return redirect("initiate_payment",pk=order.pk)
             
     return render(request,"core/checkout.html",{"cart":cart,"addresses":addresses})
 
@@ -230,3 +246,75 @@ def edit_address(request,pk):
     else:
         form = AddressForm(instance=address)
     return render(request,"core/edit_address.html",{"form":form})
+
+def initiate_payment(request,pk):
+    order = Order.objects.get(pk=pk,user = request.user)
+
+    payload = {
+        'order_id': f'order_{order.id}',
+        'order_amount': float(order.price),
+        'order_currency': 'INR',
+        'customer_details': {
+            'customer_id': str(request.user.id),
+            'customer_name': request.user.get_full_name() or request.user.username,
+            'customer_email': request.user.email,
+            'customer_phone': str(order.phone),  # using phone from order
+        },
+        'order_meta': {
+            'return_url': request.build_absolute_uri('/payment/success/') + '?order_id={order_id}',
+        }
+    }
+
+    response = requests.post(
+        f'{CASHFREE_BASE_URL}/orders',
+        json=payload,
+        headers=get_headers()
+    )
+
+    data = response.json()
+
+    if response.status_code == 200:
+        order.cashfree_order_id = data["order_id"]
+        order.save()
+
+        return render(request, 'core/payment_checkout.html', {
+            'session_id': data['payment_session_id'],
+            'order': order,
+            'env': 'sandbox' if settings.CASHFREE_ENV == 'TEST' else 'production',
+        })
+    else:
+        messages.error(request, f"Payment initiation failed: {data.get('message', 'Unknown error')}")
+        return redirect('order_details', pk=order.pk)
+    
+def payment_success(request):
+    cashfree_order_id = request.GET.get("order_id")
+
+    if not cashfree_order_id:
+        messages.error(request, "Invalid payment request.")
+        print("Invalid payment request.")
+        return redirect('orders')
+    
+    response = requests.get(
+        f'{CASHFREE_BASE_URL}/orders/{cashfree_order_id}',
+        headers=get_headers()
+    )
+
+    data = response.json()
+    status = data.get('order_status')
+
+    try:
+        order = Order.objects.get(cashfree_order_id=cashfree_order_id, user=request.user)
+    except Order.DoesNotExist:
+        messages.error(request, "Order not found.")
+        return redirect('orders')
+
+    if status == 'PAID':
+        order.payment_status = Order.PaymentStatus.PAID
+        order.status = Order.Status.PLACED  # if you have status field
+        order.save()
+        return redirect('order_success', pk=order.pk)
+    else:
+        order.payment_status = Order.PaymentStatus.FAILED
+        order.save()
+        messages.error(request, "Payment failed or cancelled. Please try again.")
+        return redirect('order_details', pk=order.pk)

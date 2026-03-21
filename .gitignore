@@ -12,3 +12,4 @@ ecommerce/media/
 
 # Database
 ecommerce/db.sqlite3
+ecommerce/.env

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Processing Payment...</title>
+</head>
+<body>
+    <p>Please wait, redirecting to payment page...</p>
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+    <script>
+        const cashfree = Cashfree({ mode: "{{ env }}" });
+        cashfree.checkout({
+            paymentSessionId: "{{ session_id }}",
+            redirectTarget: "_self",
+        });
+    </script>
+</body>
+</html>

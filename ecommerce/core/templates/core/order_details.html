@@ -18,6 +18,7 @@
                     {% endfor %}
                     <li class="list-group-item">Grand Total : Rs {{order.price}}</li>
                     <li class="list-group-item">Order Status : {{order.get_status_display}}</li>
+                    <li class="list-group-item">Payment Status : {{order.get_payment_status_display}}</li>
                     <!-- <li class="list-group-item"><a href="" class="btn btn-primary">More Details</a></li> -->
                 </ul>
             </div>
