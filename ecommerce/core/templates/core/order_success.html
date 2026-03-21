@@ -8,7 +8,7 @@
         <h1 class="mb-2">Order Placed</h1>
         {% for item in order_items %}
         <div class="row justify-content-center">
-            <div class="col-6">
+            <div class="col-sm-10 col-xl-6">
                 <ul class="list-group mb-1">
                     <li class="list-group-item">Product : {{item.product.name}}</li>
                     <li class="list-group-item">Quantity : {{item.quantity}} Total : Rs {{item.price}}</li>
@@ -19,7 +19,7 @@
                 empty
         {% endfor %}
         <div class="row justify-content-center">
-            <div class="col-6">
+            <div class="col-sm-10 col-xl-6">
                 <ul class="list-group mb-3">
                     <li class="list-group-item fw-bold">Grand Total : Rs {{order.price}}</li>
                 </ul>
@@ -27,7 +27,7 @@
         </div>
         <h3 class="mb-2">Delivering to</h3>
         <div class="row justify-content-center">
-            <div class="col-6">
+            <div class="col-sm-10 col-xl-6">
                 <ul class="list-group mb-2">
                     <li class="list-group-item">Name : {{order.name}}</li>
                     <li class="list-group-item">Ph : {{order.phone}}</li>

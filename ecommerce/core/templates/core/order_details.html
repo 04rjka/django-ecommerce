@@ -6,9 +6,21 @@
 {% include "navbar.html" %}
     <div class="container text-center mt-3">
         <h1 class="mb-3">Order Details</h1>
+        <div class="row justify-content-center">
+            <div class="col-sm-10 col-xl-6">
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                        {{message}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+            </div>
+        </div>
         <h3 class="mb-2">Order Items</h3>
         <div class="row justify-content-center">
-            <div class="col-6">
+            <div class="col-sm-10 col-xl-6">
                 <ul class="list-group mb-1">
                     <li class="list-group-item">Order ID : {{order.pk}}</li>
                     {% for item in order_items %}
@@ -25,7 +37,7 @@
         </div>
         <h3 class="mb-2 mt-3">Delivery Address</h3>
         <div class="row justify-content-center">
-            <div class="col-6">
+            <div class="col-sm-10 col-xl-6">
                 <ul class="list-group mb-2">
                     <li class="list-group-item">Name : {{order.name}}</li>
                     <li class="list-group-item">Ph : {{order.phone}}</li>

@@ -8,7 +8,7 @@
         <h1 class="mb-5">Complete Purchase</h1>
         {% for item in cart.items.all %}
         <div class="row justify-content-center">
-            <div class="col-6">
+            <div class="col-sm-10 col-xl-6">
                 <ul class="list-group mb-1">
                     <li class="list-group-item">Product : {{item.product.name}}</li>
                     <li class="list-group-item">Quantity : {{item.quantity}} Total : Rs {{item.total_price}}</li>
@@ -19,7 +19,7 @@
                 empty
         {% endfor %}
         <div class="row justify-content-center">
-            <div class="col-6">
+            <div class="col-sm-10 col-xl-6">
                 <ul class="list-group mb-3">
                     <li class="list-group-item fw-bold">Grand Total : Rs {{cart.cart_total}}</li>
                 </ul>
@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="row justify-content-center mt-3">
-            <div class="col-6">
+            <div class="col-sm-10 col-xl-6">
                 <p class="h4">Select Address</p>
                 <form action="" method="post" class="">
                     {% csrf_token %}
