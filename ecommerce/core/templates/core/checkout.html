@@ -29,6 +29,7 @@
         <div class="row justify-content-center mt-3">
             <div class="col-sm-10 col-xl-6">
                 <p class="h4">Select Address</p>
+                {% if addresses %}
                 <form action="" method="post" class="">
                     {% csrf_token %}
                     {% for address in addresses %}
@@ -45,7 +46,14 @@
                         </div>
                     {% endfor %}
                     <button type="submit" class="btn btn-primary mb-3">Place Order</button>
+                    <a href="{% url 'add_address' %}?next={{ request.path }}" class="btn btn-primary mb-3">Add New Address</a>
                 </form>
+                {% else %}
+                <div class="alert alert-info">
+                    No addresses added yet.
+                </div>
+                <a href="{% url 'add_address' %}?next={{ request.path }}" class="btn btn-primary">Add New Address</a>
+                {% endif %}
             </div>
         </div>
     </div>

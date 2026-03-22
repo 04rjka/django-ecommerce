@@ -203,10 +203,13 @@ def decrement_cart_item(request,pk):
 def add_address(request):
     if request.method == "POST":
         form = AddressForm(request.POST)
+        next_url = request.GET.get("next")
         if form.is_valid():
             address = form.save(commit=False)
             address.user = request.user
             address.save()
+            if next_url:
+                return redirect(next_url)
             return redirect("view_address")
     else:
         form = AddressForm()

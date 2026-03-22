@@ -21,6 +21,8 @@
         <div class="row justify-content-center">
             <div class="col-sm-10 col-xl-6">
                 <ul class="list-group mb-3">
+                    <li class="list-group-item">Order Status : {{order.get_status_display}}</li>
+                    <li class="list-group-item">Payment Status : {{order.get_payment_status_display}}</li>
                     <li class="list-group-item fw-bold">Grand Total : Rs {{order.price}}</li>
                 </ul>
             </div>
