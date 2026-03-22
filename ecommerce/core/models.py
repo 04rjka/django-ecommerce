@@ -77,6 +77,8 @@ class Order(models.Model):
         PENDING = "pending", "Pending"
         PAID = "paid", "Paid"
         FAILED = "failed", "Failed"
+        REFUNDED   = 'refunded',   'Refunded'
+        REFUND_PENDING = 'refund_pending', 'Refund Pending'
 
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -90,6 +92,7 @@ class Order(models.Model):
     status = models.CharField(choices=Status.choices,default=Status.PENDING)
     payment_status = models.CharField(choices=PaymentStatus.choices,default=PaymentStatus.PENDING)
     cashfree_order_id = models.CharField(blank=True,null=True)
+    refund_id = models.CharField(blank=True,null=True)
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order,on_delete=models.CASCADE,related_name="orderitems")

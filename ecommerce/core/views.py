@@ -9,6 +9,7 @@ from .models import Product,Cart,CartItem,Address,Order,OrderItem
 from django.db.models import Q
 from django.conf import settings
 import requests
+import uuid
 
 CASHFREE_BASE_URL = (
     'https://sandbox.cashfree.com/pg'
@@ -198,6 +199,7 @@ def decrement_cart_item(request,pk):
 
     return redirect("cart")
 
+@login_required
 def add_address(request):
     if request.method == "POST":
         form = AddressForm(request.POST)
@@ -210,30 +212,36 @@ def add_address(request):
         form = AddressForm()
     return render(request,"core/address.html",{"form":form})
 
+@login_required
 def view_address(request):
     addresses = Address.objects.filter(user = request.user) 
     return render(request,"core/user_address.html",{"addresses":addresses})
 
+@login_required
 def delete_address(request,pk):
     address = Address.objects.get(pk=pk)
     address.delete()
     return redirect("view_address")
 
+@login_required
 def order_success(request,pk):
     order = Order.objects.get(pk = pk,user=request.user)
     order_items = OrderItem.objects.filter(order=order).select_related("product")
     return render(request,"core/order_success.html",{"order":order,"order_items":order_items})
 
+@login_required
 def orders(request):
     orders = Order.objects.filter(user=request.user).prefetch_related("orderitems__product").order_by("-pk")
     # order_items = OrderItem.objects.filter(order=order).select_related("product")
     return render(request,"core/orders.html",{"orders":orders})
 
+@login_required
 def order_details(request,pk):
     order = Order.objects.get(pk = pk,user=request.user)
     order_items = OrderItem.objects.filter(order=order).select_related("product")
     return render(request,"core/order_details.html",{"order":order,"order_items":order_items})
 
+@login_required
 def edit_address(request,pk):
     address = Address.objects.get(pk = pk)
     if request.method == "POST":
@@ -247,6 +255,7 @@ def edit_address(request,pk):
         form = AddressForm(instance=address)
     return render(request,"core/edit_address.html",{"form":form})
 
+@login_required
 def initiate_payment(request,pk):
     order = Order.objects.get(pk=pk,user = request.user)
 
@@ -285,7 +294,8 @@ def initiate_payment(request,pk):
     else:
         messages.error(request, f"Payment initiation failed: {data.get('message', 'Unknown error')}")
         return redirect('order_details', pk=order.pk)
-    
+
+@login_required
 def payment_success(request):
     cashfree_order_id = request.GET.get("order_id")
 
@@ -318,3 +328,70 @@ def payment_success(request):
         order.save()
         messages.error(request, "Payment failed or cancelled. Please try again.")
         return redirect('order_details', pk=order.pk)
+
+@login_required
+def cancel_order(request,pk):
+    order = Order.objects.get(pk = pk, user=request.user)
+
+    if order.status in ["shipped","delivered"]:
+        messages.error(request,"Order cannot be cancelled after shipping.")
+        return redirect("order_details",pk=pk)
+    
+    if order.status == "cancelled":
+        messages.error(request,"Order already cancelled.")
+        return redirect("order_details",pk=pk)
+    
+    if order.payment_status == Order.PaymentStatus.PAID:
+        return redirect("refund_order",pk=pk)
+    
+    order.status = Order.Status.CANCELLED
+    order.save()
+    messages.success(request,"Order cancelled successfully.")
+    return redirect("order_details",pk=pk)
+
+@login_required
+def refund_order(request,pk):
+    order = Order.objects.get(pk=pk,user=request.user)
+
+    if order.payment_status != Order.PaymentStatus.PAID:
+        messages.error(request,"Only paid order can be refunded.")
+        return redirect("order_details",pk=pk)
+    
+    if order.payment_status == Order.PaymentStatus.REFUNDED:
+        messages.error(request,"Only has already been refunded.")
+        return redirect("order_details",pk=pk)
+    
+    refund_id = f"refund_{order.id}_{uuid.uuid4().hex[:8]}"
+
+    payload = {
+        'refund_amount': float(order.price),      # full refund
+        'refund_id': refund_id,                    # your unique refund id
+        'refund_note': f'Cancellation refund for order #{order.id}',
+        'refund_speed': 'STANDARD',                # or 'INSTANT'
+    }
+
+    response = requests.post(
+        f'{CASHFREE_BASE_URL}/orders/{order.cashfree_order_id}/refunds',
+        json=payload,
+        headers=get_headers()
+    )
+
+    data = response.json()
+    refund_status = data.get("refund_status")
+
+    if response.status_code == 200:
+        order.status = Order.Status.CANCELLED
+        order.refund_id = refund_id
+
+        if refund_status == "SUCCESS":
+            order.payment_status = Order.PaymentStatus.REFUNDED
+            messages.success(request,"Order cancelled and refund initiated successfully.")
+        elif refund_status in ["ONHOLD","PENDING"]:
+            order.payment_status = Order.PaymentStatus.REFUND_PENDING
+            messages.error(request,"Refund is being processed. It may take 5-7 business days.")
+        
+        order.save()
+        return redirect("order_details",pk=pk)
+    else:
+        messages.error(request, f"Refund failed: {data.get('message', 'Unknown error')}")
+        return redirect('order_details', pk=pk)

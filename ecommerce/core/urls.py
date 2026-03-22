@@ -26,4 +26,6 @@ urlpatterns = [
     path("edit-address/<int:pk>/",views.edit_address,name="edit_address"),
     path("payment/<int:pk>/",views.initiate_payment,name="initiate_payment"),
     path("payment/success/",views.payment_success,name="payment_success"),
+    path("cancel-order/<int:pk>/",views.cancel_order,name="cancel_order"),
+    path("refund-order/<int:pk>/",views.refund_order,name="refund_order"),
 ]

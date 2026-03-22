@@ -44,7 +44,9 @@
                     <li class="list-group-item">{{order.address_line_1}},{{order.address_line_2}}</li>
                     <li class="list-group-item">City : {{order.city}}, State : {{order.state}}, Pincode : {{order.pincode}}</li>
                 </ul>
-                
+                {% if order.status not in 'shipped,delivered,cancelled' %}
+                    <a class="btn btn-danger" href="{% url 'cancel_order' order.pk %}">Cancel Order</a>
+                {% endif %}
             </div>
         </div>
     </div>
