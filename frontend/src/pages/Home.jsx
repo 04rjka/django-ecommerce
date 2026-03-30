@@ -3,8 +3,6 @@ import { useState,useEffect } from 'react'
 import Card from '../components/Card'
 import axios from "axios"
 
-
-
 export default function Home() {
   const [data,setData] = useState([])
   const fetchData = async ()=> {
@@ -16,9 +14,9 @@ export default function Home() {
     fetchData()
   },[])
   return (
-    <div className='grid grid-cols-2 sm:grid-cols-3 p-2 gap-2'>
+    <div className='grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 p-2 gap-2 bg-blue-200 h-screen'>
       {data.map(product =>(
-        <Card key={product.id} name={product.name} price={product.price} src={product.images[0]?.image}/>
+        <Card key={product.id} id={product.id} name={product.name} price={product.price} src={product.images[0]?.image}/>
       ))}
     </div>
   )
