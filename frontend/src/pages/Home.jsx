@@ -2,6 +2,7 @@ import React from 'react'
 import { useState,useEffect } from 'react'
 import Card from '../components/Card'
 import axios from "axios"
+import MainNavbar from '../components/MainNavbar'
 
 export default function Home() {
   const [data,setData] = useState([])
@@ -14,7 +15,7 @@ export default function Home() {
     fetchData()
   },[])
   return (
-    <div className='grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 p-2 gap-2 bg-blue-200 h-screen'>
+    <div className='grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 p-2 gap-2 bg h-screen'>
       {data.map(product =>(
         <Card key={product.id} id={product.id} name={product.name} price={product.price} src={product.images[0]?.image}/>
       ))}
