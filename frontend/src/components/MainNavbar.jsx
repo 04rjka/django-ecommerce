@@ -7,7 +7,7 @@ export default function MainNavbar() {
     const [isOpen,setIsOpen] = useState(false)
         
   return (
-    <nav className="sticky top-0 relative shadow-lg flex justify-between items-center bg-linear-to-r from-slate-600 to-purple-600 md:w-[80%] mx-auto h-20 p-1 md:mt-1 md:rounded-md">
+    <nav className="sticky top-0 relative shadow-lg flex justify-between items-center bg-linear-to-r from-slate-600 to-purple-600 mx-auto h-20 p-1">
         <div className="p-2 rounded-md flex items-center gap-2">
             <div className=" text-xl rounded-md  text-center max-w-12 object-cover overflow-hidden shrink-0"><img src={logo} alt="logo"/>
             </div>
@@ -24,7 +24,7 @@ export default function MainNavbar() {
             <button className="hidden md:block bg-white p-2 rounded-md">Login</button>
         </div>
         <div className=" md:hidden m-2">
-            <button onClick={()=> setIsOpen(!isOpen)} id="menu-btn" className=" p-2 text-lg rounded-md bg-slate-300 w-10">{isOpen? "X" : "☰"}</button>
+            <button onClick={()=> setIsOpen(!isOpen)} id="menu-btn" className=" p-2 text-lg rounded-md bg-purple-500 shadow-lg w-10">{isOpen? "X" : "☰"}</button>
         </div>
     </nav>
   )
