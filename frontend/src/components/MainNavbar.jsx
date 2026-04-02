@@ -14,7 +14,7 @@ export default function MainNavbar() {
             <p className="font-semibold text-white">ECOM</p>
         </div>
         <ul id="nav-items"
-            className={`${isOpen? 'flex' : 'hidden'} text-center flex-col absolute top-20 right-0 left-0 bg-slate-400 p-2 md:bg-transparent md:static md:flex md:flex-row gap-2`}>
+            className={`${isOpen? 'opacity-100' : 'opacity-0 pointer-events-none md:pointer-events-auto md:opacity-100'} flex transition-all duration-300 text-center flex-col absolute top-20 right-0 left-0 bg-slate-400 p-2 md:bg-transparent md:static md:flex-row gap-2`}>
             <li className="border p-2 border-white rounded-md md:rounded-2xl font-semibold text-white bg-blue-300 md:bg-transparent hover:bg-white hover:text-black cursor-pointer">
                 <NavLink to={"/"}>Home</NavLink></li>
             <li className="border p-2 border-white rounded-md md:rounded-2xl font-semibold text-white bg-blue-300 hover:bg-white md:bg-transparent hover:text-black cursor-pointer">About</li>
