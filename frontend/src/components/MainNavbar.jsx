@@ -7,7 +7,7 @@ export default function MainNavbar() {
     const [isOpen,setIsOpen] = useState(false)
         
   return (
-    <nav className="sticky top-0 relative shadow-lg flex justify-between items-center bg-linear-to-r from-purple-800 to-purple-500 mx-auto h-20 p-1">
+    <nav className="sticky top-0  shadow-lg flex justify-between items-center bg-linear-to-r from-purple-800 to-purple-500 mx-auto h-20 p-1">
         <div className="p-2 rounded-md flex items-center gap-2">
             <div className=" text-xl rounded-md  text-center max-w-12 object-cover overflow-hidden shrink-0"><img src={logo} alt="logo"/>
             </div>
