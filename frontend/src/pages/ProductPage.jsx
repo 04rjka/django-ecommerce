@@ -19,10 +19,10 @@ export default function ProductPage() {
         
   return (
     <div className='flex flex-col md:flex-row mx-auto justify-center gap-5 p-3'>
-        <div className='overflow-hidden border border-white rounded-md shadow-md'>
+        <div className='overflow-hidden  rounded-md shadow-lg'>
             <img className='md:h-96 w-full object-cover rounded-md' src={product.images[0]?.image} alt="" />
         </div>
-        <div className='flex flex-col items-start border border-white rounded-md p-5 gap-1 md:min-w-60 bg-linear-to-r from-slate-600 to-purple-600 shadow-md'>
+        <div className='flex flex-col items-start  rounded-md p-5 gap-1 md:min-w-60 bg-linear-to-b from-gray-200 to-gray-300 shadow-lg inset-shadow-sm inset-shadow-gray-50'>
             <p className='text-lg font-semibold'>{product.name}</p>
             <p className='text-md'>{product.info}</p>
             <p className='font-bold'>Rs : {product.price}</p>

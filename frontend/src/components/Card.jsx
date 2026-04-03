@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 export default function Card({id, name, price, src }) {
   const navigate = useNavigate()
   return (
-    <div onClick={() => navigate(`/product/${id}`)} className="flex flex-col rounded-lg bg-gray-100 items-center justify-center p-1 gap-2 shadow-sm/50">
+    <div onClick={() => navigate(`/product/${id}`)} className="flex flex-col rounded-lg bg-linear-to-b from-gray-100 to-gray-200 items-center justify-center p-1 gap-2 shadow-sm/30">
       <div className="shrink-0 w-full">
         <img className="h-30 md:h-48 w-full object-cover rounded-lg" src={src} alt={name} />
       </div>
