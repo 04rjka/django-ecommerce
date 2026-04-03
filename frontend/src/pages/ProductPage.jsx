@@ -2,7 +2,7 @@ import axios from 'axios'
 import React from 'react'
 import { useState,useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import MainNavbar from '../components/MainNavbar'
+import PageLoader from '../components/PageLoader'
 
 export default function ProductPage() {
     const [product,setProductData] = useState(null)
@@ -15,7 +15,8 @@ export default function ProductPage() {
         fetchProductData()
     },[])
     if (!product)
-        return <p>LOADING</p>
+        return <PageLoader/>
+        
   return (
     <div className='flex flex-col md:flex-row mx-auto justify-center gap-5 p-3'>
         <div className='overflow-hidden border border-white rounded-md shadow-md'>
