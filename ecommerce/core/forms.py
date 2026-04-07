@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Product,ProductImage,ProductReview,Address
+from .models import Product,ProductImage,ProductReview,Address,ProductVariant
 from django.forms import inlineformset_factory
 
 class UserForm(forms.ModelForm):
@@ -34,7 +34,8 @@ class ProductForm(forms.ModelForm):
         widgets = {
             "name" : forms.TextInput(attrs={"class":"form-control"}),
             "price" : forms.NumberInput(attrs={"class":"form-control"}),
-            "info" : forms.Textarea(attrs={"class":"form-control","rows":8})
+            "info" : forms.Textarea(attrs={"class":"form-control","rows":8}),
+            "category" : forms.Select(attrs={"class":"form-select"}),
         }
 
 class ProductImageForm(forms.ModelForm):
@@ -79,3 +80,23 @@ class AddressForm(forms.ModelForm):
             "state" : forms.TextInput(attrs={"class":"form-control"}),
             "pincode" : forms.TextInput(attrs={"class":"form-control"}),
         }
+
+class ProductVariantForm(forms.ModelForm):
+    class Meta:
+        model = ProductVariant
+        fields = ["name", "price_adjustment", "stock", "is_available"]
+        widgets = {
+            "name":             forms.TextInput(attrs={"class": "form-control"}),
+            "price_adjustment": forms.NumberInput(attrs={"class": "form-control"}),
+            "stock":            forms.NumberInput(attrs={"class": "form-control"}),
+        }
+
+ProductVariantFormSet = inlineformset_factory(
+    Product,
+    ProductVariant,
+    form=ProductVariantForm,
+    extra=3,
+    can_delete=True,
+    min_num=0,
+    validate_min=False
+)

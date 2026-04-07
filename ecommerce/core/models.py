@@ -2,8 +2,22 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True,blank=True)
+
+    def save(self,*args,**kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            self.slug = slugify(self.name)
+        super().save(*args,**kwargs)
+    
+    def __str__(self):
+        return self.name
+    
 class Product(models.Model):
     name = models.CharField(max_length=100)
+    category = models.ForeignKey(Category,on_delete=models.SET_NULL,null=True,blank=True,related_name="products")
     price = models.IntegerField()
     info = models.TextField()
     is_featured = models.BooleanField(default=False)
@@ -11,8 +25,22 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+class ProductVariant(models.Model):
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name="variants")
+    name = models.CharField(max_length=100)
+    stock = models.IntegerField(default=0)
+    price_adjustment = models.IntegerField(default=0)
+    is_available = models.BooleanField(default=True)
+
+    def get_price(self):
+        return self.product.price + self.price_adjustment
+    
+    def __str__(self):
+        return f"{self.product.name} - {self.name}"
+    
 class ProductImage(models.Model):
     product = models.ForeignKey(Product,related_name="images",on_delete=models.CASCADE)
+    variant = models.ForeignKey(ProductVariant, related_name="images", on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(upload_to="products/")
 
 class ProductReview(models.Model):

@@ -1,9 +1,9 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet,ProductReviewForm,AddressForm
+from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet,ProductReviewForm,AddressForm,ProductVariantFormSet
 from django.contrib import messages
 from .models import Product,Cart,CartItem,Address,Order,OrderItem
 from django.db.models import Q
@@ -79,16 +79,32 @@ def customer_logout(request):
 def add_product(request):
     if request.method == "POST":
         form = ProductForm(request.POST)
-        formset = ProductImageFormSet(request.POST,request.FILES)
+        formset = ProductVariantFormSet(request.POST)
         if form.is_valid() and formset.is_valid():
             product = form.save()
             formset.instance = product
             formset.save()
-            return redirect("home")
+            return redirect("add_images",pk=product.pk)
     else:
         form = ProductForm()
-        formset = ProductImageFormSet()
+        formset = ProductVariantFormSet()
     return render(request,"core/add_product.html",{"form":form,"formset":formset})
+
+@staff_member_required
+def add_product_images(request,pk):
+    product = get_object_or_404(Product,pk=pk)
+    if request.method == "POST":
+        formset = ProductImageFormSet(request.POST,request.FILES,instance=product)
+        if formset.is_valid():
+            formset.save()
+            return redirect("staff_home")
+    else:
+        formset = ProductImageFormSet(instance=product)
+    return render(request,"core/add_product_images.html",{
+        "product":product,
+        "formset":formset
+    })
+
 
 def product_page(request,pk):
     product = Product.objects.prefetch_related("images","reviews").get(pk=pk)
