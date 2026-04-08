@@ -33,6 +33,18 @@
             <h1 class="fw-bold">{{product.name}}</h1>
             <h4>{{product.info}}</h4>
             <h4>Rs : {{product.price}}</h4>
+            <form method="post" action="{% url 'add_to_cart' product.pk %}">
+                {% csrf_token %}
+                <select name="variant_id">
+                    {% for variant in product.variants.all%}
+                        <option value="{{variant.id}}">{{variant.name}}</option>
+                    {% endfor %}
+                    <input type="number" name="quantity" value="1" min="1">
+                    <button type="submit">Form Add to Cart</button>
+                </select>
+
+            </form>
+            
             <a href="{% url 'add_to_cart' product.pk %}" class="btn btn-primary"><i class="bi bi-bag-plus-fill"></i> Add to Cart</a>
             <a href="{% url 'cart' %}" class="btn btn-primary"><i class="bi bi-cart"></i> Go to Cart</a>
         </div>

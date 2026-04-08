@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet,ProductReviewForm,AddressForm,ProductVariantFormSet
 from django.contrib import messages
-from .models import Product,Cart,CartItem,Address,Order,OrderItem
+from .models import Product,Cart,CartItem,Address,Order,OrderItem,ProductVariant
 from django.db.models import Q
 from django.conf import settings
 import requests
@@ -108,6 +108,8 @@ def add_product_images(request,pk):
 
 def product_page(request,pk):
     product = Product.objects.prefetch_related("images","reviews").get(pk=pk)
+    variants = ProductVariant.objects.filter(product=product)
+    print(variants)
     already_reviewed = product.reviews.filter(user=request.user).exists()
     if request.method == "POST":
         form = ProductReviewForm(request.POST)
@@ -119,7 +121,7 @@ def product_page(request,pk):
             return redirect("product_page",pk=pk)
     else:
         form = ProductReviewForm()
-    return render(request,"core/product_page.html",{"product":product,"form":form,"already_reviewed":already_reviewed})
+    return render(request,"core/product_page.html",{"product":product,"form":form,"already_reviewed":already_reviewed,"variants":variants})
 
 @login_required
 def profile(request):
@@ -129,11 +131,17 @@ def profile(request):
 @login_required
 def add_to_cart(request,pk):
     product = Product.objects.get(pk=pk)
+    variant_id = request.POST.get("variant_id")
+    quantity = int(request.POST.get("quantity",1))
+    variant = ProductVariant.objects.get(id = variant_id, product=product)
     cart , created = Cart.objects.get_or_create(user = request.user)
-    cart_item,item_created = CartItem.objects.get_or_create(cart = cart,product=product)
+    cart_item,item_created = CartItem.objects.get_or_create(cart = cart,product=product,variant=variant)
     if not item_created:
-        cart_item.quantity += 1
-        cart_item.save()
+        cart_item.quantity += quantity
+    else:
+        cart_item.quantity = quantity
+
+    cart_item.save()
     return redirect("product_page",pk=pk)
 
 @login_required
