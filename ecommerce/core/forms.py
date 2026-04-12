@@ -46,6 +46,14 @@ class ProductImageForm(forms.ModelForm):
         widgets = {
             "image" : forms.FileInput(attrs={"class":"form-control"}),
         }
+    def __init__(self,*args,**kwargs):
+        product = kwargs.pop("product",None)
+        super().__init__(*args,**kwargs)
+
+        if product:
+            self.fields["variant"].queryset = ProductVariant.objects.filter(product=product)
+        else:
+            self.fields["variant"].queryset = ProductVariant.objects.none()
 
 ProductImageFormSet = inlineformset_factory(
     Product,

@@ -94,12 +94,12 @@ def add_product(request):
 def add_product_images(request,pk):
     product = get_object_or_404(Product,pk=pk)
     if request.method == "POST":
-        formset = ProductImageFormSet(request.POST,request.FILES,instance=product)
+        formset = ProductImageFormSet(request.POST,request.FILES,instance=product,form_kwargs={"product":product})
         if formset.is_valid():
             formset.save()
             return redirect("staff_home")
     else:
-        formset = ProductImageFormSet(instance=product)
+        formset = ProductImageFormSet(instance=product,form_kwargs={"product":product})
     return render(request,"core/add_product_images.html",{
         "product":product,
         "formset":formset
