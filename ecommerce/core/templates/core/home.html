@@ -5,43 +5,7 @@
 {% block body %}
 {% include "navbar.html" %}
 <div class="container-fluid px-lg-3 mt-1">
-    {% if not query %}
-    <div class="row mb-2 justify-content-center">
-        <div class="col-xl-6 text-center">
-            <h1 class="h4">Featured Products</h1>
-            <div class="carousel-container featured-products-carousel text-center">
-                <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" 
-     data-bs-interval="3000">
-                <div class="carousel-inner">
-                    {% for product in featured %}
-                    <div class="carousel-item {% if forloop.first %}active{% endif %} product-carousel">
-                        <a href="{% url 'product_page' product.pk %}" class="text-decoration-none">
-                    <div class="card product-card">
-                    <img src="{{product.images.first.image.url}}" class="card-img-top product-card-image" alt="...">
-                    <div class="card-body">
-                    <h5 class="card-title">{{product.name}}</h5>
-                    <p class="card-text">Rs : {{product.price}}</p>
-                </div>
-                </div>
-                </a>
-                    </div>
-                    {% endfor %}
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
+    
     <div class="row gy-3 justify-content-center">
         {% if products %}
             {% for product in products %}

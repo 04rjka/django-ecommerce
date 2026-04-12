@@ -11,10 +11,11 @@
             <div class="col-12 col-sm-6 col-md-4 col-lg-2">
                 <div class="card product-card">
                     <a href="{% url 'product_page' item.product.pk %}" class="text-decoration-none">
-                        <img src="{{item.product.images.first.image.url}}" class="card-img-top product-card-image" alt="...">
+                        <img src="{{item.variant.images.first.image.url}}" class="card-img-top product-card-image" alt="...">
                     <div class="card-body">
                     </a>
                     <h5 class="card-title">{{item.product.name}}</h5>
+                    <p class="card-text">Variant : {{item.variant.name}}</p>
                     <p class="card-text">Rs : {{item.product.price}}</p>
                     <p class="card-text">Qty : {{item.quantity}}</p>
                     <div class="mb-3">

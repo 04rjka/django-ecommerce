@@ -175,7 +175,8 @@ def checkout(request):
                 order = order,
                 product = item.product,
                 price = item.product.price,
-                quantity = item.quantity
+                quantity = item.quantity,
+                variant = item.variant
             )
         cart.delete()
         return redirect("initiate_payment",pk=order.pk)

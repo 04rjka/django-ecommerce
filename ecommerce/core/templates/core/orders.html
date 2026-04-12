@@ -12,7 +12,7 @@
                 <ul class="list-group mb-1">
                     <li class="list-group-item">Order ID : {{order.pk}}</li>
                     {% for item in order.orderitems.all %}
-                    <li class="list-group-item">{{item.product.name}}</li>
+                    <li class="list-group-item">{{item.product.name}}, Variant : {{item.variant.name}}</li>
                     {% empty %}
                     empty
                     {% endfor %}
