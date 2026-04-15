@@ -4,24 +4,23 @@
 
 {% block body %}
 {% include "navbar.html" %}
-    <div class="container text-center mt-3">
-        <h1 class="mb-3">My Orders</h1>
+    <div class=" mt-3 p-2 flex flex-col items-center gap-2">
+        <h1 class="text-2xl">My Orders</h1>
         {% for order in orders %}
-        <div class="row justify-content-center">
-            <div class="col-6">
-                <ul class="list-group mb-1">
-                    <li class="list-group-item">Order ID : {{order.pk}}</li>
-                    {% for item in order.orderitems.all %}
+            <div class="border flex-col items-center lg:flex-row lg:justify-between gap-2 lg:w-2xl py-3 px-2 shadow border-gray-300 rounded flex justify-center">
+                <ul class="flex flex-col lg:flex-row gap-2 flex-wrap">
+                    <li class="">Order ID : {{order.pk}}</li>
+                    <!-- {% for item in order.orderitems.all %}
                     <li class="list-group-item">{{item.product.name}}, Variant : {{item.variant.name}}</li>
                     {% empty %}
                     empty
-                    {% endfor %}
-                    <li class="list-group-item">Total : Rs {{order.price}}</li>
-                    <li class="list-group-item">Order Status : {{order.get_status_display}}</li>
-                    <li class="list-group-item"><a href="{% url 'order_details' pk=order.pk %}" class="btn btn-primary">More Details</a></li>
+                    {% endfor %} -->
+                    <li class="">Total : Rs {{order.price}}</li>
+                    <li class="">Order Status : {{order.get_status_display}}</li>
                 </ul>
+                <a href="{% url 'order_details' pk=order.pk %}" class="rounded bg-purple-400 text-white px-2 py-1 ">More Details</a>
             </div>
-        </div>
+    
         {% empty %}
                 <div class="alert alert-info fw-bold">
                     You have not placed any orders.

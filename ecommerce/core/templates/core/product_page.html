@@ -4,78 +4,101 @@
 
 {% block body %}
 {% include "navbar.html" %}
-<div class="container py-2">
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="carousel-container">
-                <div id="carouselExample" class="carousel slide">
-                <div class="carousel-inner">
-                    {% for image in product.images.all %}
-                    <div class="carousel-item {% if forloop.first %}active{% endif %} product-carousel">
-                        <img src="{{image.image.url}}" class="d-block w-100" alt="...">
-                    </div>
-                    {% endfor %}
+<div class="py-2 px-3">
+    <div class="flex flex-col lg:flex-row gap-3 justify-evenly">
+        <div class="flex flex-col-reverse lg:flex-row gap-3">
+            <div class="flex lg:flex-col gap-1">
+                {% for image in product.images.all %}
+                <div class="h-16 w-16 cursor-pointer border-2 rounded-lg {% if forloop.first %}border-purple-500{% else %}border-gray-300 hover:border-gray-600{% endif %}"
+                    onclick="setMain('{{image.image.url}}',this)">
+                    <img src="{{image.image.url}}" alt="" class="object-cover h-full w-full">
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+                {% endfor %}
             </div>
+            <div class="flex-1 object-contain border border-gray-300 rounded-lg overflow-hidden">
+                <img id="main-image" src="{{product.images.first.image.url}}" alt=""
+                    class="w-[500px] h-[500px] bg-white object-contain">
             </div>
         </div>
-        <div class="col-lg-6">
-            <h1 class="fw-bold">{{product.name}}</h1>
-            <h4>{{product.info}}</h4>
-            <h4>Rs : {{product.price}}</h4>
-            <form method="post" action="{% url 'add_to_cart' product.pk %}">
+        <div class="border border-gray-300 rounded-lg overflow-hidden p-3 shadow flex flex-col gap-2">
+            <p class="font-semibold text-2xl">{{product.name}}</p>
+            <p class="text-lg">{{product.info}}</p>
+            <p class="text-lg font-medium">Rs : {{product.price}}</p>
+            <form method="post" action="{% url 'add_to_cart' product.pk %}" class="flex flex-col gap-2">
                 {% csrf_token %}
-                <select name="variant_id">
-                    {% for variant in product.variants.all%}
-                        <option value="{{variant.id}}">{{variant.name}}</option>
-                    {% endfor %}
-                    <input type="number" name="quantity" value="1" min="1">
-                    <button type="submit" class="btn btn-primary"><i class="bi bi-bag-plus-fill"></i> Add to Cart</button>
-                </select>
-
+                <div class="flex items-center gap-2 justify-between">
+                    <label for="variant_id" class="text-lg">Variant</label>
+                    <select name="variant_id" class="text-lg p-2 border-2 border-gray-300">
+                        {% for variant in product.variants.all%}
+                        <option value="{{variant.id}}">{{variant.name}} Rs : {{variant.product.price}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="flex items-center gap-2 justify-between">
+                    <label for="quantity" class="text-lg">Quantity</label>
+                    <input type="number" name="quantity" class="text-center border-2 border-gray-300 p-2" value="1" min="1">
+                </div>
+                <button type="submit" class="rounded text-white bg-purple-700 p-3 mt-2"><i
+                        class="bi bi-bag-plus-fill"></i> Add to Cart</button>
             </form>
-            <a href="{% url 'cart' %}" class="btn btn-primary"><i class="bi bi-cart"></i> Go to Cart</a>
+            <!-- <a href="{% url 'cart' %}" class="btn btn-primary"><i class="bi bi-cart"></i> Go to Cart</a> -->
         </div>
     </div>
-    <hr class="mb-5">
-    <div class="row">
-        <div class="col-lg-12">
-            <h3 class="mb-5">Customer Reviews</h3>
+    <hr class="mt-5">
+    <div>
+        <div class="flex flex-col justify-center items-center">
+            <p class="font-medium text-xl mt-2
+            mb-2">Customer Reviews</p>
             {% for review in product.reviews.all %}
-                <ul class="list-group mb-1">
-                    <li class="list-group-item">{{review.user}}</li>
-                    <li class="list-group-item fw-bold">{{review.title}}</li>
-                    <li class="list-group-item">{{review.content}}</li>
-                    <li class="list-group-item text-muted">{{review.created_at}}</li>
-                </ul>
+            <div class="border border-gray-300 rounded p-2 lg:min-w-lg shadow">
+                <div class="flex justify-between">
+                    <p class="">{{review.user}}</p>
+                    <p class="text-gray-500">{{review.created_at}}</p>
+                </div>
+                <div class="mt-1">
+                    <p class="font-medium text-md">{{review.title}}</p>
+                    <p class="">{{review.content}}</p>
+                </div>
+            </div>
             {% empty %}
-                <div class="alert alert-info">
-                    No reviews yet.
-                </div>
+            <div class="border border-gray-300 rounded p-2 mt-2 shadow">
+                No reviews yet.
+            </div>
             {% endfor %}
-            <hr class="mb-5">
+            <!-- <hr class="mb-5"> -->
             {% if already_reviewed %}
-                <div class="alert alert-info">
-                    You have already reviewed this product.
-                </div>
+            <div class="border border-gray-300 rounded p-2 mt-2 shadow">
+                You have already reviewed this product.
+            </div>
             {% else %}
-                <form action="" method="post">
+            <form action="" method="post"
+                class="rounded border border-gray-300 p-4 flex flex-col gap-2 mt-2 bg-gray-50 shadow">
                 {% csrf_token %}
-                {{form.as_p}}
-                <button class="btn btn-primary" type="submit">Submit</button>
-                </form>
+                <div class="flex flex-col gap-1">
+                    <label class="">{{form.title.label}}</label>
+                    {{form.title}}
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="">{{form.content.label}}</label>
+                    {{form.content}}
+                </div>
+                <button class="border border-white p-3 rounded bg-purple-500 text-white" type="submit">Submit</button>
+            </form>
             {% endif %}
         </div>
     </div>
 </div>
+<script>
+    function setMain(url, el) {
+        document.getElementById('main-image').src = url;
+
+        // Update active thumbnail border
+        document.querySelectorAll('[onclick^="setMain"]').forEach(t => {
+            t.classList.remove('border-purple-500');
+            t.classList.add('border-gray-300');
+        });
+        el.classList.add('border-purple-500');
+        el.classList.remove('border-gray-300');
+    }
+</script>
 {% endblock %}

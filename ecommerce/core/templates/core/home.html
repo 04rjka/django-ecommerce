@@ -1,29 +1,38 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}HOME{% endblock %}
 
 {% block body %}
 {% include "navbar.html" %}
-<div class="container-fluid px-lg-3 mt-1">
-    
-    <div class="row gy-3 justify-content-center">
+<div class="m-2">
+    <div class="flex flex-col lg:flex-row gap-2  rounded overflow-hidden">
+        <div class="bg-purple-600 min-h-24 w-full flex flex-col gap-2 place-items-center justify-center p-4">
+            <p class="text-white text-4xl lg:text-5xl lg:leading-16 font-bold tracking-tight">Everything you need.</p>
+            <p class="text-white text-4xl lg:text-5xl lg:leading-16 font-bold tracking-tight">Right on ECOM.</p>
+        </div>
+        <div class="bg-purple-400 flex place-items-center justify-center w-full">
+            <img class=" object-contain" src="{% static 'images/shopping.jpg' %}" alt="">
+        </div>
+    </div>
+
+    <div class="grid sm:grid-cols-3 lg:grid-cols-5 gap-2 h-screen mt-3">
         {% if products %}
             {% for product in products %}
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
-                <a href="{% url 'product_page' product.pk %}" class="text-decoration-none">
-                    <div class="card product-card">
-                    <img src="{{product.images.first.image.url}}" class="card-img-top product-card-image" alt="...">
-                    <div class="card-body">
-                    <h5 class="card-title">{{product.name}}</h5>
-                    <p class="card-text">Rs : {{product.price}}</p>
+            <a href="{% url 'product_page' product.pk %}" class="text-decoration-none">
+            <div class="border rounded p-2 h-96 bg-white shadow border-gray-300">
+                    <div class="">
+                    <img class="h-72 w-full object-cover rounded shrink-0" src="{{product.images.first.image.url}}" class="card-img-top product-card-image" alt="...">
+                    <div class="mt-2">
+                    <p class="text-lg font-medium">{{product.name}}</p>
+                    <p class="">Rs : {{product.price}}</p>
+                    </div>
                 </div>
-                </div>
-                </a>
             </div>
+        </a>
         {% endfor %}
         {% else %}
-        <div class="col-lg-4 col-sm-8">
-             <div class="card text-center p-4 fw-bold">No results found.</div>
+        <div class="">
+             <div class="rounded border p-2 bg-gray-300">No results found.</div>
          </div>
         {% endif %}
     </div>

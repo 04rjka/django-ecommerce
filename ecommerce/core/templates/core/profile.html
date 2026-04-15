@@ -4,19 +4,21 @@
 
 {% block body %}
 {% include "navbar.html" %}
-    <div class="container text-center mt-5">
-        <div class="row text-center justify-content-center">
-            <div class="col-lg-6">
-                <h1 class="mb-5">Profile</h1>
-                <ul class="list-group mb-3  text-start">
-                    <li class="list-group-item">First Name : {{user.first_name}}</li>
-                    <li class="list-group-item">Last Name : {{user.last_name}}</li>
-                    <li class="list-group-item">E-mail : {{user.email}}</li>
-                    <li class="list-group-item">Date Joined : {{user.date_joined}}</li>
-                </ul>
-                <a class="btn btn-primary w-100 mb-3" href="{% url 'view_address' %}">Addresses</a>
-                <a class="btn btn-primary w-100" href="{% url 'customer_logout' %}">Logout</a>
-            </div>
+<div class="mt-5 flex flex-col items-center">
+    <div class="border border-gray-300 rounded flex flex-col gap-3 shadow  p-4">
+
+        <h1 class=" text-2xl">Profile</h1>
+        <ul class="flex flex-col gap-2">
+            <li class="">First Name : {{user.first_name}}</li>
+            <li class="">Last Name : {{user.last_name}}</li>
+            <li class="">E-mail : {{user.email}}</li>
+            <li class="">Date Joined : {{user.date_joined}}</li>
+        </ul>
+        <div class="flex gap-2 justify-between">
+            <a class="rounded bg-purple-500 py-2 px-3 text-white" href="{% url 'view_address' %}">Addresses</a>
+            <a class="rounded bg-purple-500 py-2 px-3 text-white" href="{% url 'customer_logout' %}">Logout</a>
         </div>
+
     </div>
+</div>
 {% endblock %}

@@ -4,41 +4,40 @@
 
 {% block body %}
 {% include "navbar.html" %}
-    <div class="container text-center mt-5">
-        <h1 class="mb-5">Cart</h1>
-        <div class="row gy-3 text-center justify-content-center mb-3">
-            {% for item in cart.items.all %}
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
-                <div class="card product-card">
-                    <a href="{% url 'product_page' item.product.pk %}" class="text-decoration-none">
-                        <img src="{{item.variant.images.first.image.url}}" class="card-img-top product-card-image" alt="...">
-                    <div class="card-body">
-                    </a>
-                    <h5 class="card-title">{{item.product.name}}</h5>
-                    <p class="card-text">Variant : {{item.variant.name}}</p>
-                    <p class="card-text">Rs : {{item.product.price}}</p>
-                    <p class="card-text">Qty : {{item.quantity}}</p>
-                    <div class="mb-3">
-                        <a href="{% url 'decrement' item.pk %}"><button class="btn btn-warning">-</button></a>
-                        <a href="{% url 'increment' item.pk %}"><button class="btn btn-warning">+</button></a>
-                    </div>
-                    
-                    <a href="{% url 'remove' item.pk %}"><button class="btn btn-danger w-100">Remove</button></a>
-                </div> </div> 
-                
-            </div>
-                {% empty %}
-                <div class="alert alert-info fw-bold w-50">
-                    You cart is empty.
+<div class="p-2">
+    <div class="flex flex-col items-center gap-2">
+        {% for item in cart.items.all %}
+    
+            <div class="border-2 border-gray-300 flex w-full lg:w-2xl gap-1 rounded">
+                <a href="{% url 'product_page' item.product.pk %}" class="text-decoration-none">
+                    <img src="{{item.variant.images.first.image.url}}" class="h-48 w-48" alt="...">
+                </a>
+                <div>
+                    <div class="flex flex-col p-2 gap-2">
+                    <p class="font-medium text-xl">{{item.product.name}}</h5>
+                    <p class="">Variant : {{item.variant.name}}</p>
+                    <p class="">Rs : {{item.variant.product.price}}</p>
+                    <p class="">Qty : {{item.quantity}}</p>
                 </div>
-                {% endfor %}
-        </div>
-        {% if cart.items.all %}
-        <div class="row justify-content-center mb-3">
-            <div class="col">
-                <a href="{% url 'checkout'  %}" class="btn btn-warning">Checkout</a>
+                <div class="flex gap-2 p-2">
+                    <a href="{% url 'decrement' item.pk %}"><button class="bg-purple-500 rounded px-2 py-1 text-white">-</button></a>
+                    <a href="{% url 'increment' item.pk %}"><button class="bg-purple-500 rounded px-2 py-1 text-white">+</button></a>
+                    <a href="{% url 'remove' item.pk %}"><button class="bg-red-400 rounded px-2 py-1 text-white">Remove</button></a>
+                </div>
+                </div>
             </div>
+
+        
+        {% empty %}
+        <div class="border border-gray-300 rounded p-3 mt-3 shadow">
+            <p class="text-xl">You cart is empty.</p>
         </div>
+        {% endfor %}
+        {% if cart.items.all %}
+            <div class="mt-2">
+                <a href="{% url 'checkout'  %}" class="bg-purple-500 rounded px-2 py-1 text-white text-xl">Checkout</a>
+            </div>
         {% endif %}
     </div>
+</div>
 {% endblock %}

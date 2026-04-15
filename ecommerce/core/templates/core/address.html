@@ -4,22 +4,22 @@
 
 {% block body %}
 {% include "navbar.html" %}
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <h1 class="mb-5">Add New Address</h1>
-                <form action="" method="post">
+    <div class="p-2 mt-3 flex flex-col items-center">
+        <div class="border border-gray-300 p-2 rounded flex flex-col gap-3 shadow">
+
+                <h1 class="text-2xl">Add New Address</h1>
+                <form action="" method="post" class="flex flex-col gap-2    ">
                     {% csrf_token %}
                     {% if messages %}
                     {% for message in messages %}
-                    <div class="alert alert-primary alert-dismissible fade show text-center" role="alert">
+                    <div class="border border-gray-300 bg-blue-200 rounded p-4 shadow">
                         {{message}}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        
                     </div>
                     {% endfor %}
                     {% endif %}
                     {% if form.errors %}
-                    <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                    <div class="border border-gray-300 bg-red-400 rounded p-4 shadow">
                         {% for field in form %}
                         {% for error in field.errors %}
                         <div>{{ error }}</div>
@@ -30,44 +30,44 @@
                         <div>{{ error }}</div>
                         {% endfor %}
 
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        
                     </div>
                     {% endif %}
-                    <div class="mb-3">
-                        <label class="form-label">{{form.first_name.label}}</label>
+                    <div class="">
+                        <label class="">{{form.first_name.label}}</label>
                         {{form.first_name}}
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{form.last_name.label}}</label>
+                    <div class="">
+                        <label class="">{{form.last_name.label}}</label>
                         {{form.last_name}}
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{form.address_line_1.label}}</label>
+                    <div class="">
+                        <label class="">{{form.address_line_1.label}}</label>
                         {{form.address_line_1}}
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{form.address_line_2.label}}</label>
+                    <div class="">
+                        <label class="">{{form.address_line_2.label}}</label>
                         {{form.address_line_2}}
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{form.phone.label}}</label>
+                    <div class="">
+                        <label class="">{{form.phone.label}}</label>
                         {{form.phone}}
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{form.city.label}}</label>
+                    <div class="">
+                        <label class="">{{form.city.label}}</label>
                         {{form.city}}
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{form.state.label}}</label>
+                    <div class="">
+                        <label class="">{{form.state.label}}</label>
                         {{form.state}}
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{form.pincode.label}}</label>
+                    <div class="">
+                        <label class="">{{form.pincode.label}}</label>
                         {{form.pincode}}
                     </div>
-                    <button class="btn btn-primary w-100 mb-3" type="submit">Save</button>
+                    <button class="rounded bg-purple-400 py-2 px-3 text-white text-lg" type="submit">Save</button>
                 </form>
-            </div>
+            
         </div>
     </div>
 {% endblock %}

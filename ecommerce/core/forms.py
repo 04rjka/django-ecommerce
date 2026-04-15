@@ -69,8 +69,8 @@ class ProductReviewForm(forms.ModelForm):
         fields = ["title","content"]
 
         widgets = {
-            "title" : forms.TextInput(attrs={"class":"form-control"}),
-            "content" : forms.Textarea(attrs={"class":"form-control","rows":4})
+            "title" : forms.TextInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "content" : forms.Textarea(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white","rows":4})
         }
 
 class AddressForm(forms.ModelForm):
@@ -79,14 +79,14 @@ class AddressForm(forms.ModelForm):
         fields = ["first_name","last_name","address_line_1","address_line_2","phone","city","state","pincode"]
 
         widgets = {
-            "first_name" : forms.TextInput(attrs={"class":"form-control"}),
-            "last_name" : forms.TextInput(attrs={"class":"form-control"}),
-            "address_line_1" : forms.TextInput(attrs={"class":"form-control"}),
-            "address_line_2" : forms.TextInput(attrs={"class":"form-control"}),
-            "phone" : forms.TextInput(attrs={"class":"form-control"}),
-            "city" : forms.TextInput(attrs={"class":"form-control"}),
-            "state" : forms.TextInput(attrs={"class":"form-control"}),
-            "pincode" : forms.TextInput(attrs={"class":"form-control"}),
+            "first_name" : forms.TextInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "last_name" : forms.TextInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "address_line_1" : forms.TextInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "address_line_2" : forms.TextInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "phone" : forms.TextInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "city" : forms.TextInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "state" : forms.TextInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "pincode" : forms.TextInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
         }
 
 class ProductVariantForm(forms.ModelForm):

@@ -4,57 +4,61 @@
 
 {% block body %}
 {% include "navbar.html" %}
-    <div class="container text-center mt-5">
-        <h1 class="mb-5">Complete Purchase</h1>
-        {% for item in cart.items.all %}
-        <div class="row justify-content-center">
-            <div class="col-sm-10 col-xl-6">
-                <ul class="list-group mb-1">
-                    <li class="list-group-item">Product : {{item.product.name}}</li>
-                    <li class="list-group-item">Quantity : {{item.quantity}} Total : Rs {{item.total_price}}</li>
+<div class="p-2 mt-2 flex flex-col items-center ">
+    <div class="border py-2 px-4 border-gray-300 rounded shadow flex flex-col gap-3">
+        <h1 class=" text-2xl">Complete Purchase</h1>
+
+        <!-- {% for item in cart.items.all %}
+        <div class="">
+            <div class="">
+                <ul class="">
+                    <li class="">Product : {{item.product.name}}</li>
+                    <li class="">Quantity : {{item.quantity}} Total : Rs {{item.total_price}}</li>
                 </ul>
             </div>
         </div>
         {% empty %}
                 empty
-        {% endfor %}
-        <div class="row justify-content-center">
-            <div class="col-sm-10 col-xl-6">
-                <ul class="list-group mb-3">
-                    <li class="list-group-item fw-bold">Grand Total : Rs {{cart.cart_total}}</li>
-                </ul>
-                
-            </div>
+        {% endfor %} -->
+
+        <div class="">
+            <p class="text-xl text-center">Total : Rs {{cart.cart_total}}</p>
         </div>
-        <div class="row justify-content-center mt-3">
-            <div class="col-sm-10 col-xl-6">
-                <p class="h4">Select Address</p>
-                {% if addresses %}
-                <form action="" method="post" class="">
-                    {% csrf_token %}
+        <div class="flex flex-col gap-2">
+            <p class="text-xl">Select Address</p>
+            {% if addresses %}
+            <form action="" method="post" class="flex flex-col gap-2">
+                {% csrf_token %}
+                <div class="border border-gray-300 p-2 flex flex-col gap-2">
                     {% for address in addresses %}
-                        <div class="address-card p-1 m-1 mb-3">
-                            <label for="address_{{address.id}}" class="d-flex justify-content-center gap-1">
+                    <div class="">
+                        <label for="address_{{address.id}}" class="flex gap-3">
                             <input type="radio" name="address_id" id="address_{{address.id}}" value="{{address.id}}">
                             <div>
-                        <p class="m-0 fw-bold">{{address.first_name}} {{address.last_name}}</p>
-                        <p class="m-0">{{address.address_line_1}}, {{address.address_line_2}}</p>
-                        <p class="m-0">{{address.city}}</p>
-                        <p class="m-0">{{address.phone}}</p>
-                    </div>
+                                <p class="">{{address.first_name}} {{address.last_name}}</p>
+                                <p class="">{{address.address_line_1}}, {{address.address_line_2}}</p>
+                                <p class="">{{address.city}}</p>
+                                <p class="">{{address.phone}}</p>
+                            </div>
                         </label>
-                        </div>
+                    </div>
                     {% endfor %}
-                    <button type="submit" class="btn btn-primary mb-3">Place Order</button>
-                    <a href="{% url 'add_address' %}?next={{ request.path }}" class="btn btn-primary mb-3">Add New Address</a>
-                </form>
-                {% else %}
-                <div class="alert alert-info">
-                    No addresses added yet.
                 </div>
-                <a href="{% url 'add_address' %}?next={{ request.path }}" class="btn btn-primary">Add New Address</a>
-                {% endif %}
+                <div class="flex justify-center gap-2">
+                    <button type="submit" class="py-1 px-2 rounded bg-purple-400 text-white">Place Order</button>
+                    <a href="{% url 'add_address' %}?next={{ request.path }}" class="py-1 px-2 rounded bg-purple-400 text-white">Add New
+                        Address</a>
+                </div>
+            </form>
+            {% else %}
+            <div class="alert alert-info">
+                No addresses added yet.
             </div>
+            <a href="{% url 'add_address' %}?next={{ request.path }}" class="btn btn-primary">Add New Address</a>
+            {% endif %}
+
         </div>
     </div>
+
+</div>
 {% endblock %}

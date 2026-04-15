@@ -109,7 +109,7 @@ def add_product_images(request,pk):
 def product_page(request,pk):
     product = Product.objects.prefetch_related("images","reviews").get(pk=pk)
     variants = ProductVariant.objects.filter(product=product)
-    print(variants)
+    # print(variants)
     already_reviewed = product.reviews.filter(user=request.user).exists()
     if request.method == "POST":
         form = ProductReviewForm(request.POST)
