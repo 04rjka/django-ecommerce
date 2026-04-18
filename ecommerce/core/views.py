@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet,ProductReviewForm,AddressForm,ProductVariantFormSet
 from django.contrib import messages
-from .models import Product,Cart,CartItem,Address,Order,OrderItem,ProductVariant
+from .models import Product,Cart,CartItem,Address,Order,OrderItem,ProductVariant,Category
 from django.db.models import Q
 from django.conf import settings
 import requests
@@ -33,8 +33,8 @@ def home(request):
             Q(name__icontains=query)|
             Q(info__icontains=query)
         ).distinct()
-    featured = products.filter(is_featured=True)
-    return render(request,"core/home.html",{"products":products,"query":query,"featured":featured})
+    # featured = products.filter(is_featured=True)
+    return render(request,"core/home.html",{"products":products,"query":query})
 
 def customer_signup(request):
     if request.method == "POST":
@@ -457,3 +457,43 @@ def edit_product_images(request,pk):
         "product":product,
         "formset":formset
     })
+
+def search(request):
+    products = Product.objects.prefetch_related("images")
+    query = request.GET.get("q","")
+    category = request.GET.get("category","")
+    min_price = request.GET.get("min_price","")
+    max_price = request.GET.get("max_price","")
+    products = products.filter(
+            Q(name__icontains=query)|
+            Q(info__icontains=query)
+        ).distinct()
+    if category:
+        products = products.filter(category__id=category)
+    if min_price:
+        products = products.filter(price__gte=min_price)
+    if max_price:
+        products = products.filter(price__lte=max_price)
+        
+    categories = Category.objects.all()
+    return render(request,"core/search.html",{"products":products,"query":query,"categories":categories})
+
+def staff_search(request):
+    products = Product.objects.prefetch_related("images")
+    query = request.GET.get("q","")
+    category = request.GET.get("category","")
+    min_price = request.GET.get("min_price","")
+    max_price = request.GET.get("max_price","")
+    products = products.filter(
+            Q(name__icontains=query)|
+            Q(info__icontains=query)
+        ).distinct()
+    if category:
+        products = products.filter(category__id=category)
+    if min_price:
+        products = products.filter(price__gte=min_price)
+    if max_price:
+        products = products.filter(price__lte=max_price)
+
+    categories = Category.objects.all()
+    return render(request,"core/staff_search.html",{"products":products,"query":query,"categories":categories})

@@ -41,7 +41,7 @@
   </ul>
   <div class="m-2">
     <form class="flex justify-center items-center border border-white p-0.5 rounded bg-white gap-1" role="search"
-      action="/home/" method="GET">
+      action="{% url 'staff_search' %}" method="GET">
       <input class="focus:outline-none p-1" type="search" placeholder="Search products" name="q" aria-label="Search" />
       <button class="bg-purple-500 px-3 py-1 rounded text-white" type="submit"><i class="bi bi-search"></i></button>
     </form>

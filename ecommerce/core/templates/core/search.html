@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Search{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+<div class="m-2">
+    <div class="flex flex-col gap-2">
+        <div class="flex justify-center">
+            <form method="GET" action="{% url 'search' %}" class="flex flex-col lg:flex-row gap-2 p-2">
+                
+                <input placeholder="Search products" type="text" name="q" value="{{ query }}" class="border w-full rounded px-2 py-1 border-gray-300 bg-white">
+
+                
+                <select name="category" class="border w-full rounded px-2 py-1 border-gray-300 bg-white">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}">
+                        {{ cat.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <!-- Price range -->
+                <input type="number" name="min_price" placeholder="Min price" value="{{ request.GET.min_price }}" class="border w-full rounded px-2 py-1 border-gray-300 bg-white">
+                <input type="number" name="max_price" placeholder="Max price" value="{{ request.GET.max_price }}" class="border w-full rounded px-2 py-1 border-gray-300 bg-white">
+
+                <button type="submit" class="rounded bg-purple-400 py-2 px-3 text-white text-lg">Filter</button>
+            </form>
+        </div>
+        {% if products %}
+        <div class="grid sm:grid-cols-3 lg:grid-cols-5 gap-2 h-screen mt-3">
+            {% for product in products %}
+            <a href="{% url 'product_page' product.pk %}" class="text-decoration-none">
+                <div class="border rounded p-2 h-96 bg-white shadow border-gray-300">
+                    <div class="">
+                        <img class="h-72 w-full object-cover rounded shrink-0" src="{{product.images.first.image.url}}"
+                            class="card-img-top product-card-image" alt="...">
+                        <div class="mt-2">
+                            <p class="text-lg font-medium">{{product.name}}</p>
+                            <p class="">Rs : {{product.price}}</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+
+
+        </div>
+        {% else %}
+        <div class="flex justify-center">
+            <div class="rounded border p-2 bg-gray-300">No products found.</div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
