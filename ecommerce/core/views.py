@@ -423,3 +423,37 @@ def refund_order(request,pk):
     else:
         messages.error(request, f"Refund failed: {data.get('message', 'Unknown error')}")
         return redirect('order_details', pk=pk)
+    
+@staff_member_required
+def edit_product(request,pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == "POST":
+        form = ProductForm(request.POST,instance=product)
+        formset = ProductVariantFormSet(request.POST,instance=product)
+        if form.is_valid() and formset.is_valid():
+            product = form.save()
+            formset.save()
+            return redirect("staff_product_page",pk=product.pk)
+    else:
+        form = ProductForm(instance=product)
+        formset = ProductVariantFormSet(instance=product)
+    return render(request,"core/edit_product.html",{"form":form,"formset":formset})
+
+@staff_member_required
+def edit_product_images(request,pk):
+    product = get_object_or_404(Product,pk=pk)
+    if request.method == "POST":
+        formset = ProductImageFormSet(request.POST,request.FILES,instance=product,form_kwargs={"product":product})
+        if formset.is_valid():
+            formset.save()
+            return redirect("staff_product_page",pk=pk)
+        else:
+            print(formset.errors)        # see what's failing
+            print(formset.non_form_errors())
+    else:
+        formset = ProductImageFormSet(instance=product,form_kwargs={"product":product})
+        
+    return render(request,"core/edit_product_images.html",{
+        "product":product,
+        "formset":formset
+    })

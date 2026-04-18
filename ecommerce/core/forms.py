@@ -11,19 +11,19 @@ class UserForm(forms.ModelForm):
             "username":""
         }
         widgets = {
-            "first_name":forms.TextInput(attrs={"class":"form-control"}),
-            "last_name":forms.TextInput(attrs={"class":"form-control"}),
-            "email":forms.EmailInput(attrs={"class":"form-control"}),
-            "username":forms.TextInput(attrs={"class":"form-control"}),
-            "password": forms.PasswordInput(attrs={"class":"form-control"})
+            "first_name":forms.TextInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "last_name":forms.TextInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "email":forms.EmailInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "username":forms.TextInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "password": forms.PasswordInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"})
         }
         
 class UserLoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(
-        attrs={"class":"form-control"}
+        attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}
     ))
     password = forms.CharField(widget=forms.PasswordInput(
-        attrs={"class":"form-control"}
+        attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}
     ))
 
 class ProductForm(forms.ModelForm):
@@ -32,19 +32,20 @@ class ProductForm(forms.ModelForm):
         fields = "__all__"
 
         widgets = {
-            "name" : forms.TextInput(attrs={"class":"form-control"}),
-            "price" : forms.NumberInput(attrs={"class":"form-control"}),
-            "info" : forms.Textarea(attrs={"class":"form-control","rows":8}),
-            "category" : forms.Select(attrs={"class":"form-select"}),
+            "name" : forms.TextInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "price" : forms.NumberInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "info" : forms.Textarea(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white","rows":8}),
+            "category" : forms.Select(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
         }
 
 class ProductImageForm(forms.ModelForm):
     class Meta:
         model = ProductImage
-        fields = "__all__"
+        fields = ["variant", "image"]
 
         widgets = {
-            "image" : forms.FileInput(attrs={"class":"form-control"}),
+            "image" : forms.FileInput(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "variant" : forms.Select(attrs={"class":"border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
         }
     def __init__(self,*args,**kwargs):
         product = kwargs.pop("product",None)
@@ -94,9 +95,9 @@ class ProductVariantForm(forms.ModelForm):
         model = ProductVariant
         fields = ["name", "price_adjustment", "stock", "is_available"]
         widgets = {
-            "name":             forms.TextInput(attrs={"class": "form-control"}),
-            "price_adjustment": forms.NumberInput(attrs={"class": "form-control"}),
-            "stock":            forms.NumberInput(attrs={"class": "form-control"}),
+            "name":             forms.TextInput(attrs={"class": "border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "price_adjustment": forms.NumberInput(attrs={"class": "border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
+            "stock":            forms.NumberInput(attrs={"class": "border w-full rounded px-2 py-1 border-gray-300 bg-white"}),
         }
 
 ProductVariantFormSet = inlineformset_factory(

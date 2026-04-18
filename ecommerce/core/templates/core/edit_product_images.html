@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Add Product{% endblock %}
+
+{% block body %}
+{% include "staff_navbar.html" %}
+<div class="mt-2 p-2 flex justify-center">
+    <div class="flex flex-col p-4 gap-2 border border-gray-300 rounded shadow">
+        <h1 class="text-2xl">Change Images</h1>
+
+        <form action="" method="post" enctype="multipart/form-data" class="flex flex-col gap-2">
+            {% csrf_token %}
+            {{formset.management_form}}
+            {% for form in formset %}
+            <div class="flex flex-col gap-2 border border-gray-300 rounded p-2">
+                {{ form.id }}
+                {% if form.instance.pk %}
+                <img src="{{ form.instance.image.url }}" class="size-40 object-cover" style=" border-radius: 6px;">
+                <div class="flex flex-col gap-2">
+                    <label>Select replacement image</label>
+                    <p>{{ form.image }}</p>
+                </div>
+                {% else %}
+                <div class="flex flex-col gap-2">
+                    <p>Add new image</p>
+                    <label>{{ form.image.label }}</label>
+                    <p>{{ form.image }}</p>
+                </div>
+                {% endif %}
+                <div class="flex flex-col">
+                    <label>{{form.variant.label}}</label>
+                    <p>{{form.variant}}</p>
+                    <label>{{form.DELETE.label}}</label>
+                    <p>{{form.DELETE}}</p>
+                </div>
+            </div>
+
+            <!-- {{f.as_p}} -->
+            {% endfor %}
+            <button class="bg-purple-400 rounded py-2 px-4 text-lg text-white" type="submit">ADD</button>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

@@ -3,12 +3,12 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block body %}
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="row w-100 justify-content-center">
-        <div class="col-sm-8 col-lg-4">
-            <div class="card p-5 shadow">
-                <h1 class="h3 mb-3">Sign Up</h1>
-                <form action="" method="post">
+<div class="flex justify-center mx-auto min-h-screen items-center">
+    
+        <div class="border border-gray-300 rounded flex flex-col gap-3 p-4">
+            
+                <h1 class="text-2xl">Sign Up</h1>
+                <form action="" method="post" class="flex flex-col gap-2">
                     {% csrf_token %}
                     {% if messages %}
                     {% for message in messages %}
@@ -19,7 +19,7 @@
                     {% endfor %}
                     {% endif %}
                     {% if form.errors %}
-                    <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                    <div class="border border-gray-300 bg-blue-200 rounded p-4 shadow" role="alert">
                         {% for field in form %}
                         {% for error in field.errors %}
                         <div>{{ error }}</div>
@@ -30,36 +30,36 @@
                         <div>{{ error }}</div>
                         {% endfor %}
 
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <!-- <button type="button" class="btn-close" data-bs-dismiss="alert"></button> -->
                     </div>
                     {% endif %}
-                    <div class="mb-3">
-                        <label class="form-label">{{form.first_name.label}}</label>
+                    <div class="">
+                        <label class="">{{form.first_name.label}}</label>
                         {{form.first_name}}
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{form.last_name.label}}</label>
+                    <div class="">
+                        <label class="">{{form.last_name.label}}</label>
                         {{form.last_name}}
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{form.username.label}}</label>
+                    <div class="">
+                        <label class="">{{form.username.label}}</label>
                         {{form.username}}
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{form.email.label}}</label>
+                    <div class="">
+                        <label class="">{{form.email.label}}</label>
                         {{form.email}}
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{form.password.label}}</label>
+                    <div class="">
+                        <label class="">{{form.password.label}}</label>
                         {{form.password}}
                     </div>
-                    <button class="btn btn-primary w-100 mb-3" type="submit">Sign Up</button>
+                    <button class="rounded px-3 py-2 bg-purple-400 text-white text-xl" type="submit">Sign Up</button>
                     <div class="text-center">
-                        <a href="{% url 'customer_login'  %}">Already have an account?</a>
+                        <a href="{% url 'customer_login'  %}" class="text-blue-400">Already have an account?</a>
                     </div>
                 </form>
-            </div>
+            
         </div>
-    </div>
+    
 </div>
 {% endblock %}

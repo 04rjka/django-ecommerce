@@ -4,19 +4,19 @@
 
 {% block body %}
 {% include "staff_navbar.html" %}
-<div class="container my-3">
-    <h2>Add Images</h2>
-    <div class="row justify-content-center">
-        <div class="col">
-            <form action="" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{formset.management_form}}
-                {% for f in formset %}
-                    {{f.as_p}}
-                {% endfor %}
-                <button class="btn btn-primary" type="submit">ADD</button>
-            </form>
-        </div>
+<div class="mt-2 p-2 flex justify-center">
+    <div class="flex flex-col p-4 gap-2 border border-gray-300 rounded shadow">
+        <h1 class="text-2xl">Add Images</h1>
+
+        <form action="" method="post" enctype="multipart/form-data" class="flex flex-col gap-2">
+            {% csrf_token %}
+            {{formset.management_form}}
+            {% for f in formset %}
+            {{f.as_p}}
+            {% endfor %}
+            <button class="bg-purple-400 rounded py-2 px-4 text-lg text-white" type="submit">ADD</button>
+        </form>
+
     </div>
 </div>
 {% endblock %}
