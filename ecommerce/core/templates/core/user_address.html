@@ -21,10 +21,10 @@
                 <li class="">Pincode : {{address.pincode}}</li>
 
             </ul>
-            <div class="flex justify-between">
+            <div class="flex justify-between gap-2">
                 <a href="{% url 'delete_address' pk=address.pk %}"
-                    class="rounded bg-red-400 text-white py-2 px-3">Delete Address</a>
-                <a href="{% url 'edit_address' pk=address.pk %}" class="rounded bg-purple-400 text-white py-2 px-3">Edit
+                    class="rounded bg-red-500 text-white py-2 px-3">Delete Address</a>
+                <a href="{% url 'edit_address' pk=address.pk %}" class="rounded bg-purple-500 text-white py-2 px-3">Edit
                     Address</a>
             </div>
         </div>
@@ -34,7 +34,7 @@
             <p>No addresses added yet.</p>
         </div>
         {% endif %}
-            <a href="{% url 'add_address' %}" class="rounded bg-purple-400 text-white py-2 px-3 text-center">Add Address</a>
+            <a href="{% url 'add_address' %}" class="rounded bg-purple-500 text-white py-2 px-3 text-center">Add Address</a>
         
     </div>
 </div>
