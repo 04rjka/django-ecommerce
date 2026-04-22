@@ -266,7 +266,7 @@ def orders(request):
 @login_required
 def order_details(request,pk):
     order = Order.objects.get(pk = pk,user=request.user)
-    order_items = OrderItem.objects.filter(order=order).select_related("product")
+    order_items = OrderItem.objects.filter(order=order).select_related("product").prefetch_related("product__images")
     return render(request,"core/order_details.html",{"order":order,"order_items":order_items})
 
 @login_required

@@ -6,14 +6,19 @@
 {% include "navbar.html" %}
     <div class="p-2 mt-3 flex flex-col gap-2 items-center">
         <div class="border border-gray-300 rounded shadow p-3 flex flex-col gap-2">
-            <h1 class="text-xl font-semibold">Order Placed</h1>
+            <h1 class="text-2xl font-semibold">Order Placed</h1>
+            <!-- <hr> -->
+            <h2 class="text-xl font-semibold">Order Details</h2>
         {% for item in order_items %}
-        <div class="border border-gray-300 rounded shadow p-3">
-            
+        <div class="border border-gray-300 rounded shadow p-3 flex items-center gap-4">
+                <div class="">
+                        <img src="{{item.variant.images.first.image.url}}" alt=""
+                            class="h-24 w-24 object-cover overflow-hidden rounded shadow">
+                    </div>
                 <ul class="">
-                    <li class="list-group-item">Product : {{item.product.name}}</li>
-                    <li class="list-group-item">Product : {{item.variant.name}}</li>
-                    <li class="list-group-item">Quantity : {{item.quantity}} Total : Rs {{item.price}}</li>
+                    <li class="">Product : {{item.product.name}}</li>
+                    <li class="">Variant : {{item.variant.name}}</li>
+                    <li class="">Quantity : {{item.quantity}} Unit Price : Rs {{item.variant.get_price}}</li>
                 </ul>
             
         </div>
@@ -21,21 +26,21 @@
                 empty
         {% endfor %}
         <div class="border border-gray-300 rounded shadow p-3">
-            <div class="col-sm-10 col-xl-6">
-                <ul class="list-group mb-3">
-                    <li class="list-group-item">Order Status : {{order.get_status_display}}</li>
-                    <li class="list-group-item">Payment Status : {{order.get_payment_status_display}}</li>
-                    <li class="list-group-item fw-bold">Grand Total : Rs {{order.price}}</li>
+            
+                <ul class="">
+                    <li class="">Order Status : {{order.get_status_display}}</li>
+                    <li class="">Payment Status : {{order.get_payment_status_display}}</li>
+                    <li class="">Grand Total : Rs {{order.price}}</li>
                 </ul>
-            </div>
+            
         </div>
-        <h3 class="text-xl font-semibold">Delivering to</h3>
+        <h2 class="text-xl font-semibold">Delivering to</h2>
         <div class="border border-gray-300 rounded shadow p-3">
-                <ul class="list-group mb-2">
-                    <li class="list-group-item">Name : {{order.name}}</li>
-                    <li class="list-group-item">Ph : {{order.phone}}</li>
-                    <li class="list-group-item">{{order.address_line_1}},{{order.address_line_2}}</li>
-                    <li class="list-group-item">City : {{order.city}}, State : {{order.state}}, Pincode : {{order.pincode}}</li>
+                <ul class="">
+                    <li class="">Name : {{order.name}}</li>
+                    <li class="">Ph : {{order.phone}}</li>
+                    <li class="">{{order.address_line_1}},{{order.address_line_2}}</li>
+                    <li class="">City : {{order.city}}, State : {{order.state}}, Pincode : {{order.pincode}}</li>
                 </ul>
             </div>
             <a href="{% url 'home' %}" class="rounded bg-purple-500 py-2 px-3 text-xl text-center text-white">Continue Shopping</a>
