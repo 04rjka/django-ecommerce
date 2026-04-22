@@ -6,10 +6,11 @@ from django.contrib.admin.views.decorators import staff_member_required
 from .forms import UserForm,UserLoginForm,ProductForm,ProductImageFormSet,ProductReviewForm,AddressForm,ProductVariantFormSet
 from django.contrib import messages
 from .models import Product,Cart,CartItem,Address,Order,OrderItem,ProductVariant,Category
-from django.db.models import Q
+from django.db.models import Q,Sum
 from django.conf import settings
 import requests
 import uuid
+from django.utils import timezone
 
 CASHFREE_BASE_URL = (
     'https://sandbox.cashfree.com/pg'
@@ -195,7 +196,37 @@ def remove_cart_item(request,pk):
 @staff_member_required
 def staff_home(request):
     products = Product.objects.prefetch_related("images")
-    return render(request,"core/staff_home.html",{"products":products})
+    today = timezone.now().date()
+    this_month = timezone.now().month
+
+    total_orders = Order.objects.count()
+    delivered_orders = Order.objects.filter(status=Order.Status.DELIVERED).count()
+    placed_orders = Order.objects.filter(status=Order.Status.PLACED).count()
+    cancelled_orders = Order.objects.filter(status=Order.Status.CANCELLED).count()
+
+    orders_today = Order.objects.filter(created_at__date=today).count()
+    orders_this_month = Order.objects.filter(created_at__month=this_month).count()
+
+    total_revenue = Order.objects.filter(
+        status=Order.Status.DELIVERED
+    ).aggregate(total=Sum('price'))['total'] or 0
+
+    # Revenue this month
+    revenue_this_month = Order.objects.filter(
+        status=Order.Status.DELIVERED,
+        created_at__month=this_month
+    ).aggregate(total=Sum('price'))['total'] or 0
+
+    return render(request,"core/staff_home.html",{"products":products,
+        'total_orders': total_orders,
+        'placed_orders': placed_orders,
+        'cancelled_orders': cancelled_orders,
+        'delivered_orders': delivered_orders,
+        'orders_today': orders_today,
+        'orders_this_month': orders_this_month,
+        'total_revenue': total_revenue,
+        'revenue_this_month': revenue_this_month,
+        })
 
 @staff_member_required
 def staff_product_page(request,pk):
@@ -288,7 +319,7 @@ def initiate_payment(request,pk):
     order = Order.objects.get(pk=pk,user = request.user)
 
     payload = {
-        'order_id': f'order_{order.id}',
+        'order_id': f'order_{order.id}_{uuid.uuid4().hex[:8]}',
         'order_amount': float(order.price),
         'order_currency': 'INR',
         'customer_details': {
@@ -497,3 +528,30 @@ def staff_search(request):
 
     categories = Category.objects.all()
     return render(request,"core/staff_search.html",{"products":products,"query":query,"categories":categories})
+
+def process_orders(request):
+    orders = Order.objects.filter(status=Order.Status.PLACED).prefetch_related("orderitems__product")
+    return render(request,"core/staff_process_orders.html",{"orders":orders})
+
+@login_required
+def staff_order_details(request,pk):
+    order = Order.objects.get(pk = pk)
+    order_items = OrderItem.objects.filter(order=order).select_related("product").prefetch_related("product__images")
+    return render(request,"core/staff_order_details.html",{"order":order,"order_items":order_items})
+
+@login_required
+def set_order_shipped(request,pk):
+    order = Order.objects.get(pk = pk)
+
+    if order.status in ["shipped","delivered"]:
+        messages.error(request,"Order already shipped.")
+        return redirect("order_details",pk=pk)
+    
+    if order.status == "cancelled":
+        messages.error(request,"Order already cancelled.")
+        return redirect("order_details",pk=pk)
+    
+    order.status = Order.Status.SHIPPED
+    order.save()
+    messages.success(request,"Order shipment confirmed.")
+    return redirect("staff_order_details",pk=pk)

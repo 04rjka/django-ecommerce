@@ -122,7 +122,7 @@ class Order(models.Model):
     payment_status = models.CharField(choices=PaymentStatus.choices,default=PaymentStatus.PENDING)
     cashfree_order_id = models.CharField(blank=True,null=True)
     refund_id = models.CharField(blank=True,null=True)
-    created_at = models.DateTimeField(timezone.now())
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order,on_delete=models.CASCADE,related_name="orderitems")

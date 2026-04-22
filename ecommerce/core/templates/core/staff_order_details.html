@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Order Details{% endblock %}
+
+{% block body %}
+{% include "staff_navbar.html" %}
+<div class="p-2 mt-3 flex flex-col items-center">
+    <div class="border py-2 px-4 border-gray-300 rounded shadow flex flex-col gap-2">
+        <h1 class="text-2xl font-semibold">Order Details</h1>
+
+        {% if messages %}
+        <div class="">
+            {% for message in messages %}
+            <div class="border border-gray-300 bg-blue-200 rounded p-4 shadow">
+                {{message}}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <h3 class="text-xl font-semibold">Order Items</h3>
+
+        <div class="">
+            <ul class="flex flex-col gap-2">
+                <!-- <li class="">Order ID : {{order.pk}}</li> -->
+                {% for item in order_items %}
+                <div class="border border-gray-300 rounded shadow p-3 flex items-center gap-4">
+                    <div class="">
+                        <img src="{{item.variant.images.first.image.url}}" alt=""
+                            class="h-24 w-24 object-cover overflow-hidden rounded shadow">
+                    </div>
+                    <ul class="">
+                        <li class="">Product : {{item.product.name}}</li>
+                        <li class="">Variant : {{item.variant.name}}</li>
+                        <li class="">Quantity : {{item.quantity}} Unit Price : Rs
+                            {{item.variant.get_price}}</li>
+                    </ul>
+
+                </div>
+                {% empty %}
+                empty
+                {% endfor %}
+
+                <div class="border border-gray-300 rounded shadow p-3">
+
+                    <ul class="">
+                        <li class="">Ordered On : {{order.created_at}}</li>
+                        <li class="">Order Status : {{order.get_status_display}}</li>
+                        <li class="">Payment Status : {{order.get_payment_status_display}}</li>
+                        <li class="">Grand Total : Rs {{order.price}}</li>
+                    </ul>
+
+                </div>
+            </ul>
+        </div>
+        <!-- <hr> -->
+
+        <h3 class="text-xl font-semibold">Delivery Address</h3>
+        <div class="border border-gray-300 rounded shadow p-3">
+                <ul class="">
+                    <li class="">Name : {{order.name}}</li>
+                    <li class="">Ph : {{order.phone}}</li>
+                    <li class="">{{order.address_line_1}},{{order.address_line_2}}</li>
+                    <li class="">City : {{order.city}}, State : {{order.state}}, Pincode : {{order.pincode}}</li>
+                </ul>
+            </div>
+            {% if order.status not in 'shipped,delivered,cancelled' %}
+            <a class="rounded text-center bg-red-500 py-2 px-3 text-xl text-white"
+                href="{% url 'cancel_order' order.pk %}">Cancel Order</a>
+            {% endif %}
+            {% if order.status not in 'shipped,delivered,cancelled' %}
+            <a class="rounded text-center bg-green-500 py-2 px-3 text-xl text-white"
+                href="{% url 'set_order_shipped' order.pk %}">Set Shipped</a>
+            {% endif %}
+        </div>
+
+
+        
+    </div>
+</div>
+{% endblock %}
