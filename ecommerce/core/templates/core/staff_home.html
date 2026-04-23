@@ -64,7 +64,7 @@
                 <p class="text-2xl font-semibold">{{placed_orders}} orders to be processed.</p>
             <a href="{% url 'process_orders' %}" class="px-3 py-2 rounded bg-purple-500 text-white w-full text-center text-xl">Orders</a>
             {% else %}
-                <p class="text-2xl font-semibold">All orders processed.</p>
+                <p class="text-2xl font-semibold">No orders to process.</p>
             {% endif %}
         </div>
     </div>
