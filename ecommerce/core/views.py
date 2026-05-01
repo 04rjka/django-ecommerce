@@ -495,6 +495,8 @@ def search(request):
     category = request.GET.get("category","")
     min_price = request.GET.get("min_price","")
     max_price = request.GET.get("max_price","")
+    sort_by = request.GET.get('sort_by', '')
+
     products = products.filter(
             Q(name__icontains=query)|
             Q(info__icontains=query)
@@ -506,8 +508,17 @@ def search(request):
     if max_price:
         products = products.filter(price__lte=max_price)
         
+    if sort_by == 'price_asc':
+        products = products.order_by('price')
+    elif sort_by == 'price_desc':
+        products = products.order_by('-price')
+    elif sort_by == 'name_asc':
+        products = products.order_by('name')
+    elif sort_by == 'name_desc':
+        products = products.order_by('-name')
+
     categories = Category.objects.all()
-    return render(request,"core/search.html",{"products":products,"query":query,"categories":categories})
+    return render(request,"core/search.html",{"products":products,"query":query,"categories":categories,'sort_by': sort_by,})
 
 def staff_search(request):
     products = Product.objects.prefetch_related("images")
@@ -515,6 +526,8 @@ def staff_search(request):
     category = request.GET.get("category","")
     min_price = request.GET.get("min_price","")
     max_price = request.GET.get("max_price","")
+    sort_by = request.GET.get("sort_by", "")
+    
     products = products.filter(
             Q(name__icontains=query)|
             Q(info__icontains=query)
@@ -526,8 +539,17 @@ def staff_search(request):
     if max_price:
         products = products.filter(price__lte=max_price)
 
+    if sort_by == "price_asc":
+        products = products.order_by("price")
+    elif sort_by == "price_desc":
+        products = products.order_by("-price")
+    elif sort_by == "name_asc":
+        products = products.order_by("name")
+    elif sort_by == "name_desc":
+        products = products.order_by("-name")
+
     categories = Category.objects.all()
-    return render(request,"core/staff_search.html",{"products":products,"query":query,"categories":categories})
+    return render(request,"core/staff_search.html",{"products":products,"query":query,"categories":categories,"sort_by": sort_by,})
 
 def process_orders(request):
     orders = Order.objects.filter(status=Order.Status.PLACED).prefetch_related("orderitems__product")

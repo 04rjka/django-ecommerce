@@ -1,104 +1,141 @@
 {% extends "base.html" %}
 
-{% block title %}{{product.name}}{% endblock %}
+{% block title %}{{ product.name }}{% endblock %}
 
 {% block body %}
 {% include "navbar.html" %}
-<div class="py-2 px-3">
-    <div class="flex flex-col lg:flex-row gap-3 justify-evenly">
-        <div class="flex flex-col-reverse lg:flex-row gap-3">
-            <div class="flex lg:flex-col gap-1">
-                {% for image in product.images.all %}
-                <div class="h-16 w-16 cursor-pointer border-2 rounded-lg {% if forloop.first %}border-purple-500{% else %}border-gray-300 hover:border-gray-600{% endif %}"
-                    onclick="setMain('{{image.image.url}}',this)">
-                    <img src="{{image.image.url}}" alt="" class="object-cover h-full w-full">
-                </div>
-                {% endfor %}
-            </div>
-            <div class="flex-1 object-contain border border-gray-300 rounded-lg overflow-hidden">
-                <img id="main-image" src="{{product.images.first.image.url}}" alt=""
-                    class="w-[500px] h-[500px] bg-white object-contain">
-            </div>
-        </div>
-        <div class="border border-gray-300 rounded-lg overflow-hidden p-3 shadow flex flex-col gap-2 lg:w-xl">
-            <p class="font-semibold text-2xl">{{product.name}}</p>
-            <p class="text-lg">{{product.info}}</p>
-            <p class="text-lg font-medium">Rs : {{product.price}}</p>
-            <form method="post" action="{% url 'add_to_cart' product.pk %}" class="flex flex-col gap-2">
-                {% csrf_token %}
-                <div class="flex items-center gap-2 justify-between">
-                    <label for="variant_id" class="text-lg">Variant</label>
-                    <select name="variant_id" class="text-lg p-2 border-2 border-gray-300">
-                        {% for variant in product.variants.all%}
-                        <option value="{{variant.id}}">{{variant.name}} Rs : {{variant.product.price}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="flex items-center gap-2 justify-between">
-                    <label for="quantity" class="text-lg">Quantity</label>
-                    <input type="number" name="quantity" class="text-center border-2 border-gray-300 p-2" value="1" min="1">
-                </div>
-                <button type="submit" class="rounded text-white bg-purple-700 p-3 mt-2"><i
-                        class="bi bi-bag-plus-fill"></i> Add to Cart</button>
-            </form>
-            <!-- <a href="{% url 'cart' %}" class="btn btn-primary"><i class="bi bi-cart"></i> Go to Cart</a> -->
-        </div>
-    </div>
-    <hr class="mt-5">
-    <div>
-        <div class="flex flex-col justify-center items-center">
-            <p class="font-medium text-xl mt-2
-            mb-2">Customer Reviews</p>
-            {% for review in product.reviews.all %}
-            <div class="border border-gray-300 rounded p-2 lg:min-w-lg shadow">
-                <div class="flex justify-between">
-                    <p class="">{{review.user}}</p>
-                    <p class="text-gray-500">{{review.created_at}}</p>
-                </div>
-                <div class="mt-1">
-                    <p class="font-medium text-md">{{review.title}}</p>
-                    <p class="">{{review.content}}</p>
-                </div>
-            </div>
-            {% empty %}
-            <div class="border border-gray-300 rounded p-2 mt-2 shadow">
-                No reviews yet.
-            </div>
-            {% endfor %}
-            <!-- <hr class="mb-5"> -->
-            {% if already_reviewed %}
-            <div class="border border-gray-300 rounded p-2 mt-2 shadow">
-                You have already reviewed this product.
-            </div>
-            {% else %}
-            <form action="" method="post"
-                class="rounded border border-gray-300 p-4 flex flex-col gap-2 mt-2 bg-gray-50 shadow">
-                {% csrf_token %}
-                <div class="flex flex-col gap-1">
-                    <label class="">{{form.title.label}}</label>
-                    {{form.title}}
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label class="">{{form.content.label}}</label>
-                    {{form.content}}
-                </div>
-                <button class="border border-white p-3 rounded bg-purple-500 text-white" type="submit">Submit</button>
-            </form>
-            {% endif %}
-        </div>
-    </div>
-</div>
-<script>
-    function setMain(url, el) {
-        document.getElementById('main-image').src = url;
 
-        // Update active thumbnail border
-        document.querySelectorAll('[onclick^="setMain"]').forEach(t => {
-            t.classList.remove('border-purple-500');
-            t.classList.add('border-gray-300');
-        });
-        el.classList.add('border-purple-500');
-        el.classList.remove('border-gray-300');
-    }
+<div class="max-w-6xl mx-auto px-4 py-6 flex flex-col gap-10">
+
+  <!-- Product Section -->
+  <div class="flex flex-col lg:flex-row gap-8">
+
+    <!-- Images -->
+    <div class="flex flex-col-reverse lg:flex-row gap-3 flex-1">
+
+      <!-- Thumbnails -->
+      <div class="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible">
+        {% for image in product.images.all %}
+        <div class="w-16 h-16 shrink-0 rounded-lg overflow-hidden border-2 cursor-pointer transition-colors
+                    {% if forloop.first %}border-purple-500{% else %}border-gray-200 hover:border-gray-400{% endif %}"
+             onclick="setMain('{{ image.image.url }}', this)">
+          <img src="{{ image.image.url }}" alt="" class="w-full h-full object-cover">
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Main Image -->
+      <div class="flex-1 rounded-xl overflow-hidden border border-gray-200 bg-white flex items-center justify-center aspect-square max-h-[500px]">
+        <img id="main-image" src="{{ product.images.first.image.url }}" alt="{{ product.name }}"
+             class="w-full h-full object-contain">
+      </div>
+
+    </div>
+
+    <!-- Product Info -->
+    <div class="flex flex-col gap-4 lg:w-96">
+
+      <div class="flex flex-col gap-1">
+        {% if product.category %}
+          <span class="text-xs text-purple-600 font-medium">{{ product.category.name }}</span>
+        {% endif %}
+        <h1 class="text-2xl font-medium text-gray-800">{{ product.name }}</h1>
+        <p class="text-xl font-medium text-gray-800">₹{{ product.price }}</p>
+      </div>
+
+      <p class="text-sm text-gray-500 leading-relaxed">{{ product.info }}</p>
+
+      <hr class="border-gray-100">
+
+      <form method="post" action="{% url 'add_to_cart' product.pk %}" class="flex flex-col gap-3">
+        {% csrf_token %}
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-600">Variant</label>
+          <select name="variant_id"
+                  class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300">
+            {% for variant in product.variants.all %}
+            <option value="{{ variant.id }}">{{ variant.name }} — ₹{{ variant.get_price }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-600">Quantity</label>
+          <input type="number" name="quantity" value="1" min="1"
+                 class="w-24 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 text-center bg-white focus:outline-none focus:ring-2 focus:ring-purple-300">
+        </div>
+
+        <button type="submit"
+                class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-xl transition-colors flex items-center justify-center gap-2 mt-1">
+          <i class="bi bi-bag-plus-fill"></i>
+          Add to Cart
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Reviews -->
+  <div class="flex flex-col gap-6">
+    <h2 class="text-xl font-medium text-gray-800">Customer Reviews</h2>
+
+    <div class="flex flex-col gap-3">
+      {% for review in product.reviews.all %}
+      <div class="bg-white border border-gray-200 rounded-xl px-5 py-4 shadow-sm flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <p class="text-sm font-medium text-gray-800">{{ review.user }}</p>
+          <p class="text-xs text-gray-400">{{ review.created_at|date:"d M Y" }}</p>
+        </div>
+        <p class="text-sm font-medium text-gray-700">{{ review.title }}</p>
+        <p class="text-sm text-gray-500">{{ review.content }}</p>
+      </div>
+      {% empty %}
+      <div class="bg-gray-50 border border-gray-200 rounded-xl px-5 py-8 text-center">
+        <p class="text-sm text-gray-400">No reviews yet. Be the first to review!</p>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Review Form -->
+    {% if already_reviewed %}
+    <div class="bg-blue-50 border border-blue-200 text-blue-800 text-sm rounded-lg px-4 py-3">
+      You have already reviewed this product.
+    </div>
+    {% else %}
+    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col gap-4">
+      <h3 class="text-xs uppercase tracking-widest text-gray-400">Write a Review</h3>
+      <form action="" method="post" class="flex flex-col gap-4">
+        {% csrf_token %}
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-600">{{ form.title.label }}</label>
+          {{ form.title }}
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-600">{{ form.content.label }}</label>
+          {{ form.content }}
+        </div>
+        <button type="submit"
+                class="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors">
+          Submit Review
+        </button>
+      </form>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<script>
+  function setMain(url, el) {
+    document.getElementById('main-image').src = url;
+    document.querySelectorAll('[onclick^="setMain"]').forEach(t => {
+      t.classList.remove('border-purple-500');
+      t.classList.add('border-gray-200');
+    });
+    el.classList.add('border-purple-500');
+    el.classList.remove('border-gray-200');
+  }
 </script>
+
 {% endblock %}

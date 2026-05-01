@@ -4,70 +4,95 @@
 
 {% block body %}
 {% include "navbar.html" %}
-    <div class="p-2 mt-3 flex flex-col items-center">
-        <div class="border border-gray-300 p-2 rounded flex flex-col gap-3 shadow">
 
-                <h1 class="text-2xl">Add New Address</h1>
-                <form action="" method="post" class="flex flex-col gap-2    ">
-                    {% csrf_token %}
-                    {% if messages %}
-                    {% for message in messages %}
-                    <div class="border border-gray-300 bg-blue-200 rounded p-4 shadow">
-                        {{message}}
-                        
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-                    {% if form.errors %}
-                    <div class="border border-gray-300 bg-red-400 rounded p-4 shadow">
-                        {% for field in form %}
-                        {% for error in field.errors %}
-                        <div>{{ error }}</div>
-                        {% endfor %}
-                        {% endfor %}
+<div class="max-w-xl mx-auto px-4 py-6 flex flex-col gap-6">
 
-                        {% for error in form.non_field_errors %}
-                        <div>{{ error }}</div>
-                        {% endfor %}
+  <div>
+    <h1 class="text-2xl font-medium text-gray-800">Add New Address</h1>
+    <p class="text-sm text-gray-400 mt-1">Enter your delivery address details</p>
+  </div>
 
-                        
-                    </div>
-                    {% endif %}
-                    <div class="">
-                        <label class="">{{form.first_name.label}}</label>
-                        {{form.first_name}}
-                    </div>
-                    <div class="">
-                        <label class="">{{form.last_name.label}}</label>
-                        {{form.last_name}}
-                    </div>
-                    <div class="">
-                        <label class="">{{form.address_line_1.label}}</label>
-                        {{form.address_line_1}}
-                    </div>
-                    <div class="">
-                        <label class="">{{form.address_line_2.label}}</label>
-                        {{form.address_line_2}}
-                    </div>
-                    <div class="">
-                        <label class="">{{form.phone.label}}</label>
-                        {{form.phone}}
-                    </div>
-                    <div class="">
-                        <label class="">{{form.city.label}}</label>
-                        {{form.city}}
-                    </div>
-                    <div class="">
-                        <label class="">{{form.state.label}}</label>
-                        {{form.state}}
-                    </div>
-                    <div class="">
-                        <label class="">{{form.pincode.label}}</label>
-                        {{form.pincode}}
-                    </div>
-                    <button class="rounded bg-purple-400 py-2 px-3 text-white text-lg" type="submit">Save</button>
-                </form>
-            
+  <!-- Messages -->
+  {% if messages %}
+  {% for message in messages %}
+  <div class="bg-blue-50 border border-blue-200 text-blue-800 text-sm rounded-lg px-4 py-3">
+    {{ message }}
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <!-- Errors -->
+  {% if form.errors %}
+  <div class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3 flex flex-col gap-1">
+    {% for field in form %}
+      {% for error in field.errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+      <p>{{ error }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <form action="" method="post" class="flex flex-col gap-6">
+    {% csrf_token %}
+
+    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col gap-4">
+      <h2 class="text-xs uppercase tracking-widest text-gray-400">Personal Details</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-600">{{ form.first_name.label }}</label>
+          {{ form.first_name }}
         </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-600">{{ form.last_name.label }}</label>
+          {{ form.last_name }}
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-gray-600">{{ form.phone.label }}</label>
+        {{ form.phone }}
+      </div>
     </div>
+
+    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col gap-4">
+      <h2 class="text-xs uppercase tracking-widest text-gray-400">Address Details</h2>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-gray-600">{{ form.address_line_1.label }}</label>
+        {{ form.address_line_1 }}
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-gray-600">{{ form.address_line_2.label }}</label>
+        {{ form.address_line_2 }}
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-600">{{ form.city.label }}</label>
+          {{ form.city }}
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-600">{{ form.state.label }}</label>
+          {{ form.state }}
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-600">{{ form.pincode.label }}</label>
+          {{ form.pincode }}
+        </div>
+      </div>
+    </div>
+
+    <button type="submit"
+      class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl transition-colors text-sm">
+      Save Address
+    </button>
+
+  </form>
+</div>
+
 {% endblock %}

@@ -4,69 +4,110 @@
 
 {% block body %}
 {% include "staff_navbar.html" %}
-<div class="mt-2 p-2 flex flex-col gap-3 items-center">
-    <!-- <div class="flex flex-col gap-2">
-        {% for product in products %}
-            
-             <div class="border-2 border-gray-300 flex w-full lg:w-2xl gap-1 rounded">
-                <a href="{% url 'staff_product_page' product.pk %}" class="text-decoration-none">
-                    <img src="{{product.images.first.image.url}}" class="h-48 w-48" alt="...">
-                </a>
-                <div>
-                    <div class="flex flex-col p-2 gap-2">
-                    <p class="font-medium text-xl">{{product.name}}</h5>
-                    <p class="">Variant : {{item.variant.name}}</p>
-                    <p class="">Rs : {{product.price}}</p>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div> -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-        <div class="rounded border border-gray-300 p-4 shadow bg-purple-100 flex flex-col gap-3 text-2xl text-gray-800">
-            <div class="flex justify-between gap-3">
-                <p>Total Orders</p>
-                <p>{{total_orders}}</p>
-            </div>
-            <div class="flex justify-between gap-3">
-                <p>Delivered Orders</p>
-                <p>{{delivered_orders}}</p>
-            </div>
-            <div class="flex justify-between gap-3">
-                <p>Total Revenue</p>
-                <p>{{total_revenue}}</p>
-            </div>
-            <div class="flex justify-between gap-3">
-                <p>Revenue This Month</p>
-                <p>{{revenue_this_month}}</p>
-            </div>
-            <div class="flex justify-between gap-3">
-                <p>Cancelled Orders</p>
-                <p>{{cancelled_orders}}</p>
-            </div>            
-        </div>
-        <div class="rounded border border-gray-300 p-4 shadow bg-purple-100 flex flex-col gap-3 text-2xl text-gray-800">
-            <div class="flex justify-between gap-3">
-                <p>Orders Placed</p>
-                <p>{{placed_orders}}</p>
-            </div>
-            <div class="flex justify-between gap-3">
-                <p>Orders Today</p>
-                <p>{{orders_today}}</p>
-            </div>
-            <div class="flex justify-between gap-3">
-                <p>Orders This Month</p>
-                <p>{{orders_this_month}}</p>
-            </div>
-        </div>
-        <div class="rounded border border-gray-300 p-5 flex flex-col gap-4 items-center justify-center shadow">
-            {% if placed_orders > 0 %}
-                <p class="text-2xl font-semibold">{{placed_orders}} orders to be processed.</p>
-            <a href="{% url 'process_orders' %}" class="px-3 py-2 rounded bg-purple-500 text-white w-full text-center text-xl">Orders</a>
-            {% else %}
-                <p class="text-2xl font-semibold">No orders to process.</p>
-            {% endif %}
-        </div>
+
+<div class="p-4 max-w-6xl mx-auto flex flex-col gap-6 mt-4">
+
+  <!-- Overview Stats -->
+  <div>
+    <p class="text-xs uppercase tracking-widest text-gray-400 mb-3">Overview</p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+
+      <div class="bg-blue-200 rounded-lg p-4">
+        <p class="text-xs text-gray-500 mb-1">Total Orders</p>
+        <p class="text-3xl font-medium text-gray-800">{{ total_orders }}</p>
+      </div>
+
+      <div class="bg-green-100 rounded-lg p-4">
+        <p class="text-xs text-green-700 mb-1">Total Revenue</p>
+        <p class="text-3xl font-medium text-green-900">₹{{ total_revenue }}</p>
+        <p class="text-xs text-green-600 mt-1">₹{{ revenue_this_month }} this month</p>
+      </div>
+
+      <div class="bg-blue-100 rounded-lg p-4">
+        <p class="text-xs text-blue-700 mb-1">Delivered</p>
+        <p class="text-3xl font-medium text-blue-900">{{ delivered_orders }}</p>
+      </div>
+
+      <div class="bg-red-100 rounded-lg p-4">
+        <p class="text-xs text-red-700 mb-1">Cancelled</p>
+        <p class="text-3xl font-medium text-red-900">{{ cancelled_orders }}</p>
+      </div>
+
     </div>
+  </div>
+
+  <!-- Period Stats -->
+  <div>
+    <p class="text-xs uppercase tracking-widest text-gray-400 mb-3">This Period</p>
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+
+      <div class="bg-gray-200 rounded-lg p-4">
+        <p class="text-xs text-gray-500 mb-1">Orders Today</p>
+        <p class="text-3xl font-medium text-gray-800">{{ orders_today }}</p>
+      </div>
+
+      <div class="bg-gray-200 rounded-lg p-4">
+        <p class="text-xs text-gray-500 mb-1">Orders This Month</p>
+        <p class="text-3xl font-medium text-gray-800">{{ orders_this_month }}</p>
+      </div>
+
+      <div class="bg-amber-100 rounded-lg p-4 col-span-2 sm:col-span-1">
+        <p class="text-xs text-amber-700 mb-1">Placed / Pending</p>
+        <p class="text-3xl font-medium text-amber-900">{{ placed_orders }}</p>
+        <p class="text-xs text-amber-600 mt-1">need processing</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <hr class="border-gray-200">
+
+  <!-- Actions -->
+  <div>
+    <p class="text-xs uppercase tracking-widest text-gray-400 mb-3">Actions</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+      <!-- Process Orders -->
+      <div class="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between gap-4">
+        <div>
+          <p class="font-medium text-gray-800">Process Orders</p>
+          {% if placed_orders > 0 %}
+            <span class="inline-block mt-1 text-xs font-medium bg-amber-100 text-amber-800 px-2 py-1 rounded-full">
+              {{ placed_orders }} pending
+            </span>
+          {% else %}
+            <span class="inline-block mt-1 text-xs font-medium bg-green-100 text-green-800 px-2 py-1 rounded-full">
+              All clear
+            </span>
+          {% endif %}
+        </div>
+        {% if placed_orders > 0 %}
+          <a href="{% url 'process_orders' %}"
+             class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors whitespace-nowrap">
+            View Orders
+          </a>
+        {% else %}
+          <span class="px-4 py-2 bg-gray-100 text-gray-400 text-sm font-medium rounded-lg cursor-not-allowed whitespace-nowrap">
+            View Orders
+          </span>
+        {% endif %}
+      </div>
+
+      <!-- Staff Search -->
+      <div class="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between gap-4">
+        <div>
+          <p class="font-medium text-gray-800">Staff Search</p>
+          <p class="text-sm text-gray-400 mt-1">Find any order or product</p>
+        </div>
+        <a href="{% url 'staff_search' %}"
+           class="px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-lg transition-colors whitespace-nowrap">
+          Search
+        </a>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 {% endblock %}

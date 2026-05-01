@@ -1,22 +1,52 @@
 {% extends "base.html" %}
 
-{% block title %}Add Product{% endblock %}
+{% block title %}Add Product Images{% endblock %}
 
 {% block body %}
 {% include "staff_navbar.html" %}
-<div class="mt-2 p-2 flex justify-center">
-    <div class="flex flex-col p-4 gap-2 border border-gray-300 rounded shadow">
-        <h1 class="text-2xl">Add Images</h1>
 
-        <form action="" method="post" enctype="multipart/form-data" class="flex flex-col gap-2">
-            {% csrf_token %}
-            {{formset.management_form}}
-            {% for f in formset %}
-            {{f.as_p}}
-            {% endfor %}
-            <button class="bg-purple-400 rounded py-2 px-4 text-lg text-white" type="submit">ADD</button>
-        </form>
+<div class="max-w-2xl mx-auto px-4 py-6">
 
+  <div class="mb-6">
+    <h1 class="text-2xl font-medium text-gray-800">Add Images</h1>
+    <p class="text-sm text-gray-400 mt-1">Upload images for this product</p>
+  </div>
+
+  <form action="" method="post" enctype="multipart/form-data" class="flex flex-col gap-6">
+    {% csrf_token %}
+    {{ formset.management_form }}
+
+    <div class="flex flex-col gap-4">
+      {% for f in formset %}
+      <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col gap-3">
+        <p class="text-xs uppercase tracking-widest text-gray-400">Image {{ forloop.counter }}</p>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-600">{{ f.image.label }}</label>
+          {{ f.image }}
+          {% if f.image.errors %}
+            <p class="text-xs text-red-500">{{ f.image.errors|join:", " }}</p>
+          {% endif %}
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-600">{{ f.variant.label }}</label>
+          {{ f.variant }}
+          {% if f.variant.errors %}
+            <p class="text-xs text-red-500">{{ f.variant.errors|join:", " }}</p>
+          {% endif %}
+        </div>
+
+      </div>
+      {% endfor %}
     </div>
+
+    <button type="submit"
+      class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl transition-colors text-sm">
+      Upload Images
+    </button>
+
+  </form>
 </div>
+
 {% endblock %}

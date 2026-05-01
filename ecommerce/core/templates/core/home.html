@@ -1,40 +1,78 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}HOME{% endblock %}
+
+{% block title %}Home{% endblock %}
 
 {% block body %}
 {% include "navbar.html" %}
-<div class="m-2">
-    <div class="flex flex-col lg:flex-row gap-2  rounded overflow-hidden">
-        <div class="bg-purple-600 min-h-24 w-full flex flex-col gap-2 place-items-center justify-center p-4">
-            <p class="text-white text-4xl lg:text-5xl lg:leading-16 font-bold tracking-tight">Everything you need.</p>
-            <p class="text-white text-4xl lg:text-5xl lg:leading-16 font-bold tracking-tight">Right on ECOM.</p>
-        </div>
-        <div class="bg-purple-400 flex place-items-center justify-center w-full">
-            <img class=" object-contain" src="{% static 'images/shopping.jpg' %}" alt="">
-        </div>
+
+<div class="flex flex-col gap-8 pb-10">
+
+  <!-- Hero -->
+  <div class="flex flex-col lg:flex-row overflow-hidden">
+    <div class="bg-purple-600 w-full flex flex-col gap-3 items-start justify-center p-10 lg:p-16">
+      <p class="text-white text-4xl lg:text-6xl font-bold tracking-tight leading-tight">
+        Everything<br>you need.
+      </p>
+      <p class="text-purple-200 text-lg">Right here, right now.</p>
+      <a href="{% url 'search' %}"
+         class="mt-2 px-6 py-3 bg-white text-purple-700 text-sm font-medium rounded-lg hover:bg-purple-50 transition-colors">
+        Shop Now
+      </a>
+    </div>
+    <div class="bg-purple-400 w-full flex items-center justify-center min-h-64 lg:min-h-auto">
+      <img src="{% static 'images/shopping.jpg' %}" class="w-full h-full object-cover" alt="Shopping">
+    </div>
+  </div>
+
+  <!-- Products -->
+  <div class="max-w-6xl mx-auto w-full px-4 flex flex-col gap-4">
+
+    <div class="flex items-center justify-between">
+      <h2 class="text-xl font-medium text-gray-800">Featured Products</h2>
+      <a href="{% url 'search' %}"
+         class="text-sm text-purple-600 hover:text-purple-700 font-medium transition-colors">
+        View All →
+      </a>
     </div>
 
-    <div class="grid sm:grid-cols-3 lg:grid-cols-5 gap-2 h-screen mt-3">
-        {% if products %}
-            {% for product in products %}
-            <a href="{% url 'product_page' product.pk %}" class="text-decoration-none">
-            <div class="border rounded p-2 h-96 bg-white shadow border-gray-300">
-                    <div class="">
-                    <img class="h-72 w-full object-cover rounded shrink-0" src="{{product.images.first.image.url}}" class="card-img-top product-card-image" alt="...">
-                    <div class="mt-2">
-                    <p class="text-lg font-medium">{{product.name}}</p>
-                    <p class="">Rs : {{product.price}}</p>
-                    </div>
-                </div>
-            </div>
-        </a>
-        {% endfor %}
+    {% if products %}
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+      {% for product in products %}
+      <a href="{% url 'product_page' product.pk %}"
+         class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:border-purple-300 hover:shadow-md transition-all group">
+        {% if product.images.first %}
+          <img src="{{ product.images.first.image.url }}"
+               class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+               alt="{{ product.name }}">
         {% else %}
-        <div class="">
-             <div class="rounded border p-2 bg-gray-300">No results found.</div>
-         </div>
+          <div class="w-full h-48 bg-gray-100 flex items-center justify-center">
+            <i class="bi bi-image text-3xl text-gray-300"></i>
+          </div>
         {% endif %}
+        <div class="p-3 flex flex-col gap-1">
+          <p class="text-sm font-medium text-gray-800 line-clamp-2">{{ product.name }}</p>
+          {% if product.category %}
+            <span class="text-xs text-purple-600">{{ product.category.name }}</span>
+          {% endif %}
+          <p class="text-sm font-medium text-gray-700 mt-1">₹{{ product.price }}</p>
+        </div>
+      </a>
+      {% endfor %}
     </div>
+
+    {% else %}
+    <div class="flex flex-col items-center justify-center py-24 text-center">
+      <div class="bg-gray-100 rounded-full p-6 mb-4">
+        <i class="bi bi-box text-4xl text-gray-400"></i>
+      </div>
+      <p class="text-gray-600 font-medium">No products available</p>
+      <p class="text-sm text-gray-400 mt-1">Check back soon</p>
+    </div>
+    {% endif %}
+
+  </div>
+
 </div>
+
 {% endblock %}

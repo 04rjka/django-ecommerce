@@ -4,23 +4,117 @@
 
 {% block body %}
 {% include "staff_navbar.html" %}
-<div class="mt-2 p-2 flex justify-center">
-    <div class="flex flex-col p-4 gap-2 border border-gray-300 rounded shadow">
-        <h1 class="text-2xl">Edit Product</h1>
-        
-            
-                <form action="" method="post" enctype="multipart/form-data" class="flex flex-col gap-2">
-                    {% csrf_token %}
-                    {{ form.as_p}}
-                    <h2 class="text-xl">Edit Variants</h2>
-                    {{formset.management_form}}
-                    {% for f in formset %}
-                    {{f.as_p}}
-                    {% endfor %}
-                    <button class="bg-purple-400 rounded py-2 px-4 text-lg text-white" type="submit">ADD</button>
-                </form>
-            
-        
+
+<div class="max-w-2xl mx-auto px-4 py-6">
+
+  <div class="mb-6">
+    <h1 class="text-2xl font-medium text-gray-800">Edit Product</h1>
+    <p class="text-sm text-gray-400 mt-1">Update the product details below</p>
+  </div>
+
+  <form action="" method="post" enctype="multipart/form-data" class="flex flex-col gap-6">
+    {% csrf_token %}
+
+    <!-- Product Details -->
+    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col gap-4">
+      <h2 class="text-xs uppercase tracking-widest text-gray-400">Product Details</h2>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-gray-600">{{ form.name.label }}</label>
+        {{ form.name }}
+        {% if form.name.errors %}
+          <p class="text-xs text-red-500">{{ form.name.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-gray-600">{{ form.category.label }}</label>
+        {{ form.category }}
+        {% if form.category.errors %}
+          <p class="text-xs text-red-500">{{ form.category.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-gray-600">{{ form.price.label }}</label>
+        {{ form.price }}
+        {% if form.price.errors %}
+          <p class="text-xs text-red-500">{{ form.price.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-gray-600">{{ form.info.label }}</label>
+        {{ form.info }}
+        {% if form.info.errors %}
+          <p class="text-xs text-red-500">{{ form.info.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+
+      <div class="flex items-center gap-2">
+        {{ form.is_featured }}
+        <label class="text-sm font-medium text-gray-600">{{ form.is_featured.label }}</label>
+      </div>
+
     </div>
+
+    <!-- Variants -->
+    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col gap-4">
+      <h2 class="text-xs uppercase tracking-widest text-gray-400">Variants</h2>
+      {{ formset.management_form }}
+
+      {% for f in formset %}
+      <div class="border border-gray-100 rounded-lg p-4 bg-gray-50 flex flex-col gap-3">
+        <p class="text-xs font-medium text-gray-400">Variant {{ forloop.counter }}</p>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-600">{{ f.name.label }}</label>
+          {{ f.name }}
+          {% if f.name.errors %}
+            <p class="text-xs text-red-500">{{ f.name.errors|join:", " }}</p>
+          {% endif %}
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-medium text-gray-600">{{ f.price_adjustment.label }}</label>
+            {{ f.price_adjustment }}
+            {% if f.price_adjustment.errors %}
+              <p class="text-xs text-red-500">{{ f.price_adjustment.errors|join:", " }}</p>
+            {% endif %}
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-medium text-gray-600">{{ f.stock.label }}</label>
+            {{ f.stock }}
+            {% if f.stock.errors %}
+              <p class="text-xs text-red-500">{{ f.stock.errors|join:", " }}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          {{ f.is_available }}
+          <label class="text-sm font-medium text-gray-600">{{ f.is_available.label }}</label>
+        </div>
+
+        {% if f.DELETE %}
+        <div class="flex items-center gap-2 pt-1 border-t border-gray-200">
+          {{ f.DELETE }}
+          <label class="text-xs text-red-400">{{ f.DELETE.label }}</label>
+        </div>
+        {% endif %}
+
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Submit -->
+    <button type="submit"
+      class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl transition-colors text-sm">
+      Save Changes
+    </button>
+
+  </form>
 </div>
+
 {% endblock %}

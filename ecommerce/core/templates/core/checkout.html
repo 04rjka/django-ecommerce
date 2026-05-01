@@ -1,64 +1,71 @@
 {% extends "base.html" %}
 
-{% block title %}Cart{% endblock %}
+{% block title %}Checkout{% endblock %}
 
 {% block body %}
 {% include "navbar.html" %}
-<div class="p-2 mt-2 flex flex-col items-center ">
-    <div class="border py-2 px-4 border-gray-300 rounded shadow flex flex-col gap-3">
-        <h1 class=" text-2xl text-center font-semibold">Complete Purchase</h1>
 
-        <!-- {% for item in cart.items.all %}
-        <div class="">
-            <div class="">
-                <ul class="">
-                    <li class="">Product : {{item.product.name}}</li>
-                    <li class="">Quantity : {{item.quantity}} Total : Rs {{item.total_price}}</li>
-                </ul>
-            </div>
-        </div>
-        {% empty %}
-                empty
-        {% endfor %} -->
+<div class="max-w-xl mx-auto px-4 py-6 flex flex-col gap-6">
 
-        <div class="">
-            <p class="text-xl font-medium text-center">Total : Rs {{cart.cart_total}}</p>
-        </div>
-        <div class="flex flex-col gap-2">
-            <p class="text-lg">Select Address</p>
-            {% if addresses %}
-            <form action="" method="post" class="flex flex-col gap-2">
-                {% csrf_token %}
-                <div class="border border-gray-300 p-2 flex flex-col gap-2">
-                    {% for address in addresses %}
-                    <div class="">
-                        <label for="address_{{address.id}}" class="flex gap-3">
-                            <input type="radio" name="address_id" id="address_{{address.id}}" value="{{address.id}}">
-                            <div>
-                                <p class="">{{address.first_name}} {{address.last_name}}</p>
-                                <p class="">{{address.address_line_1}}, {{address.address_line_2}}</p>
-                                <p class="">{{address.city}}</p>
-                                <p class="">{{address.phone}}</p>
-                            </div>
-                        </label>
-                    </div>
-                    {% endfor %}
-                </div>
-                <div class="flex justify-center gap-2">
-                    <button type="submit" class="py-1 px-2 rounded bg-purple-500 text-white">Place Order</button>
-                    <a href="{% url 'add_address' %}?next={{ request.path }}" class="py-1 px-2 rounded bg-purple-500 text-white">Add New
-                        Address</a>
-                </div>
-            </form>
-            {% else %}
-            <div class="alert alert-info">
-                No addresses added yet.
-            </div>
-            <a href="{% url 'add_address' %}?next={{ request.path }}" class="py-1 px-2 rounded bg-purple-500 text-white">Add New Address</a>
-            {% endif %}
+  <h1 class="text-2xl font-medium text-gray-800">Checkout</h1>
 
-        </div>
+  <!-- Order Total -->
+  <div class="bg-purple-50 border border-purple-100 rounded-xl px-5 py-4 flex justify-between items-center">
+    <p class="text-sm text-purple-700">Order Total</p>
+    <p class="text-xl font-medium text-purple-800">₹{{ cart.cart_total }}</p>
+  </div>
+
+  <!-- Address Selection -->
+  <div class="flex flex-col gap-3">
+    <div class="flex items-center justify-between">
+      <h2 class="text-xs uppercase tracking-widest text-gray-400">Select Address</h2>
+      <a href="{% url 'add_address' %}?next={{ request.path }}"
+         class="text-xs text-purple-600 hover:text-purple-700 font-medium transition-colors">
+        + Add New
+      </a>
     </div>
 
+    {% if addresses %}
+    <form action="" method="post" class="flex flex-col gap-3">
+      {% csrf_token %}
+
+      {% for address in addresses %}
+      <label for="address_{{ address.id }}"
+             class="bg-white border border-gray-200 rounded-xl px-5 py-4 flex gap-4 items-start cursor-pointer hover:border-purple-300 transition-colors has-[:checked]:border-purple-400 has-[:checked]:bg-purple-50">
+        <input type="radio" name="address_id" id="address_{{ address.id }}" value="{{ address.id }}"
+               class="mt-1 accent-purple-600 shrink-0">
+        <div class="flex flex-col gap-0.5">
+          <p class="font-medium text-gray-800">{{ address.first_name }} {{ address.last_name }}</p>
+          <p class="text-sm text-gray-500">{{ address.address_line_1 }}{% if address.address_line_2 %}, {{ address.address_line_2 }}{% endif %}</p>
+          <p class="text-sm text-gray-500">{{ address.city }}</p>
+          <p class="text-sm text-gray-500">{{ address.phone }}</p>
+        </div>
+      </label>
+      {% endfor %}
+
+      <button type="submit"
+              class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-xl transition-colors mt-2">
+        Place Order
+      </button>
+
+    </form>
+
+    {% else %}
+    <div class="flex flex-col items-center justify-center py-12 text-center bg-white border border-gray-200 rounded-xl">
+      <div class="bg-gray-100 rounded-full p-5 mb-3">
+        <i class="bi bi-geo-alt text-3xl text-gray-400"></i>
+      </div>
+      <p class="text-gray-600 font-medium">No addresses saved</p>
+      <p class="text-sm text-gray-400 mt-1">Add an address to continue</p>
+      <a href="{% url 'add_address' %}?next={{ request.path }}"
+         class="mt-4 px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors">
+        Add Address
+      </a>
+    </div>
+    {% endif %}
+
+  </div>
+
 </div>
+
 {% endblock %}

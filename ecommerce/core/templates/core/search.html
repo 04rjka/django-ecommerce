@@ -1,56 +1,119 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block title %}Search{% endblock %}
 
 {% block body %}
 {% include "navbar.html" %}
-<div class="m-2">
-    <div class="flex flex-col gap-2">
-        <div class="flex justify-center">
-            <form method="GET" action="{% url 'search' %}" class="flex flex-col lg:flex-row gap-2 p-2">
-                
-                <input placeholder="Search products" type="text" name="q" value="{{ query }}" class="border w-full rounded px-2 py-1 border-gray-300 bg-white">
 
-                
-                <select name="category" class="border w-full rounded px-2 py-1 border-gray-300 bg-white">
-                    <option value="">All Categories</option>
-                    {% for cat in categories %}
-                    <option value="{{ cat.id }}">
-                        {{ cat.name }}
-                    </option>
-                    {% endfor %}
-                </select>
+<div class="max-w-6xl mx-auto px-4 py-6 flex flex-col gap-6">
 
-                <input type="number" name="min_price" placeholder="Min price" value="{{ request.GET.min_price }}" class="border w-full rounded px-2 py-1 border-gray-300 bg-white">
-                <input type="number" name="max_price" placeholder="Max price" value="{{ request.GET.max_price }}" class="border w-full rounded px-2 py-1 border-gray-300 bg-white">
+  <!-- Search & Filters -->
+  <form method="GET" action="{% url 'search' %}"
+        class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col gap-3">
 
-                <button type="submit" class="rounded bg-purple-400 py-2 px-3 text-white text-lg">Filter</button>
-            </form>
-        </div>
-        {% if products %}
-        <div class="grid sm:grid-cols-3 lg:grid-cols-5 gap-2 h-screen mt-3">
-            {% for product in products %}
-            <a href="{% url 'product_page' product.pk %}" class="text-decoration-none">
-                <div class="border rounded p-2 h-96 bg-white shadow border-gray-300">
-                    <div class="">
-                        <img class="h-72 w-full object-cover rounded shrink-0" src="{{product.images.first.image.url}}"
-                            class="card-img-top product-card-image" alt="...">
-                        <div class="mt-2">
-                            <p class="text-lg font-medium">{{product.name}}</p>
-                            <p class="">Rs : {{product.price}}</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-            {% endfor %}
+    <input type="text" name="q" value="{{ query }}" placeholder="Search products..."
+           class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300">
 
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
 
-        </div>
-        {% else %}
-        <div class="flex justify-center">
-            <div class="rounded border p-2 bg-gray-200 border-gray-300">No products found.</div>
-        </div>
-        {% endif %}
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-gray-400">Category</label>
+        <select name="category"
+                class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300">
+          <option value="">All Categories</option>
+          {% for cat in categories %}
+          <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"i" %}selected{% endif %}>
+            {{ cat.name }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-gray-400">Sort By</label>
+        <select name="sort_by"
+                class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300">
+          <option value="" {% if sort_by == "" %}selected{% endif %}>Default</option>
+          <option value="price_asc" {% if sort_by == "price_asc" %}selected{% endif %}>Price: Low to High</option>
+          <option value="price_desc" {% if sort_by == "price_desc" %}selected{% endif %}>Price: High to Low</option>
+          <option value="name_asc" {% if sort_by == "name_asc" %}selected{% endif %}>Name: A to Z</option>
+          <option value="name_desc" {% if sort_by == "name_desc" %}selected{% endif %}>Name: Z to A</option>
+        </select>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-gray-400">Min Price</label>
+        <input type="number" name="min_price" placeholder="₹ Min" value="{{ request.GET.min_price }}"
+               class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300">
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-gray-400">Max Price</label>
+        <input type="number" name="max_price" placeholder="₹ Max" value="{{ request.GET.max_price }}"
+               class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300">
+      </div>
+
     </div>
+
+    <div class="flex gap-2 justify-end">
+      <a href="{% url 'search' %}"
+         class="px-4 py-2 border border-gray-200 text-gray-500 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
+        Clear
+      </a>
+      <button type="submit"
+              class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors">
+        Search
+      </button>
+    </div>
+
+  </form>
+
+  <!-- Results -->
+  {% if products %}
+  <div>
+    <p class="text-xs uppercase tracking-widest text-gray-400 mb-3">
+      {{ products|length }} result{{ products|length|pluralize }}
+    </p>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+      {% for product in products %}
+      <a href="{% url 'product_page' product.pk %}"
+         class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:border-purple-300 hover:shadow-md transition-all group">
+        {% if product.images.first %}
+          <img src="{{ product.images.first.image.url }}"
+               class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+               alt="{{ product.name }}">
+        {% else %}
+          <div class="w-full h-48 bg-gray-100 flex items-center justify-center">
+            <i class="bi bi-image text-3xl text-gray-300"></i>
+          </div>
+        {% endif %}
+        <div class="p-3 flex flex-col gap-1">
+          <p class="text-sm font-medium text-gray-800 line-clamp-2">{{ product.name }}</p>
+          {% if product.category %}
+            <span class="text-xs text-purple-600">{{ product.category.name }}</span>
+          {% endif %}
+          <p class="text-sm font-medium text-gray-700 mt-1">₹{{ product.price }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% else %}
+  <div class="flex flex-col items-center justify-center py-24 text-center">
+    <div class="bg-gray-100 rounded-full p-6 mb-4">
+      <i class="bi bi-search text-4xl text-gray-400"></i>
+    </div>
+    <p class="text-gray-600 font-medium">No products found</p>
+    <p class="text-sm text-gray-400 mt-1">Try adjusting your search or filters</p>
+    <a href="{% url 'search' %}"
+       class="mt-4 px-5 py-2 border border-gray-200 hover:bg-gray-50 text-gray-600 text-sm font-medium rounded-lg transition-colors">
+      Clear Filters
+    </a>
+  </div>
+  {% endif %}
+
 </div>
+
 {% endblock %}

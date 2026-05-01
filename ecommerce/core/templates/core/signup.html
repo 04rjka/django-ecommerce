@@ -3,63 +3,83 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block body %}
-<div class="flex justify-center mx-auto min-h-screen items-center">
-    
-        <div class="border border-gray-300 rounded flex flex-col gap-3 p-4">
-            
-                <h1 class="text-2xl font-medium">Sign Up</h1>
-                <form action="" method="post" class="flex flex-col gap-2">
-                    {% csrf_token %}
-                    {% if messages %}
-                    {% for message in messages %}
-                    <div class="border border-gray-300 bg-blue-200 rounded p-4 shadow" role="alert">
-                        {{message}}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-                    {% if form.errors %}
-                    <div class="border border-gray-300 bg-red-400 rounded p-4 shadow" role="alert">
-                        {% for field in form %}
-                        {% for error in field.errors %}
-                        <div>{{ error }}</div>
-                        {% endfor %}
-                        {% endfor %}
+<div class="min-h-screen flex items-center justify-center px-4 bg-gray-50">
+  <div class="w-full max-w-sm flex flex-col gap-6">
 
-                        {% for error in form.non_field_errors %}
-                        <div>{{ error }}</div>
-                        {% endfor %}
+    <!-- Header -->
+    <div class="text-center">
+      <h1 class="text-2xl font-medium text-gray-800">Create an account</h1>
+      <p class="text-sm text-gray-400 mt-1">Sign up to get started</p>
+    </div>
 
-                        <!-- <button type="button" class="btn-close" data-bs-dismiss="alert"></button> -->
-                    </div>
-                    {% endif %}
-                    <div class="">
-                        <label class="">{{form.first_name.label}}</label>
-                        {{form.first_name}}
-                    </div>
-                    <div class="">
-                        <label class="">{{form.last_name.label}}</label>
-                        {{form.last_name}}
-                    </div>
-                    <div class="">
-                        <label class="">{{form.username.label}}</label>
-                        {{form.username}}
-                    </div>
-                    <div class="">
-                        <label class="">{{form.email.label}}</label>
-                        {{form.email}}
-                    </div>
-                    <div class="">
-                        <label class="">{{form.password.label}}</label>
-                        {{form.password}}
-                    </div>
-                    <button class="rounded px-3 py-2 bg-purple-500 text-white text-xl" type="submit">Sign Up</button>
-                    <div class="text-center">
-                        <a href="{% url 'customer_login'  %}" class="text-blue-400">Already have an account?</a>
-                    </div>
-                </form>
-            
+    <!-- Card -->
+    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col gap-4">
+
+      {% if messages %}
+      {% for message in messages %}
+      <div class="bg-blue-50 border border-blue-200 text-blue-800 text-sm rounded-lg px-4 py-3">
+        {{ message }}
+      </div>
+      {% endfor %}
+      {% endif %}
+
+      {% if form.errors %}
+      <div class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3 flex flex-col gap-1">
+        {% for field in form %}
+          {% for error in field.errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <form action="" method="post" class="flex flex-col gap-4">
+        {% csrf_token %}
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-medium text-gray-600">{{ form.first_name.label }}</label>
+            {{ form.first_name }}
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-medium text-gray-600">{{ form.last_name.label }}</label>
+            {{ form.last_name }}
+          </div>
         </div>
-    
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-600">{{ form.username.label }}</label>
+          {{ form.username }}
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-600">{{ form.email.label }}</label>
+          {{ form.email }}
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-600">{{ form.password.label }}</label>
+          {{ form.password }}
+        </div>
+
+        <button type="submit"
+                class="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors mt-1">
+          Create Account
+        </button>
+
+      </form>
+
+      <p class="text-center text-sm text-gray-400">
+        Already have an account?
+        <a href="{% url 'customer_login' %}" class="text-purple-600 hover:text-purple-700 font-medium transition-colors">
+          Sign in
+        </a>
+      </p>
+
+    </div>
+  </div>
 </div>
 {% endblock %}
