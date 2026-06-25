@@ -5,48 +5,145 @@
 {% block body %}
 {% include "staff_navbar.html" %}
 
-<div class="max-w-2xl mx-auto px-4 py-6">
+
+<div class="max-w-3xl mx-auto px-4 py-6 bg-gray-50 min-h-screen">
+
+
+  <!-- Header -->
 
   <div class="mb-6">
-    <h1 class="text-2xl font-medium text-gray-800">Add Images</h1>
-    <p class="text-sm text-gray-400 mt-1">Upload images for this product</p>
+
+    <h1 class="text-2xl font-semibold text-gray-800">
+      Add Product Images
+    </h1>
+
+    <p class="text-sm text-gray-500 mt-1">
+      Upload images and assign them to product variants
+    </p>
+
   </div>
 
-  <form action="" method="post" enctype="multipart/form-data" class="flex flex-col gap-6">
+
+
+
+
+  <form action="" method="post" enctype="multipart/form-data" class="flex flex-col gap-5">
+
+
     {% csrf_token %}
+
     {{ formset.management_form }}
 
-    <div class="flex flex-col gap-4">
-      {% for f in formset %}
-      <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col gap-3">
-        <p class="text-xs uppercase tracking-widest text-gray-400">Image {{ forloop.counter }}</p>
 
-        <div class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-gray-600">{{ f.image.label }}</label>
-          {{ f.image }}
-          {% if f.image.errors %}
-            <p class="text-xs text-red-500">{{ f.image.errors|join:", " }}</p>
-          {% endif %}
-        </div>
 
-        <div class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-gray-600">{{ f.variant.label }}</label>
-          {{ f.variant }}
-          {% if f.variant.errors %}
-            <p class="text-xs text-red-500">{{ f.variant.errors|join:", " }}</p>
-          {% endif %}
-        </div>
+
+
+    {% for f in formset %}
+
+
+    <div class="bg-white border border-gray-200 p-5 flex flex-col gap-4">
+
+
+      <p class="text-xs uppercase tracking-widest text-gray-400">
+
+        Image {{ forloop.counter }}
+
+      </p>
+
+
+
+
+
+      <div class="flex flex-col gap-1">
+
+
+        <label class="text-sm font-medium text-gray-600">
+
+          {{ f.image.label }}
+
+        </label>
+
+
+        {{ f.image }}
+
+
+        {% if f.image.errors %}
+
+        <p class="text-xs text-red-500">
+
+          {{ f.image.errors|join:", " }}
+
+        </p>
+
+        {% endif %}
+
 
       </div>
-      {% endfor %}
+
+
+
+
+
+
+
+      <div class="flex flex-col gap-1">
+
+
+        <label class="text-sm font-medium text-gray-600">
+
+          {{ f.variant.label }}
+
+        </label>
+
+
+        {{ f.variant }}
+
+
+
+        {% if f.variant.errors %}
+
+        <p class="text-xs text-red-500">
+
+          {{ f.variant.errors|join:", " }}
+
+        </p>
+
+        {% endif %}
+
+
+
+      </div>
+
+
+
+
+
     </div>
 
+
+
+    {% endfor %}
+
+
+
+
+
+
     <button type="submit"
-      class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl transition-colors text-sm">
+      class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium text-sm transition-colors">
+
       Upload Images
+
     </button>
 
+
+
+
+
   </form>
+
+
 </div>
+
 
 {% endblock %}

@@ -1,63 +1,157 @@
 {% extends "base.html" %}
 
-{% block title %}Addresses{% endblock %}
+{% block title %}Addresses | ORVIUS{% endblock %}
 
 {% block body %}
 {% include "navbar.html" %}
 
-<div class="max-w-xl mx-auto px-4 py-6 flex flex-col gap-4">
+<div class="bg-gray-50 min-h-screen">
 
-  <div class="flex items-center justify-between">
-    <h1 class="text-2xl font-medium text-gray-800">Addresses</h1>
-    <a href="{% url 'add_address' %}"
-       class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors">
-      + Add New
-    </a>
-  </div>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-  {% if addresses %}
-  <div class="flex flex-col gap-3">
-    {% for address in addresses %}
-    <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
 
-      <!-- Address Details -->
-      <div class="px-5 py-4 flex flex-col gap-0.5">
-        <p class="font-medium text-gray-800">{{ address.first_name }} {{ address.last_name }}</p>
-        <p class="text-sm text-gray-500">{{ address.address_line_1 }}{% if address.address_line_2 %}, {{ address.address_line_2 }}{% endif %}</p>
-        <p class="text-sm text-gray-500">{{ address.city }}, {{ address.state }} — {{ address.pincode }}</p>
-        <p class="text-sm text-gray-500 mt-1">{{ address.phone }}</p>
-      </div>
+    <div class="flex items-center justify-between mb-6">
 
-      <!-- Actions -->
-      <div class="px-5 py-3 border-t border-gray-100 flex justify-end gap-2">
-        <a href="{% url 'edit_address' pk=address.pk %}"
-           class="px-3 py-1.5 border border-gray-200 hover:bg-gray-50 text-gray-600 text-sm font-medium rounded-lg transition-colors">
-          Edit
-        </a>
-        <a href="{% url 'delete_address' pk=address.pk %}"
-           class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-sm font-medium rounded-lg border border-red-200 transition-colors">
-          Delete
-        </a>
-      </div>
+      <h1 class="text-2xl font-semibold text-gray-900">
+        Addresses
+      </h1>
+
+
+      <a href="{% url 'add_address' %}"
+        class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium transition-colors">
+        + Add New
+      </a>
+
 
     </div>
-    {% endfor %}
-  </div>
 
-  {% else %}
-  <div class="flex flex-col items-center justify-center py-20 text-center bg-white border border-gray-200 rounded-xl shadow-sm">
-    <div class="bg-gray-100 rounded-full p-6 mb-4">
-      <i class="bi bi-geo-alt text-4xl text-gray-400"></i>
+
+
+
+    {% if addresses %}
+
+    <div class="bg-white border border-gray-200">
+
+
+      {% for address in addresses %}
+
+
+      <div class="p-5 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4
+{% if not forloop.last %}border-b border-gray-200{% endif %}">
+
+
+        <div class="flex flex-col gap-1">
+
+
+          <p class="font-medium text-gray-900">
+            {{ address.first_name }} {{ address.last_name }}
+          </p>
+
+
+          <p class="text-sm text-gray-600">
+
+            {{ address.address_line_1 }}
+
+            {% if address.address_line_2 %}
+            , {{ address.address_line_2 }}
+            {% endif %}
+
+          </p>
+
+
+          <p class="text-sm text-gray-600">
+
+            {{ address.city }}, {{ address.state }} - {{ address.pincode }}
+
+          </p>
+
+
+          <p class="text-sm text-gray-500 mt-1">
+
+            {{ address.phone }}
+
+          </p>
+
+
+        </div>
+
+
+
+
+        <div class="flex gap-2">
+
+
+          <a href="{% url 'edit_address' pk=address.pk %}"
+            class="px-4 py-2 border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-medium transition-colors">
+
+            Edit
+
+          </a>
+
+
+
+          <a href="{% url 'delete_address' pk=address.pk %}"
+            class="px-4 py-2 border border-red-200 bg-red-50 hover:bg-red-100 text-red-600 text-sm font-medium transition-colors">
+
+            Delete
+
+          </a>
+
+
+        </div>
+
+
+      </div>
+
+
+
+      {% endfor %}
+
+
     </div>
-    <p class="text-gray-600 font-medium">No addresses saved</p>
-    <p class="text-sm text-gray-400 mt-1">Add an address to get started</p>
-    <a href="{% url 'add_address' %}"
-       class="mt-4 px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors">
-      Add Address
-    </a>
+
+
+
+
+    {% else %}
+
+
+    <div class="bg-white border border-gray-200 p-10 text-center">
+
+
+      <i class="bi bi-geo-alt text-3xl text-gray-400"></i>
+
+
+      <p class="font-medium text-gray-800 mt-4">
+        No addresses saved
+      </p>
+
+
+      <p class="text-sm text-gray-500 mt-1">
+        Add an address for faster checkout
+      </p>
+
+
+
+      <a href="{% url 'add_address' %}"
+        class="inline-block mt-4 px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium transition-colors">
+
+        Add Address
+
+      </a>
+
+
+    </div>
+
+
+
+    {% endif %}
+
+
+
   </div>
-  {% endif %}
 
 </div>
+
 
 {% endblock %}

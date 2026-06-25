@@ -5,79 +5,244 @@
 {% block body %}
 {% include "staff_navbar.html" %}
 
-<div class="max-w-2xl mx-auto px-4 py-6">
+<div class="max-w-3xl mx-auto px-4 py-8">
 
-  <div class="mb-6">
-    <h1 class="text-2xl font-medium text-gray-800">Edit Images</h1>
-    <p class="text-sm text-gray-400 mt-1">Replace existing images or add new ones</p>
+
+  <!-- Header -->
+  <div class="mb-8">
+
+    <h1 class="text-2xl font-semibold text-gray-800">
+      Edit Product Images
+    </h1>
+
+    <p class="text-sm text-gray-500 mt-1">
+      Replace existing images or upload new product images
+    </p>
+
   </div>
 
-  <form action="" method="post" enctype="multipart/form-data" class="flex flex-col gap-6">
+
+
+
+  <form method="post"
+        enctype="multipart/form-data"
+        class="flex flex-col gap-5">
+
+
     {% csrf_token %}
+
     {{ formset.management_form }}
 
-    <div class="flex flex-col gap-4">
-      {% for form in formset %}
-      <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col gap-4">
-        {{ form.id }}
 
-        {% if form.instance.pk %}
-          <!-- Existing image -->
-          <div class="flex gap-4 items-start">
-            <img src="{{ form.instance.image.url }}"
-                 class="w-28 h-28 object-cover rounded-lg border border-gray-200 shrink-0">
-            <div class="flex flex-col gap-3 flex-1">
-              <p class="text-xs uppercase tracking-widest text-gray-400">Image {{ forloop.counter }}</p>
 
-              <div class="flex flex-col gap-1">
-                <label class="text-sm font-medium text-gray-600">Replace image</label>
-                {{ form.image }}
-              </div>
+    {% for form in formset %}
 
-              <div class="flex flex-col gap-1">
-                <label class="text-sm font-medium text-gray-600">{{ form.variant.label }}</label>
-                {{ form.variant }}
-              </div>
 
-              <div class="flex items-center gap-2 pt-2 border-t border-gray-100">
-                {{ form.DELETE }}
-                <label class="text-xs text-red-400">{{ form.DELETE.label }}</label>
-              </div>
-            </div>
+    <div class="bg-white border border-gray-200 p-5">
+
+
+      {{ form.id }}
+
+
+
+      {% if form.instance.pk %}
+
+
+      <div class="flex flex-col sm:flex-row gap-5">
+
+
+        <!-- Image Preview -->
+
+        <div class="shrink-0">
+
+          <img src="{{ form.instance.image.url }}"
+               class="w-28 h-28 object-cover border border-gray-200">
+
+        </div>
+
+
+
+
+
+        <div class="flex-1 flex flex-col gap-4">
+
+
+          <div class="flex justify-between items-center">
+
+            <p class="text-sm font-semibold text-gray-700">
+              Image {{ forloop.counter }}
+            </p>
+
+
+            <span class="text-xs text-gray-400">
+              Existing
+            </span>
+
+
           </div>
 
-        {% else %}
-          <!-- New image slot -->
-          <div class="flex flex-col gap-3">
-            <p class="text-xs uppercase tracking-widest text-gray-400">New Image</p>
 
-            <div class="flex flex-col gap-1">
-              <label class="text-sm font-medium text-gray-600">{{ form.image.label }}</label>
-              {{ form.image }}
-            </div>
 
-            <div class="flex flex-col gap-1">
-              <label class="text-sm font-medium text-gray-600">{{ form.variant.label }}</label>
-              {{ form.variant }}
-            </div>
 
-            <div class="flex items-center gap-2 pt-2 border-t border-gray-100">
-              {{ form.DELETE }}
-              <label class="text-xs text-red-400">{{ form.DELETE.label }}</label>
-            </div>
+
+          <div>
+
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              Replace Image
+            </label>
+
+            {{ form.image }}
+
           </div>
-        {% endif %}
+
+
+
+
+
+          <div>
+
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              {{ form.variant.label }}
+            </label>
+
+            {{ form.variant }}
+
+          </div>
+
+
+
+
+
+          <div class="pt-3 border-t border-gray-100 flex items-center gap-2">
+
+
+            {{ form.DELETE }}
+
+
+            <label class="text-sm text-red-500">
+              {{ form.DELETE.label }}
+            </label>
+
+
+          </div>
+
+
+
+
+        </div>
+
 
       </div>
-      {% endfor %}
+
+
+
+
+
+      {% else %}
+
+
+
+      <div class="flex flex-col gap-4">
+
+
+        <div>
+
+          <p class="text-sm font-semibold text-gray-700">
+            New Image
+          </p>
+
+          <p class="text-xs text-gray-400 mt-1">
+            Upload additional product image
+          </p>
+
+        </div>
+
+
+
+
+
+        <div>
+
+          <label class="block text-sm font-medium text-gray-600 mb-1">
+            {{ form.image.label }}
+          </label>
+
+          {{ form.image }}
+
+        </div>
+
+
+
+
+
+        <div>
+
+          <label class="block text-sm font-medium text-gray-600 mb-1">
+            {{ form.variant.label }}
+          </label>
+
+          {{ form.variant }}
+
+        </div>
+
+
+
+
+
+        <div class="pt-3 border-t border-gray-100 flex items-center gap-2">
+
+
+          {{ form.DELETE }}
+
+
+          <label class="text-sm text-red-500">
+            {{ form.DELETE.label }}
+          </label>
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+      {% endif %}
+
+
+
     </div>
 
+
+
+    {% endfor %}
+
+
+
+
+
     <button type="submit"
-      class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl transition-colors text-sm">
+      class="
+      w-full
+      py-2.5
+      bg-purple-600
+      hover:bg-purple-700
+      text-white
+      text-sm
+      font-medium
+      transition-colors">
+
       Save Images
+
     </button>
 
+
+
   </form>
+
+
 </div>
+
 
 {% endblock %}

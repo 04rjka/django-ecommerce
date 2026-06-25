@@ -3,11 +3,15 @@ from django.contrib.auth.models import User
 from .models import Product, ProductImage, ProductReview, Address, ProductVariant
 from django.forms import inlineformset_factory
 
-INPUT = "w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-transparent"
-TEXTAREA = "w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-transparent resize-none"
-SELECT = "w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-transparent"
-CHECKBOX = "w-4 h-4 accent-purple-500"
-FILE = "w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+INPUT = "w-full border border-gray-300 px-3 py-2.5 text-sm text-gray-800 bg-white focus:outline-none focus:border-purple-500 transition-colors"
+
+TEXTAREA = "w-full border border-gray-300 px-3 py-2.5 text-sm text-gray-800 bg-white focus:outline-none focus:border-purple-500 resize-none transition-colors"
+
+SELECT = "w-full border border-gray-300 px-3 py-2.5 text-sm text-gray-800 bg-white focus:outline-none focus:border-purple-500 transition-colors"
+
+CHECKBOX = "w-4 h-4 accent-purple-600"
+
+FILE = "w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-3 file:border-0 file:text-sm file:font-medium file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
 
 class UserForm(forms.ModelForm):
     class Meta:

@@ -1,82 +1,145 @@
-{% extends "base.html" %}
+{% extends "staff_base.html" %}
 
 {% block title %}Orders{% endblock %}
 
-{% block body %}
-{% include "staff_navbar.html" %}
+{% block staff_body %}
 
-<div class="max-w-4xl mx-auto px-4 py-6">
 
-  <div class="flex items-center justify-between mb-6">
-    <h1 class="text-2xl font-medium text-gray-800">Orders</h1>
-    <span class="text-sm text-gray-400">{{ orders|length }} total</span>
+<div class="flex justify-between items-center mb-5">
+
+  <h1 class="text-2xl font-semibold text-gray-800">
+    Orders
+  </h1>
+
+  <p class="text-sm text-gray-400">
+    {{ orders|length }} orders
+  </p>
+
+</div>
+
+
+
+{% if orders %}
+
+
+<div class="bg-white border border-gray-200  overflow-hidden">
+
+
+  <div class="grid grid-cols-12 px-5 py-3 bg-gray-50 text-xs text-gray-400 uppercase">
+
+    <div class="col-span-2">
+      ID
+    </div>
+
+    <div class="col-span-3">
+      Customer
+    </div>
+
+    <div class="col-span-2">
+      Amount
+    </div>
+
+    <div class="col-span-2">
+      Status
+    </div>
+
+    <div class="col-span-3 text-right">
+      Action
+    </div>
+
   </div>
 
-  {% if orders %}
-  <div class="flex flex-col gap-3">
-    {% for order in orders %}
-    <div class="bg-white border border-gray-200 rounded-xl px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-sm">
 
-      <!-- Left: Order Info -->
-      <div class="flex flex-col sm:flex-row sm:items-center gap-4">
 
-        <!-- Order ID badge -->
-        <div class="bg-gray-100 rounded-lg px-3 py-2 text-center min-w-[80px]">
-          <p class="text-xs text-gray-400">Order</p>
-          <p class="text-sm font-medium text-gray-700">#{{ order.pk }}</p>
-        </div>
+  {% for order in orders %}
 
-        <!-- Details -->
-        <div class="flex flex-col gap-1">
-          <div class="flex flex-wrap gap-3 text-sm text-gray-600">
-            <span>₹{{ order.price }}</span>
-            <span class="text-gray-300">|</span>
-            <span>{{ order.created_at|date:"d M Y, g:i A" }}</span>
-          </div>
-          <!-- Status badge -->
-          <div>
-            {% if order.status == 'placed' %}
-              <span class="text-xs font-medium bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">Placed</span>
-            {% elif order.status == 'confirmed' %}
-              <span class="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">Confirmed</span>
-            {% elif order.status == 'processing' %}
-              <span class="text-xs font-medium bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full">Processing</span>
-            {% elif order.status == 'shipped' %}
-              <span class="text-xs font-medium bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full">Shipped</span>
-            {% elif order.status == 'delivered' %}
-              <span class="text-xs font-medium bg-green-100 text-green-800 px-2 py-0.5 rounded-full">Delivered</span>
-            {% elif order.status == 'cancelled' %}
-              <span class="text-xs font-medium bg-red-100 text-red-800 px-2 py-0.5 rounded-full">Cancelled</span>
-            {% elif order.status == 'return_requested' %}
-              <span class="text-xs font-medium bg-orange-100 text-orange-800 px-2 py-0.5 rounded-full">Return Requested</span>
-            {% elif order.status == 'returned' %}
-              <span class="text-xs font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">Returned</span>
-            {% endif %}
-          </div>
-        </div>
+  <div class="grid grid-cols-12 items-center px-5 py-4 border-t border-gray-100 text-sm">
 
-      </div>
 
-      <!-- Right: Action -->
-      <a href="{% url 'staff_order_details' pk=order.pk %}"
-         class="flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors whitespace-nowrap self-start sm:self-center">
-        View
-        <i class="bi bi-arrow-right"></i>
-      </a>
+    <div class="col-span-2 font-medium text-gray-700">
+      #{{order.pk}}
+    </div>
+
+
+    <div class="col-span-3 text-gray-600">
+      {{order.name}}
+    </div>
+
+
+    <div class="col-span-2 text-gray-700">
+      ₹{{order.price}}
+    </div>
+
+
+    <div class="col-span-2">
+
+
+      {% if order.status == "placed" %}
+
+      <span class="bg-yellow-100 text-yellow-700 px-2 py-1 text-xs rounded">
+        Placed
+      </span>
+
+      {% elif order.status == "delivered" %}
+
+      <span class="bg-green-100 text-green-700 px-2 py-1 text-xs rounded">
+        Delivered
+      </span>
+
+      {% elif order.status == "cancelled" %}
+
+      <span class="bg-red-100 text-red-700 px-2 py-1 text-xs rounded">
+        Cancelled
+      </span>
+
+
+      {% else %}
+
+      <span class="bg-purple-100 text-purple-700 px-2 py-1 text-xs rounded">
+        {{order.get_status_display}}
+      </span>
+
+
+      {% endif %}
 
     </div>
-    {% endfor %}
+
+
+
+    <div class="col-span-3 text-right">
+
+
+      <a href="{% url 'staff_order_details' pk=order.pk %}"
+        class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs ">
+
+        View
+
+      </a>
+
+
+    </div>
+
+
   </div>
 
-  {% else %}
-  <div class="flex flex-col items-center justify-center py-20 text-center">
+
+  {% endfor %}
+
+</div>
+
+
+{% else %}
+
+
+<div class="flex flex-col items-center justify-center py-20 text-center">
     <div class="bg-gray-100 rounded-full p-5 mb-4">
       <i class="bi bi-inbox text-3xl text-gray-400"></i>
     </div>
     <p class="text-gray-500 font-medium">No orders to process</p>
     <p class="text-sm text-gray-400 mt-1">New orders will appear here</p>
   </div>
-  {% endif %}
 
-</div>
+{% endif %}
+
+
 {% endblock %}

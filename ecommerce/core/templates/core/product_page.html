@@ -1,141 +1,449 @@
 {% extends "base.html" %}
 
-{% block title %}{{ product.name }}{% endblock %}
+{% block title %}{{ product.name }} | ORVIUS{% endblock %}
+
 
 {% block body %}
+
 {% include "navbar.html" %}
 
-<div class="max-w-6xl mx-auto px-4 py-6 flex flex-col gap-10">
 
-  <!-- Product Section -->
-  <div class="flex flex-col lg:flex-row gap-8">
+<div class="bg-gray-50 min-h-screen">
 
-    <!-- Images -->
-    <div class="flex flex-col-reverse lg:flex-row gap-3 flex-1">
 
-      <!-- Thumbnails -->
-      <div class="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible">
-        {% for image in product.images.all %}
-        <div class="w-16 h-16 shrink-0 rounded-lg overflow-hidden border-2 cursor-pointer transition-colors
-                    {% if forloop.first %}border-purple-500{% else %}border-gray-200 hover:border-gray-400{% endif %}"
-             onclick="setMain('{{ image.image.url }}', this)">
-          <img src="{{ image.image.url }}" alt="" class="w-full h-full object-cover">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+
+        <!-- Product Section -->
+
+        <div class="bg-white border border-gray-200 p-5">
+
+
+            <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-8">
+
+
+
+                <!-- Images -->
+
+
+                <div class="flex flex-col gap-3">
+
+
+                    <!-- Main image -->
+
+
+                    <div
+                        class="h-[360px] sm:h-[420px] bg-gray-50 border border-gray-200 flex items-center justify-center">
+
+
+                        {% if product.images.first %}
+
+                        <img id="main-image" src="{{ product.images.first.image.url }}"
+                            class="h-full w-full object-contain" alt="{{ product.name }}">
+
+
+                        {% else %}
+
+
+                        <i class="bi bi-image text-5xl text-gray-300"></i>
+
+
+                        {% endif %}
+
+
+                    </div>
+
+
+
+
+
+                    <!-- Thumbnails -->
+
+
+                    <div class="flex gap-2 overflow-x-auto">
+
+
+                        {% for image in product.images.all %}
+
+
+                        <button onclick="setMain('{{ image.image.url }}', this)" class="w-14 h-14 shrink-0 border
+                    {% if forloop.first %}
+                    border-purple-600
+                    {% else %}
+                    border-gray-200
+                    {% endif %}">
+
+
+                            <img src="{{ image.image.url }}" class="w-full h-full object-cover">
+
+
+                        </button>
+
+
+                        {% endfor %}
+
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+
+
+                <!-- Product Details -->
+
+
+                <div class="flex flex-col gap-5">
+
+
+                    <div>
+
+
+                        {% if product.category %}
+
+                        <p class="text-xs text-purple-700 mb-2">
+
+                            {{ product.category.name }}
+
+                        </p>
+
+                        {% endif %}
+
+
+
+                        <h1 class="text-2xl font-semibold text-gray-900 leading-tight">
+
+                            {{ product.name }}
+
+                        </h1>
+
+
+
+                        <p class="text-xl font-semibold text-gray-900 mt-3">
+
+                            ₹{{ product.price }}
+
+                        </p>
+
+
+                    </div>
+
+
+
+
+
+                    <p class="text-sm text-gray-600 leading-relaxed">
+
+                        {{ product.info }}
+
+                    </p>
+
+
+
+
+
+                    <div class="border-t border-gray-200 pt-5">
+
+
+                        <form method="post" action="{% url 'add_to_cart' product.pk %}" class="flex flex-col gap-4">
+
+
+                            {% csrf_token %}
+
+
+
+
+                            <!-- Variant -->
+
+
+                            <div>
+
+
+                                <label class="text-sm text-gray-600">
+
+                                    Variant
+
+                                </label>
+
+
+                                <select name="variant_id"
+                                    class="mt-1 w-full border border-gray-300 px-3 py-2 text-sm bg-white">
+
+
+                                    {% for variant in product.variants.all %}
+
+
+                                    <option value="{{ variant.id }}">
+
+                                        {{ variant.name }} — ₹{{ variant.get_price }}
+
+                                    </option>
+
+
+                                    {% endfor %}
+
+
+                                </select>
+
+
+                            </div>
+
+
+
+
+
+
+                            <!-- Quantity -->
+
+
+                            <div>
+
+
+                                <label class="text-sm text-gray-600">
+
+                                    Quantity
+
+                                </label>
+
+
+                                <input type="number" name="quantity" value="1" min="1"
+                                    class="mt-1 w-24 border border-gray-300 px-3 py-2 text-sm text-center">
+
+
+                            </div>
+
+
+
+
+
+
+                            <button type="submit" class="w-full bg-purple-700 hover:bg-purple-800 
+                    text-white py-3 text-sm font-medium transition">
+
+
+                                <i class="bi bi-cart-plus mr-2"></i>
+
+                                Add to Cart
+
+
+                            </button>
+
+
+
+                        </form>
+
+
+                    </div>
+
+
+
+                </div>
+
+
+            </div>
+
+
         </div>
-        {% endfor %}
-      </div>
 
-      <!-- Main Image -->
-      <div class="flex-1 rounded-xl overflow-hidden border border-gray-200 bg-white flex items-center justify-center aspect-square max-h-[500px]">
-        <img id="main-image" src="{{ product.images.first.image.url }}" alt="{{ product.name }}"
-             class="w-full h-full object-contain">
-      </div>
+
+
+
+
+
+
+
+        <!-- Reviews -->
+
+
+        <section class="mt-8">
+
+
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">
+
+                Customer Reviews
+
+            </h2>
+
+
+
+
+
+            <div class="flex flex-col gap-3">
+
+
+                {% for review in product.reviews.all %}
+
+
+
+                <div class="bg-white border border-gray-200 p-4">
+
+
+                    <div class="flex justify-between">
+
+
+                        <p class="text-sm font-medium">
+
+                            {{ review.user }}
+
+                        </p>
+
+
+                        <p class="text-xs text-gray-400">
+
+                            {{ review.created_at|date:"d M Y" }}
+
+                        </p>
+
+
+                    </div>
+
+
+
+
+                    <p class="text-sm font-medium mt-3">
+
+                        {{ review.title }}
+
+                    </p>
+
+
+
+                    <p class="text-sm text-gray-600 mt-1">
+
+                        {{ review.content }}
+
+                    </p>
+
+
+                </div>
+
+
+
+                {% empty %}
+
+
+
+                <div class="bg-white border border-gray-200 p-8 text-center">
+
+
+                    <p class="text-sm text-gray-500">
+
+                        No reviews yet. Be the first to review.
+
+                    </p>
+
+
+                </div>
+
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+
+
+
+
+
+            <!-- Review Form -->
+
+
+            {% if already_reviewed %}
+
+
+            <div class="mt-5 bg-purple-50 border border-purple-200 p-4 text-sm text-purple-800 text-center">
+
+                You have already reviewed this product.
+
+            </div>
+
+
+            {% else %}
+
+
+            <div class="mt-5 bg-white border border-gray-200 p-5">
+
+
+                <h3 class="font-medium mb-4">
+
+                    Write a Review
+
+                </h3>
+
+
+
+                <form method="post" class="flex flex-col gap-4">
+
+
+                    {% csrf_token %}
+
+
+                    {{ form.title }}
+
+                    {{ form.content }}
+
+
+
+                    <button class="bg-purple-700 text-white py-2.5 text-sm">
+
+                        Submit Review
+
+                    </button>
+
+
+                </form>
+
+
+            </div>
+
+
+            {% endif %}
+
+
+
+        </section>
+
+
+
 
     </div>
 
-    <!-- Product Info -->
-    <div class="flex flex-col gap-4 lg:w-96">
 
-      <div class="flex flex-col gap-1">
-        {% if product.category %}
-          <span class="text-xs text-purple-600 font-medium">{{ product.category.name }}</span>
-        {% endif %}
-        <h1 class="text-2xl font-medium text-gray-800">{{ product.name }}</h1>
-        <p class="text-xl font-medium text-gray-800">₹{{ product.price }}</p>
-      </div>
-
-      <p class="text-sm text-gray-500 leading-relaxed">{{ product.info }}</p>
-
-      <hr class="border-gray-100">
-
-      <form method="post" action="{% url 'add_to_cart' product.pk %}" class="flex flex-col gap-3">
-        {% csrf_token %}
-
-        <div class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-gray-600">Variant</label>
-          <select name="variant_id"
-                  class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300">
-            {% for variant in product.variants.all %}
-            <option value="{{ variant.id }}">{{ variant.name }} — ₹{{ variant.get_price }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-gray-600">Quantity</label>
-          <input type="number" name="quantity" value="1" min="1"
-                 class="w-24 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 text-center bg-white focus:outline-none focus:ring-2 focus:ring-purple-300">
-        </div>
-
-        <button type="submit"
-                class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-xl transition-colors flex items-center justify-center gap-2 mt-1">
-          <i class="bi bi-bag-plus-fill"></i>
-          Add to Cart
-        </button>
-      </form>
-
-    </div>
-  </div>
-
-  <!-- Reviews -->
-  <div class="flex flex-col gap-6">
-    <h2 class="text-xl font-medium text-gray-800">Customer Reviews</h2>
-
-    <div class="flex flex-col gap-3">
-      {% for review in product.reviews.all %}
-      <div class="bg-white border border-gray-200 rounded-xl px-5 py-4 shadow-sm flex flex-col gap-2">
-        <div class="flex items-center justify-between">
-          <p class="text-sm font-medium text-gray-800">{{ review.user }}</p>
-          <p class="text-xs text-gray-400">{{ review.created_at|date:"d M Y" }}</p>
-        </div>
-        <p class="text-sm font-medium text-gray-700">{{ review.title }}</p>
-        <p class="text-sm text-gray-500">{{ review.content }}</p>
-      </div>
-      {% empty %}
-      <div class="bg-gray-50 border border-gray-200 rounded-xl px-5 py-8 text-center">
-        <p class="text-sm text-gray-400">No reviews yet. Be the first to review!</p>
-      </div>
-      {% endfor %}
-    </div>
-
-    <!-- Review Form -->
-    {% if already_reviewed %}
-    <div class="bg-blue-50 border border-blue-200 text-blue-800 text-sm rounded-lg px-4 py-3">
-      You have already reviewed this product.
-    </div>
-    {% else %}
-    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col gap-4">
-      <h3 class="text-xs uppercase tracking-widest text-gray-400">Write a Review</h3>
-      <form action="" method="post" class="flex flex-col gap-4">
-        {% csrf_token %}
-        <div class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-gray-600">{{ form.title.label }}</label>
-          {{ form.title }}
-        </div>
-        <div class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-gray-600">{{ form.content.label }}</label>
-          {{ form.content }}
-        </div>
-        <button type="submit"
-                class="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors">
-          Submit Review
-        </button>
-      </form>
-    </div>
-    {% endif %}
-
-  </div>
 </div>
 
+
+
+
+
 <script>
-  function setMain(url, el) {
-    document.getElementById('main-image').src = url;
-    document.querySelectorAll('[onclick^="setMain"]').forEach(t => {
-      t.classList.remove('border-purple-500');
-      t.classList.add('border-gray-200');
-    });
-    el.classList.add('border-purple-500');
-    el.classList.remove('border-gray-200');
-  }
+
+    function setMain(url, el) {
+
+        document.getElementById("main-image").src = url;
+
+
+        document.querySelectorAll("button").forEach(btn => {
+
+            btn.classList.remove("border-purple-600");
+            btn.classList.add("border-gray-200");
+
+        });
+
+
+        el.classList.add("border-purple-600");
+
+    }
+
 </script>
+
+
 
 {% endblock %}

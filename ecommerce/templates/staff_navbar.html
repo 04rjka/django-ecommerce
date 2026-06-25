@@ -1,62 +1,73 @@
- <!-- <nav class="navbar navbar-expand-lg sticky-top navbar-main">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Ecommerce</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link" aria-current="page" href="{% url 'staff_home' %}">Home</a>
-        <a class="nav-link" href="{% url 'add_product' %}">Add Product</a>
-        <a class="nav-link" href="{% url 'customer_logout' %}">Logout</a>
-      </div>
-    </div>
-  </div>
-</nav> -->
 <nav
-  class="sticky top-0 relative shadow-lg flex justify-between items-center bg-linear-to-r from-slate-600 to-purple-600  mx-auto h-20 p-1 md:px-5">
-  <div class="p-2 rounded-md flex items-center gap-1">
-    <div class=" text-xl rounded-md bg-blue-300 text-center max-w-12 object-cover overflow-hidden shrink-0"><img
-        src="/31530356_bird_2.jpg" alt=""></div>
-    <a class="text-white text-lgZz" href="{% url 'home' %}">ECOM</a>
+  class="sticky top-0 z-50 h-16 bg-purple-700 text-white flex items-center justify-between px-4 md:px-6 border-b border-purple-800">
+
+  <div class="flex items-center gap-3">
+    <!-- <div class="w-9 h-9 bg-white text-purple-700 flex items-center justify-center font-semibold">
+      O
+    </div> -->
+
+    <a href="{% url 'staff_home' %}" class="text-lg font-semibold">
+      ORVIUS Staff
+    </a>
   </div>
-  <ul id="nav-items"
-    class="hidden text-center flex-col absolute top-20 right-0 left-0 bg-slate-700 p-4 lg:bg-transparent lg:static lg:flex lg:flex-row gap-5 lg:items-center">
+
+
+  <ul id="nav-items" class="hidden lg:flex items-center gap-6 text-sm">
+
     <li>
-      <a class="block w-full border p-2 border-white rounded-md md:rounded-2xl font-semibold text-white bg-blue-300 hover:bg-white md:bg-transparent hover:text-black cursor-pointer"
-        aria-current="page" href="{% url 'staff_home' %}">Home <i class="bi bi-house"></i></a>
+      <a href="{% url 'staff_home' %}" class="hover:text-purple-200 transition">
+        Dashboard
+      </a>
     </li>
+
     <li>
-      <a class="block w-full border p-2 border-white rounded-md md:rounded-2xl font-semibold text-white bg-blue-300 hover:bg-white md:bg-transparent hover:text-black cursor-pointer"
-        href="{% url 'add_product' %}">Add Product <i class="bi bi-cart"></i></a>
+      <a href="{% url 'add_product' %}" class="hover:text-purple-200 transition">
+        Add Products
+      </a>
     </li>
+
     <li>
-      <a class="block w-full border p-2 border-white rounded-md md:rounded-2xl font-semibold text-white bg-blue-300 hover:bg-white md:bg-transparent hover:text-black cursor-pointer"
-        href="{% url 'process_orders' %}">Process Orders <i class="bi bi-journal-text"></i></a>
+      <a href="{% url 'process_orders' %}" class="hover:text-purple-200 transition">
+        Orders
+      </a>
     </li>
+
     <li>
-      <a class="block w-full border p-2 border-white rounded-md md:rounded-2xl font-semibold text-white bg-blue-300 hover:bg-white md:bg-transparent hover:text-black cursor-pointer"
-        href="{% url 'customer_logout' %}">Logout <i class="bi bi-person-fill"></i></a>
+      <a href="{% url 'customer_logout' %}" class="hover:text-purple-200 transition">
+        Logout
+      </a>
     </li>
+
   </ul>
-  <div class="m-2">
-    <form class="flex justify-center items-center border border-white p-0.5 rounded bg-white gap-1" role="search"
-      action="{% url 'staff_search' %}" method="GET">
-      <input class="focus:outline-none p-1" type="search" placeholder="Search products" name="q" aria-label="Search" />
-      <button class="bg-purple-500 px-3 py-1 rounded text-white" type="submit"><i class="bi bi-search"></i></button>
-    </form>
-  </div>
-  <div class=" lg:hidden m-2 ">
-    <button id="menu-btn" class=" p-2 text-lg rounded-md bg-purple-700 w-10 shadow">&#8801</button>
-  </div>
+
+
+  <form action="{% url 'staff_search' %}" method="GET" class="hidden md:flex items-center bg-white">
+
+    <input type="search" name="q" placeholder="Search..." class="px-3 py-2 text-sm text-gray-700 outline-none w-40">
+
+    <button class="px-3 py-2 bg-purple-600 text-white text-sm">
+      <i class="bi bi-search"></i>
+    </button>
+
+  </form>
+
+
+  <button id="menu-btn" class="lg:hidden text-xl">
+    ☰
+  </button>
+
 </nav>
 
+
 <script>
+
   const nav_items = document.getElementById("nav-items")
   const menu_btn = document.getElementById("menu-btn")
 
-  menu_btn.addEventListener("click", () => {
+  menu_btn.onclick = () => {
+
     nav_items.classList.toggle("hidden")
-    nav_items.classList.toggle("flex")
-  })
+
+  }
+
 </script>

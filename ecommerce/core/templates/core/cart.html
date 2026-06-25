@@ -1,90 +1,142 @@
 {% extends "base.html" %}
 
-{% block title %}Cart{% endblock %}
+{% block title %}Cart | ORVIUS{% endblock %}
 
 {% block body %}
 {% include "navbar.html" %}
 
-<div class="max-w-3xl mx-auto px-4 py-6 flex flex-col gap-4">
+<div class="bg-gray-50 min-h-screen">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-  <h1 class="text-2xl font-medium text-gray-800">Your Cart</h1>
+    <h1 class="text-2xl font-semibold text-gray-900 mb-6">Your Cart</h1>
 
-  {% if cart.items.all %}
+    {% if cart.items.all %}
 
-  <div class="flex flex-col gap-3">
-    {% for item in cart.items.all %}
-    <div class="bg-white border border-gray-200 rounded-xl shadow-sm flex gap-4 overflow-hidden">
+    <div class="grid lg:grid-cols-[1fr_320px] gap-6 items-start">
 
-      <!-- Image -->
-      <a href="{% url 'product_page' item.product.pk %}" class="shrink-0">
-        {% if item.variant.images.first %}
-          <img src="{{ item.variant.images.first.image.url }}"
-               class="w-36 h-36 object-cover" alt="{{ item.product.name }}">
-        {% else %}
-          <div class="w-36 h-36 bg-gray-100 flex items-center justify-center">
-            <i class="bi bi-image text-2xl text-gray-300"></i>
+      <!-- Cart Items -->
+      <div class="bg-white border border-gray-200">
+
+        <div class="px-5 py-4 border-b border-gray-200">
+          <h2 class="font-medium text-gray-900">Cart Items</h2>
+        </div>
+
+        <div class="p-4 flex flex-col gap-3 max-h-[600px] overflow-y-auto">
+
+          {% for item in cart.items.all %}
+
+          <div class="border border-gray-200 p-4 flex gap-4">
+
+            <a href="{% url 'product_page' item.product.pk %}" class="shrink-0">
+
+              {% if item.variant.images.first %}
+              <img src="{{ item.variant.images.first.image.url }}" class="w-28 h-28 object-cover bg-gray-100"
+                alt="{{ item.product.name }}">
+              {% else %}
+              <div class="w-28 h-28 bg-gray-100 flex items-center justify-center">
+                <i class="bi bi-image text-2xl text-gray-300"></i>
+              </div>
+              {% endif %}
+
+            </a>
+
+            <div class="flex flex-col justify-between flex-1">
+
+              <div>
+                <a href="{% url 'product_page' item.product.pk %}"
+                  class="text-sm font-medium text-gray-900 hover:text-purple-700">
+                  {{ item.product.name }}
+                </a>
+
+                <p class="text-xs text-gray-500 mt-1">
+                  Variant: {{ item.variant.name }}
+                </p>
+
+                <p class="font-semibold text-gray-900 mt-2">
+                  ₹{{ item.variant.product.price }}
+                </p>
+              </div>
+
+              <div class="flex items-center gap-3 mt-3">
+
+                <a href="{% url 'decrement' item.pk %}"
+                  class="w-8 h-8 border border-gray-300 flex items-center justify-center hover:bg-gray-50">
+                  −
+                </a>
+
+                <span class="text-sm w-5 text-center">
+                  {{ item.quantity }}
+                </span>
+
+                <a href="{% url 'increment' item.pk %}"
+                  class="w-8 h-8 border border-gray-300 flex items-center justify-center hover:bg-gray-50">
+                  +
+                </a>
+
+                <a href="{% url 'remove' item.pk %}" class="ml-2 text-red-500 hover:text-red-700">
+                  <i class="bi bi-trash"></i>
+                </a>
+
+              </div>
+
+            </div>
+
           </div>
-        {% endif %}
-      </a>
 
-      <!-- Details -->
-      <div class="flex flex-col justify-between py-4 pr-4 flex-1 gap-2">
-        <div class="flex flex-col gap-1">
-          <a href="{% url 'product_page' item.product.pk %}"
-             class="font-medium text-gray-800 hover:text-purple-600 transition-colors">
-            {{ item.product.name }}
-          </a>
-          <p class="text-sm text-gray-500">Variant: {{ item.variant.name }}</p>
-          <p class="text-sm font-medium text-gray-800">₹{{ item.variant.product.price }}</p>
+          {% endfor %}
+
         </div>
 
-        <!-- Qty Controls -->
-        <div class="flex items-center gap-2">
-          <a href="{% url 'decrement' item.pk %}"
-             class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-600 font-medium transition-colors">
-            −
-          </a>
-          <span class="w-8 text-center text-sm font-medium text-gray-800">{{ item.quantity }}</span>
-          <a href="{% url 'increment' item.pk %}"
-             class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-600 font-medium transition-colors">
-            +
-          </a>
-          <a href="{% url 'remove' item.pk %}"
-             class="ml-2 w-8 h-8 flex items-center justify-center rounded-lg border border-red-100 hover:bg-red-50 text-red-400 transition-colors">
-            <i class="bi bi-trash text-sm"></i>
-          </a>
+      </div>
+
+
+      <!-- Checkout -->
+      <div class="bg-white border border-gray-200 p-5 lg:sticky lg:top-24">
+
+        <h2 class="font-medium text-gray-900">
+          Checkout
+        </h2>
+
+        <div class="border-t border-gray-200 my-4"></div>
+
+        <div class="flex justify-between text-sm text-gray-600">
+          <span>Items</span>
+          <span>{{ cart.items.count }}</span>
         </div>
+
+        <a href="{% url 'checkout' %}"
+          class="mt-5 block text-center bg-purple-700 hover:bg-purple-800 text-white py-3 text-sm font-medium">
+          Proceed to Checkout
+        </a>
+
       </div>
 
     </div>
-    {% endfor %}
-  </div>
 
-  <!-- Checkout -->
-  <div class="bg-white border border-gray-200 rounded-xl shadow-sm px-5 py-4 flex items-center justify-between">
-    <p class="text-sm text-gray-500">Ready to place your order?</p>
-    <a href="{% url 'checkout' %}"
-       class="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors">
-      Checkout
-    </a>
-  </div>
 
-  {% else %}
+    {% else %}
 
-  <div class="flex flex-col items-center justify-center py-24 text-center">
-    <div class="bg-gray-100 rounded-full p-6 mb-4">
-      <i class="bi bi-cart text-4xl text-gray-400"></i>
+    <div class="bg-white border border-gray-200 py-24 text-center">
+
+      <i class="bi bi-cart text-5xl text-gray-300"></i>
+
+      <p class="mt-5 font-medium text-gray-700">
+        Your cart is empty
+      </p>
+
+      <p class="text-sm text-gray-400 mt-1">
+        Add products to continue shopping
+      </p>
+
+      <a href="{% url 'home' %}" class="inline-block mt-5 bg-purple-700 text-white px-6 py-2.5 text-sm">
+        Browse Products
+      </a>
+
     </div>
-    <p class="text-gray-600 font-medium">Your cart is empty</p>
-    <p class="text-sm text-gray-400 mt-1">Add some products to get started</p>
-    <a href="{% url 'home' %}"
-       class="mt-4 px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors">
-      Browse Products
-    </a>
+
+    {% endif %}
+
   </div>
-
-  {% endif %}
-
 </div>
 
 {% endblock %}

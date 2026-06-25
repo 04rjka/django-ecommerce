@@ -1,72 +1,219 @@
 {% extends "base.html" %}
 
-{% block title %}Profile{% endblock %}
+{% block title %}Profile | ORVIUS{% endblock %}
 
 {% block body %}
 {% include "navbar.html" %}
 
-<div class="max-w-md mx-auto px-4 py-6 flex flex-col gap-4">
+<div class="bg-gray-50 min-h-screen">
 
-  <h1 class="text-2xl font-medium text-gray-800">Profile</h1>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-  <!-- User Info -->
-  <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
 
-    <!-- Avatar -->
-    <div class="bg-purple-50 px-5 py-6 flex items-center gap-4 border-b border-gray-100">
-      <div class="w-14 h-14 rounded-full bg-purple-200 flex items-center justify-center shrink-0">
-        <span class="text-xl font-medium text-purple-700">
-          {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+    <h1 class="text-2xl font-semibold text-gray-900 mb-6">
+      Profile
+    </h1>
+
+
+
+    <!-- Profile -->
+
+    <div class="bg-white border border-gray-200">
+
+
+      <div class="p-5 border-b border-gray-200 flex items-center gap-4">
+
+
+        <div class="w-14 h-14 bg-purple-100 flex items-center justify-center">
+
+          <span class="text-lg font-semibold text-purple-700">
+
+            {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+
+          </span>
+
+        </div>
+
+
+
+        <div>
+
+          <p class="font-medium text-gray-900">
+
+            {{ user.first_name }} {{ user.last_name }}
+
+          </p>
+
+
+          <p class="text-sm text-gray-500">
+
+            {{ user.email }}
+
+          </p>
+
+
+        </div>
+
+
+      </div>
+
+
+
+
+
+
+      <div class="px-5">
+
+
+        <div class="flex justify-between py-4 border-b border-gray-200">
+
+          <span class="text-sm text-gray-500">
+            Username
+          </span>
+
+          <span class="text-sm font-medium text-gray-900">
+            {{ user.username }}
+          </span>
+
+        </div>
+
+
+
+        <div class="flex justify-between py-4 border-b border-gray-200">
+
+          <span class="text-sm text-gray-500">
+            First Name
+          </span>
+
+          <span class="text-sm font-medium text-gray-900">
+            {{ user.first_name }}
+          </span>
+
+        </div>
+
+
+
+
+        <div class="flex justify-between py-4 border-b border-gray-200">
+
+          <span class="text-sm text-gray-500">
+            Last Name
+          </span>
+
+          <span class="text-sm font-medium text-gray-900">
+            {{ user.last_name }}
+          </span>
+
+        </div>
+
+
+
+
+        <div class="flex justify-between py-4 border-b border-gray-200">
+
+          <span class="text-sm text-gray-500">
+            Email
+          </span>
+
+          <span class="text-sm font-medium text-gray-900">
+            {{ user.email }}
+          </span>
+
+        </div>
+
+
+
+
+        <div class="flex justify-between py-4">
+
+          <span class="text-sm text-gray-500">
+            Member Since
+          </span>
+
+          <span class="text-sm font-medium text-gray-900">
+            {{ user.date_joined|date:"d M Y" }}
+          </span>
+
+        </div>
+
+
+
+      </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+    <!-- Actions -->
+
+
+    <div class="bg-white border border-gray-200 mt-6">
+
+
+      <a href="{% url 'view_address' %}"
+        class="flex justify-between items-center px-5 py-4 border-b border-gray-200 hover:bg-gray-50">
+
+
+        <span class="text-sm font-medium text-gray-900">
+
+          Manage Addresses
+
         </span>
-      </div>
-      <div>
-        <p class="font-medium text-gray-800">{{ user.first_name }} {{ user.last_name }}</p>
-        <p class="text-sm text-gray-400">{{ user.email }}</p>
-      </div>
+
+
+        <i class="bi bi-chevron-right text-gray-400"></i>
+
+
+      </a>
+
+
+
+
+
+      <a href="{% url 'orders' %}" class="flex justify-between items-center px-5 py-4 hover:bg-gray-50">
+
+
+        <span class="text-sm font-medium text-gray-900">
+
+          My Orders
+
+        </span>
+
+
+        <i class="bi bi-chevron-right text-gray-400"></i>
+
+
+      </a>
+
+
     </div>
 
-    <!-- Details -->
-    <div class="px-5 py-4 flex flex-col gap-3">
-      <div class="flex justify-between items-center py-2 border-b border-gray-100">
-        <p class="text-sm text-gray-400">Username</p>
-        <p class="text-sm font-medium text-gray-700">{{ user.username }}</p>
-      </div>
-      <div class="flex justify-between items-center py-2 border-b border-gray-100">
-        <p class="text-sm text-gray-400">First Name</p>
-        <p class="text-sm font-medium text-gray-700">{{ user.first_name }}</p>
-      </div>
-      <div class="flex justify-between items-center py-2 border-b border-gray-100">
-        <p class="text-sm text-gray-400">Last Name</p>
-        <p class="text-sm font-medium text-gray-700">{{ user.last_name }}</p>
-      </div>
-      <div class="flex justify-between items-center py-2 border-b border-gray-100">
-        <p class="text-sm text-gray-400">Email</p>
-        <p class="text-sm font-medium text-gray-700">{{ user.email }}</p>
-      </div>
-      <div class="flex justify-between items-center py-2">
-        <p class="text-sm text-gray-400">Member Since</p>
-        <p class="text-sm font-medium text-gray-700">{{ user.date_joined|date:"d M Y" }}</p>
-      </div>
-    </div>
 
-  </div>
 
-  <!-- Actions -->
-  <div class="flex flex-col gap-2">
-    <a href="{% url 'view_address' %}"
-       class="w-full text-center py-2.5 border border-gray-200 bg-purple-600 hover:bg-purple-700 text-gray-50 text-sm font-medium rounded-lg transition-colors">
-      Manage Addresses
-    </a>
-    <a href="{% url 'orders' %}"
-       class="w-full text-center py-2.5 border border-gray-200 bg-purple-600 hover:bg-purple-700 text-gray-50 text-sm font-medium rounded-lg transition-colors">
-      My Orders
-    </a>
-    <a href="{% url 'customer_logout' %}"
-       class="w-full text-center py-2.5 bg-red-500 hover:bg-red-600 text-gray-50 text-sm font-medium rounded-lg border border-gray-200 transition-colors">
+
+
+
+
+    <a href="{% url 'customer_logout' %}" class="block text-center mt-4 bg-red-600 hover:bg-red-700 
+text-white py-3 text-sm font-medium">
+
       Logout
+
     </a>
+
+
+
+
+
   </div>
 
 </div>
+
 
 {% endblock %}

@@ -1,98 +1,235 @@
 {% extends "base.html" %}
 
-{% block title %}Add Address{% endblock %}
+{% block title %}Add Address | ORVIUS{% endblock %}
 
 {% block body %}
 {% include "navbar.html" %}
 
-<div class="max-w-xl mx-auto px-4 py-6 flex flex-col gap-6">
+<div class="bg-gray-50 min-h-screen">
 
-  <div>
-    <h1 class="text-2xl font-medium text-gray-800">Add New Address</h1>
-    <p class="text-sm text-gray-400 mt-1">Enter your delivery address details</p>
-  </div>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-  <!-- Messages -->
-  {% if messages %}
-  {% for message in messages %}
-  <div class="bg-blue-50 border border-blue-200 text-blue-800 text-sm rounded-lg px-4 py-3">
-    {{ message }}
-  </div>
-  {% endfor %}
-  {% endif %}
 
-  <!-- Errors -->
-  {% if form.errors %}
-  <div class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3 flex flex-col gap-1">
-    {% for field in form %}
+    <div class="mb-6">
+
+      <h1 class="text-2xl font-semibold text-gray-900">
+        Add New Address
+      </h1>
+
+      <p class="text-sm text-gray-500 mt-1">
+        Enter your delivery details
+      </p>
+
+    </div>
+
+
+
+    {% if messages %}
+
+    {% for message in messages %}
+
+    <div class="bg-purple-50 border border-purple-200 text-purple-800 text-sm px-4 py-3 mb-4">
+      {{ message }}
+    </div>
+
+    {% endfor %}
+
+    {% endif %}
+
+
+
+
+    {% if form.errors %}
+
+    <div class="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 mb-4">
+
+      {% for field in form %}
+
       {% for error in field.errors %}
-        <p>{{ error }}</p>
-      {% endfor %}
-    {% endfor %}
-    {% for error in form.non_field_errors %}
+
       <p>{{ error }}</p>
-    {% endfor %}
+
+      {% endfor %}
+
+      {% endfor %}
+
+
+      {% for error in form.non_field_errors %}
+
+      <p>{{ error }}</p>
+
+      {% endfor %}
+
+
+    </div>
+
+    {% endif %}
+
+
+
+
+
+    <form action="" method="post" class="bg-white border border-gray-200 p-5 flex flex-col gap-5">
+
+      {% csrf_token %}
+
+
+
+      <div>
+
+        <h2 class="text-sm font-medium text-gray-900 mb-4">
+          Personal Details
+        </h2>
+
+
+        <div class="grid sm:grid-cols-2 gap-4">
+
+
+          <div class="flex flex-col gap-1">
+
+            <label class="text-sm text-gray-600">
+              {{ form.first_name.label }}
+            </label>
+
+            {{ form.first_name }}
+
+          </div>
+
+
+          <div class="flex flex-col gap-1">
+
+            <label class="text-sm text-gray-600">
+              {{ form.last_name.label }}
+            </label>
+
+            {{ form.last_name }}
+
+          </div>
+
+
+        </div>
+
+
+
+        <div class="flex flex-col gap-1 mt-4">
+
+          <label class="text-sm text-gray-600">
+            {{ form.phone.label }}
+          </label>
+
+          {{ form.phone }}
+
+        </div>
+
+
+      </div>
+
+
+
+
+
+      <div class="border-t border-gray-200 pt-5">
+
+
+        <h2 class="text-sm font-medium text-gray-900 mb-4">
+          Address Details
+        </h2>
+
+
+
+        <div class="flex flex-col gap-4">
+
+
+
+          <div class="flex flex-col gap-1">
+
+            <label class="text-sm text-gray-600">
+              {{ form.address_line_1.label }}
+            </label>
+
+            {{ form.address_line_1 }}
+
+          </div>
+
+
+
+          <div class="flex flex-col gap-1">
+
+            <label class="text-sm text-gray-600">
+              {{ form.address_line_2.label }}
+            </label>
+
+            {{ form.address_line_2 }}
+
+          </div>
+
+
+
+
+          <div class="grid sm:grid-cols-3 gap-4">
+
+
+            <div class="flex flex-col gap-1">
+
+              <label class="text-sm text-gray-600">
+                {{ form.city.label }}
+              </label>
+
+              {{ form.city }}
+
+            </div>
+
+
+            <div class="flex flex-col gap-1">
+
+              <label class="text-sm text-gray-600">
+                {{ form.state.label }}
+              </label>
+
+              {{ form.state }}
+
+            </div>
+
+
+            <div class="flex flex-col gap-1">
+
+              <label class="text-sm text-gray-600">
+                {{ form.pincode.label }}
+              </label>
+
+              {{ form.pincode }}
+
+            </div>
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+
+
+
+      <button type="submit" class="w-full bg-purple-700 hover:bg-purple-800 
+text-white py-3 text-sm font-medium">
+
+        Save Address
+
+      </button>
+
+
+
+    </form>
+
+
+
   </div>
-  {% endif %}
 
-  <form action="" method="post" class="flex flex-col gap-6">
-    {% csrf_token %}
-
-    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col gap-4">
-      <h2 class="text-xs uppercase tracking-widest text-gray-400">Personal Details</h2>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-gray-600">{{ form.first_name.label }}</label>
-          {{ form.first_name }}
-        </div>
-        <div class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-gray-600">{{ form.last_name.label }}</label>
-          {{ form.last_name }}
-        </div>
-      </div>
-
-      <div class="flex flex-col gap-1">
-        <label class="text-sm font-medium text-gray-600">{{ form.phone.label }}</label>
-        {{ form.phone }}
-      </div>
-    </div>
-
-    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col gap-4">
-      <h2 class="text-xs uppercase tracking-widest text-gray-400">Address Details</h2>
-
-      <div class="flex flex-col gap-1">
-        <label class="text-sm font-medium text-gray-600">{{ form.address_line_1.label }}</label>
-        {{ form.address_line_1 }}
-      </div>
-
-      <div class="flex flex-col gap-1">
-        <label class="text-sm font-medium text-gray-600">{{ form.address_line_2.label }}</label>
-        {{ form.address_line_2 }}
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-gray-600">{{ form.city.label }}</label>
-          {{ form.city }}
-        </div>
-        <div class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-gray-600">{{ form.state.label }}</label>
-          {{ form.state }}
-        </div>
-        <div class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-gray-600">{{ form.pincode.label }}</label>
-          {{ form.pincode }}
-        </div>
-      </div>
-    </div>
-
-    <button type="submit"
-      class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl transition-colors text-sm">
-      Save Address
-    </button>
-
-  </form>
 </div>
+
 
 {% endblock %}

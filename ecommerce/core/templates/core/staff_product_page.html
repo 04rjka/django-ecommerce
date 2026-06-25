@@ -5,160 +5,440 @@
 {% block body %}
 {% include "staff_navbar.html" %}
 
-<div class="max-w-6xl mx-auto px-4 py-6 flex flex-col gap-10">
+<div class="max-w-6xl mx-auto px-4 py-6 flex flex-col gap-8">
 
-  <!-- Product Section -->
+  <!-- Product Header -->
   <div class="flex flex-col lg:flex-row gap-8">
 
     <!-- Images -->
     <div class="flex flex-col-reverse lg:flex-row gap-3 flex-1">
 
       <!-- Thumbnails -->
-      <div class="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible">
+      <div class="flex lg:flex-col gap-2 overflow-x-auto">
+
         {% for image in product.images.all %}
-        <div class="w-16 h-16 shrink-0 rounded-lg overflow-hidden border-2 cursor-pointer transition-colors
-                    {% if forloop.first %}border-purple-500{% else %}border-gray-200 hover:border-gray-400{% endif %}"
-             onclick="setMain('{{ image.image.url }}', this)">
-          <img src="{{ image.image.url }}" alt="" class="w-full h-full object-cover">
+        <div onclick="setMain('{{ image.image.url }}', this)" class="w-16 h-16 shrink-0 overflow-hidden border cursor-pointer
+             {% if forloop.first %}
+             border-purple-500
+             {% else %}
+             border-gray-200 hover:border-gray-400
+             {% endif %}">
+
+          <img src="{{ image.image.url }}" class="w-full h-full object-cover">
+
         </div>
         {% endfor %}
+
       </div>
+
 
       <!-- Main Image -->
-      <div class="flex-1 rounded-xl overflow-hidden border border-gray-200 bg-white flex items-center justify-center aspect-square max-h-[500px]">
-        <img id="main-image" src="{{ product.images.first.image.url }}" alt="{{ product.name }}"
-             class="w-full h-full object-contain">
+      <div
+        class="flex-1 aspect-square max-h-[450px] border border-gray-200 bg-white flex items-center justify-center overflow-hidden">
+
+        {% if product.images.first %}
+        <img id="main-image" src="{{ product.images.first.image.url }}" class="w-full h-full object-contain">
+        {% else %}
+
+        <div class="text-gray-400 text-sm">
+          No image
+        </div>
+
+        {% endif %}
+
       </div>
 
     </div>
 
-    <!-- Product Info -->
-    <div class="flex flex-col gap-4 lg:w-96">
 
-      <div class="flex flex-col gap-1">
+    <!-- Product Details -->
+
+    <div class="lg:w-96 flex flex-col gap-5">
+
+
+      <div>
+
         {% if product.category %}
-          <span class="text-xs text-purple-600 font-medium">{{ product.category.name }}</span>
+        <p class="text-xs text-purple-600 font-medium mb-1">
+          {{ product.category.name }}
+        </p>
         {% endif %}
-        <h1 class="text-2xl font-medium text-gray-800">{{ product.name }}</h1>
-        <p class="text-xl font-medium text-gray-800">₹{{ product.price }}</p>
-        <p class="text-sm text-gray-500 leading-relaxed mt-1">{{ product.info }}</p>
+
+
+        <h1 class="text-2xl font-medium text-gray-800">
+          {{ product.name }}
+        </h1>
+
+
+        <p class="text-xl font-medium text-gray-800 mt-2">
+          ₹{{ product.price }}
+        </p>
+
+
+        <p class="text-sm text-gray-500 mt-3 leading-relaxed">
+          {{ product.info }}
+        </p>
+
+
       </div>
 
-      <hr class="border-gray-100">
+
+
+      <!-- Metadata -->
+
+      <div class="border-t border-gray-200 pt-3 text-sm">
+
+
+        <div class="flex justify-between py-2 border-b border-gray-100">
+          <span class="text-gray-400">
+            Product ID
+          </span>
+
+          <span class="text-gray-700">
+            #{{ product.pk }}
+          </span>
+        </div>
+
+
+        <div class="flex justify-between py-2 border-b border-gray-100">
+
+          <span class="text-gray-400">
+            Variants
+          </span>
+
+          <span class="text-gray-700">
+            {{ product.variants.count }}
+          </span>
+
+        </div>
+
+
+        <div class="flex justify-between py-2">
+
+          <span class="text-gray-400">
+            Reviews
+          </span>
+
+          <span class="text-gray-700">
+            {{ product.reviews.count }}
+          </span>
+
+        </div>
+
+
+      </div>
+
+
 
       <!-- Actions -->
+
       <div class="flex flex-col gap-2">
+
+
         <a href="{% url 'edit_product' pk=product.pk %}"
-           class="w-full text-center py-2.5 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2">
-          <i class="bi bi-pen"></i> Edit Product Info
+          class="w-full text-center py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium  transition">
+
+          <i class="bi bi-pen"></i>
+          Edit Product
+
         </a>
+
+
+
         <a href="{% url 'edit_product_images' pk=product.pk %}"
-           class="w-full text-center py-2.5 border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2">
-          <i class="bi bi-images"></i> Edit Images
+          class="w-full text-center py-2 border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-medium  transition">
+
+          <i class="bi bi-images"></i>
+          Manage Images
+
         </a>
+
+
       </div>
 
+
     </div>
+
+
   </div>
 
-  <!-- Variants Table -->
-  <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-    <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-      <h2 class="text-sm font-medium text-gray-800">Variants</h2>
-      <span class="text-xs text-gray-400">{{ product.variants.count }} variant{{ product.variants.count|pluralize }}</span>
+
+
+  <!-- Variants -->
+
+  <div class="border border-gray-200 bg-white">
+
+
+    <div class="px-5 py-3 border-b border-gray-100 flex justify-between">
+
+      <h2 class="text-sm font-medium text-gray-800">
+        Variants
+      </h2>
+
+      <span class="text-xs text-gray-400">
+        {{ product.variants.count }} total
+      </span>
+
     </div>
+
+
 
     {% if product.variants.all %}
+
     <div class="overflow-x-auto">
+
+
       <table class="w-full text-sm">
+
+
         <thead>
+
           <tr class="bg-gray-50 border-b border-gray-100">
-            <th class="text-left px-5 py-3 text-xs uppercase tracking-widest text-gray-400 font-medium">Name</th>
-            <th class="text-left px-5 py-3 text-xs uppercase tracking-widest text-gray-400 font-medium">Base Price</th>
-            <th class="text-left px-5 py-3 text-xs uppercase tracking-widest text-gray-400 font-medium">Adjustment</th>
-            <th class="text-left px-5 py-3 text-xs uppercase tracking-widest text-gray-400 font-medium">Final Price</th>
-            <th class="text-left px-5 py-3 text-xs uppercase tracking-widest text-gray-400 font-medium">Stock</th>
-            <th class="text-left px-5 py-3 text-xs uppercase tracking-widest text-gray-400 font-medium">Status</th>
+
+            <th class="text-left px-5 py-3 text-xs text-gray-400">
+              Name
+            </th>
+
+            <th class="text-left px-5 py-3 text-xs text-gray-400">
+              Base Price
+            </th>
+
+            <th class="text-left px-5 py-3 text-xs text-gray-400">
+              Adjustment
+            </th>
+
+            <th class="text-left px-5 py-3 text-xs text-gray-400">
+              Final Price
+            </th>
+
+            <th class="text-left px-5 py-3 text-xs text-gray-400">
+              Stock
+            </th>
+
+            <th class="text-left px-5 py-3 text-xs text-gray-400">
+              Status
+            </th>
+
+
           </tr>
+
+
         </thead>
+
+
+
         <tbody>
+
+
           {% for variant in product.variants.all %}
-          <tr class="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
-            <td class="px-5 py-3 font-medium text-gray-800">{{ variant.name }}</td>
-            <td class="px-5 py-3 text-gray-500">₹{{ product.price }}</td>
+
+          <tr class="border-b border-gray-100 hover:bg-gray-50">
+
+
+            <td class="px-5 py-3 font-medium text-gray-800">
+              {{ variant.name }}
+            </td>
+
+
+            <td class="px-5 py-3 text-gray-600">
+              ₹{{ product.price }}
+            </td>
+
+
             <td class="px-5 py-3">
+
               {% if variant.price_adjustment > 0 %}
-                <span class="text-green-600">+₹{{ variant.price_adjustment }}</span>
-              {% elif variant.price_adjustment < 0 %}
-                <span class="text-red-500">-₹{{ variant.price_adjustment }}</span>
-              {% else %}
-                <span class="text-gray-400">—</span>
-              {% endif %}
+
+              <span class="text-green-600">
+                +₹{{ variant.price_adjustment }}
+              </span>
+
+              {% elif variant.price_adjustment < 0 %} <span class="text-red-500">
+                -₹{{ variant.price_adjustment }}
+                </span>
+
+                {% else %}
+
+                <span class="text-gray-400">
+                  -
+                </span>
+
+                {% endif %}
+
             </td>
-            <td class="px-5 py-3 font-medium text-gray-800">₹{{ variant.get_price }}</td>
+
+
+
+            <td class="px-5 py-3 font-medium">
+              ₹{{ variant.get_price }}
+            </td>
+
+
+
             <td class="px-5 py-3">
+
               {% if variant.stock == 0 %}
-                <span class="text-xs font-medium bg-red-100 text-red-700 px-2 py-0.5 rounded-full">Out of stock</span>
-              {% elif variant.stock <= 5 %}
-                <span class="text-xs font-medium bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">{{ variant.stock }} left</span>
+
+              <span class="text-red-600">
+                Out of stock
+              </span>
+
               {% else %}
-                <span class="text-sm text-gray-700">{{ variant.stock }}</span>
+
+              {{ variant.stock }}
+
               {% endif %}
+
             </td>
+
+
+
             <td class="px-5 py-3">
+
               {% if variant.is_available %}
-                <span class="text-xs font-medium bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Available</span>
+
+              <span class="text-green-600">
+                Available
+              </span>
+
               {% else %}
-                <span class="text-xs font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">Unavailable</span>
+
+              <span class="text-gray-400">
+                Disabled
+              </span>
+
               {% endif %}
+
+
             </td>
+
+
+
           </tr>
+
+
           {% endfor %}
+
+
         </tbody>
+
+
       </table>
+
+
     </div>
+
 
     {% else %}
-    <div class="px-5 py-8 text-center">
-      <p class="text-sm text-gray-400">No variants added yet.</p>
+
+    <div class="py-8 text-center text-sm text-gray-400">
+      No variants added
     </div>
+
     {% endif %}
+
+
   </div>
+
+
+
+
 
   <!-- Reviews -->
-  <div class="flex flex-col gap-4">
-    <h2 class="text-xl font-medium text-gray-800">Customer Reviews</h2>
 
-    <div class="flex flex-col gap-3">
+
+  <div>
+
+
+    <h2 class="text-xl font-medium text-gray-800 mb-3">
+      Customer Reviews
+    </h2>
+
+
+
+    <div class="border border-gray-200 bg-white px-5">
+
+
       {% for review in product.reviews.all %}
-      <div class="bg-white border border-gray-200 rounded-xl px-5 py-4 shadow-sm flex flex-col gap-2">
-        <div class="flex items-center justify-between">
-          <p class="text-sm font-medium text-gray-800">{{ review.user }}</p>
-          <p class="text-xs text-gray-400">{{ review.created_at|date:"d M Y" }}</p>
+
+
+      <div class="py-4 border-b border-gray-100 last:border-0">
+
+
+        <div class="flex justify-between">
+
+
+          <p class="font-medium text-gray-800">
+            {{ review.user }}
+          </p>
+
+
+          <p class="text-xs text-gray-400">
+            {{ review.created_at|date:"d M Y" }}
+          </p>
+
+
         </div>
-        <p class="text-sm font-medium text-gray-700">{{ review.title }}</p>
-        <p class="text-sm text-gray-500">{{ review.content }}</p>
+
+
+
+        <p class="text-sm font-medium text-gray-700 mt-2">
+          {{ review.title }}
+        </p>
+
+
+        <p class="text-sm text-gray-500 mt-1">
+          {{ review.content }}
+        </p>
+
+
       </div>
+
+
       {% empty %}
-      <div class="bg-gray-50 border border-gray-200 rounded-xl px-5 py-8 text-center">
-        <p class="text-sm text-gray-400">No reviews yet.</p>
+
+
+      <div class="py-8 text-center text-sm text-gray-400">
+        No reviews yet
       </div>
+
+
       {% endfor %}
+
+
     </div>
+
+
   </div>
+
 
 </div>
 
+
+
+
 <script>
+
   function setMain(url, el) {
-    document.getElementById('main-image').src = url;
-    document.querySelectorAll('[onclick^="setMain"]').forEach(t => {
-      t.classList.remove('border-purple-500');
-      t.classList.add('border-gray-200');
-    });
-    el.classList.add('border-purple-500');
-    el.classList.remove('border-gray-200');
+
+    document.getElementById("main-image").src = url;
+
+
+    document.querySelectorAll("[onclick^='setMain']")
+      .forEach(item => {
+
+        item.classList.remove("border-purple-500");
+        item.classList.add("border-gray-200");
+
+      });
+
+
+    el.classList.add("border-purple-500");
+    el.classList.remove("border-gray-200");
+
   }
+
 </script>
+
 
 {% endblock %}

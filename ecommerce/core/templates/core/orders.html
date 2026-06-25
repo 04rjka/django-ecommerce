@@ -1,71 +1,143 @@
 {% extends "base.html" %}
 
-{% block title %}My Orders{% endblock %}
+{% block title %}My Orders | ORVIUS{% endblock %}
 
 {% block body %}
 {% include "navbar.html" %}
 
-<div class="max-w-3xl mx-auto px-4 py-6 flex flex-col gap-4">
+<div class="bg-gray-50 min-h-screen">
 
-  <h1 class="text-2xl font-medium text-gray-800">My Orders</h1>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-  {% if orders %}
-  <div class="flex flex-col gap-3">
-    {% for order in orders %}
-    <div class="bg-white border border-gray-200 rounded-xl shadow-sm px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <h1 class="text-2xl font-semibold text-gray-900 mb-6">
+      My Orders
+    </h1>
 
-      <!-- Left -->
-      <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+    {% if orders %}
 
-        <!-- Order ID -->
-        <div class="bg-gray-100 rounded-lg px-3 py-2 text-center min-w-[80px]">
-          <p class="text-xs text-gray-400">Order</p>
-          <p class="text-sm font-medium text-gray-700">#{{ order.pk }}</p>
+    <div class="bg-white border border-gray-200">
+
+      <div class="px-5 py-4 border-b border-gray-200">
+        <h2 class="font-medium text-gray-900">
+          Order History
+        </h2>
+      </div>
+
+
+      <div class="flex flex-col">
+
+        {% for order in orders %}
+
+        <div
+          class="px-5 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
+
+          <div class="flex items-center gap-5">
+
+            <div>
+              <p class="text-xs text-gray-400">
+                Order
+              </p>
+
+              <p class="text-sm font-medium text-gray-900">
+                #{{ order.pk }}
+              </p>
+            </div>
+
+
+            <div class="h-8 border-l border-gray-200 hidden sm:block"></div>
+
+
+            <div>
+
+              <p class="text-sm font-semibold text-gray-900">
+                ₹{{ order.price }}
+              </p>
+
+
+              <span class="text-xs font-medium
+          {% if order.status == 'placed' %}
+          text-amber-700
+          {% elif order.status == 'confirmed' %}
+          text-blue-700
+          {% elif order.status == 'processing' %}
+          text-purple-700
+          {% elif order.status == 'shipped' %}
+          text-indigo-700
+          {% elif order.status == 'delivered' %}
+          text-green-700
+          {% elif order.status == 'cancelled' %}
+          text-red-700
+          {% elif order.status == 'return_requested' %}
+          text-orange-700
+          {% elif order.status == 'returned' %}
+          text-gray-600
+          {% endif %}">
+
+                {{ order.get_status_display }}
+
+              </span>
+
+
+            </div>
+
+
+          </div>
+
+
+
+          <a href="{% url 'order_details' pk=order.pk %}" class="px-4 py-2 border border-gray-300 hover:bg-gray-50 
+      text-sm text-gray-700 text-center">
+
+            View Details
+            <i class="bi bi-arrow-right ml-1"></i>
+
+          </a>
+
+
         </div>
 
-        <!-- Info -->
-        <div class="flex flex-col gap-1">
-          <p class="text-sm text-gray-600">₹{{ order.price }}</p>
-          <span class="text-xs font-medium px-2 py-0.5 rounded-full w-fit
-            {% if order.status == 'placed' %}bg-amber-100 text-amber-800
-            {% elif order.status == 'confirmed' %}bg-blue-100 text-blue-800
-            {% elif order.status == 'processing' %}bg-purple-100 text-purple-800
-            {% elif order.status == 'shipped' %}bg-indigo-100 text-indigo-800
-            {% elif order.status == 'delivered' %}bg-green-100 text-green-800
-            {% elif order.status == 'cancelled' %}bg-red-100 text-red-800
-            {% elif order.status == 'return_requested' %}bg-orange-100 text-orange-800
-            {% elif order.status == 'returned' %}bg-gray-100 text-gray-600
-            {% endif %}">
-            {{ order.get_status_display }}
-          </span>
-        </div>
+
+        {% endfor %}
 
       </div>
 
-      <!-- Right -->
-      <a href="{% url 'order_details' pk=order.pk %}"
-         class="flex items-center justify-center gap-2 px-4 py-2 border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-lg transition-colors whitespace-nowrap self-start sm:self-center">
-        View Details
-        <i class="bi bi-arrow-right text-sm"></i>
+
+    </div>
+
+
+    {% else %}
+
+
+    <div class="bg-white border border-gray-200 py-24 text-center">
+
+      <i class="bi bi-bag text-5xl text-gray-300"></i>
+
+
+      <p class="mt-5 font-medium text-gray-700">
+        No orders yet
+      </p>
+
+
+      <p class="text-sm text-gray-400 mt-1">
+        Your orders will appear here after checkout
+      </p>
+
+
+      <a href="{% url 'home' %}" class="inline-block mt-5 bg-purple-700 text-white px-6 py-2.5 text-sm">
+
+        Start Shopping
+
       </a>
 
-    </div>
-    {% endfor %}
-  </div>
 
-  {% else %}
-  <div class="flex flex-col items-center justify-center py-24 text-center">
-    <div class="bg-gray-100 rounded-full p-6 mb-4">
-      <i class="bi bi-bag text-4xl text-gray-400"></i>
     </div>
-    <p class="text-gray-600 font-medium">No orders yet</p>
-    <p class="text-sm text-gray-400 mt-1">Your orders will appear here once you place one</p>
-    <a href="{% url 'home' %}"
-       class="mt-4 px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors">
-      Start Shopping
-    </a>
+
+
+    {% endif %}
+
+
   </div>
-  {% endif %}
 
 </div>
 
