@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Login | ORVIUS{% endblock %}
+
+{% block body %}
+
+<div class="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+
+
+    <div class="w-full max-w-md">
+
+
+        <!-- Header -->
+        <div class="text-center mb-8">
+
+            <h1 class="text-3xl font-semibold text-gray-900">
+                ORVIUS
+            </h1>
+
+            <p class="text-sm text-gray-500 mt-2">
+                Staff management portal
+            </p>
+
+        </div>
+
+
+
+        <!-- Card -->
+        <div class="bg-white border border-gray-200 p-6">
+
+
+            <h2 class="text-xl font-medium text-gray-900 mb-1">
+                Staff Login
+            </h2>
+
+
+            <p class="text-sm text-gray-500 mb-6">
+                Sign in to manage products and orders
+            </p>
+
+
+
+            {% if messages %}
+
+            {% for message in messages %}
+
+            <div class="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 mb-4">
+
+                {{ message }}
+
+            </div>
+
+            {% endfor %}
+
+            {% endif %}
+
+
+
+
+
+            <form action="" method="post" class="flex flex-col gap-4">
+
+                {% csrf_token %}
+
+
+
+                <div class="flex flex-col gap-1">
+
+                    <label class="text-sm text-gray-600">
+                        {{ form.username.label }}
+                    </label>
+
+                    {{ form.username }}
+
+                </div>
+
+
+
+
+
+                <div class="flex flex-col gap-1">
+
+                    <label class="text-sm text-gray-600">
+                        {{ form.password.label }}
+                    </label>
+
+                    {{ form.password }}
+
+                </div>
+
+
+
+
+
+                <button type="submit"
+                    class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium transition-colors mt-2">
+
+                    Staff Sign In
+
+                </button>
+
+
+
+            </form>
+
+
+
+
+            <p class="text-center text-sm text-gray-500 mt-5">
+
+                Customer?
+
+                <a href="{% url 'customer_login' %}" class="text-purple-600 hover:text-purple-700 font-medium">
+
+                    Customer Login
+
+                </a>
+
+            </p>
+
+
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock %}

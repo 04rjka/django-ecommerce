@@ -63,10 +63,10 @@ def customer_login(request):
             password = form.cleaned_data["password"]
             user = authenticate(request,username=username,password=password)
             if user is not None:
-                login(request,user)
                 if user.is_staff:
-                    print("STAFF")
-                    return redirect("staff_home")
+                    messages.error(request,"Staff accounts cannot login here.")
+                    return redirect("customer_login")
+                login(request,user)
                 next_url = request.GET.get("next")
                 if next_url:
                     return redirect(next_url)
@@ -78,7 +78,30 @@ def customer_login(request):
 
 def customer_logout(request):
     logout(request)
-    return redirect("customer_login")
+    return redirect("home")
+
+def staff_login(request):
+    if request.method == "POST":
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+            user = authenticate(request,username=username,password=password)
+            if user is not None:
+                if not user.is_staff:
+                    messages.error(request,"You are not a staff member.")
+                    return redirect("staff_login")
+                login(request,user)
+                return redirect("staff_home")
+            else:
+                messages.error(request,"Incorrect Username or Password.")
+    else:
+        form = UserLoginForm()
+    return render(request,"core/staff_login.html",{"form":form})
+
+def staff_logout(request):
+    logout(request)
+    return redirect("home")
 
 @staff_member_required
 def add_product(request):
