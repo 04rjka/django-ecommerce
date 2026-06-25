@@ -11,6 +11,7 @@ from django.conf import settings
 import requests
 import uuid
 from django.utils import timezone
+from django.urls import reverse
 
 CASHFREE_BASE_URL = (
     'https://sandbox.cashfree.com/pg'
@@ -66,6 +67,9 @@ def customer_login(request):
                 if user.is_staff:
                     print("STAFF")
                     return redirect("staff_home")
+                next_url = request.GET.get("next")
+                if next_url:
+                    return redirect(next_url)
                 return redirect("home")
             else:
                 messages.error(request,"Incorrect Username or Password.")
@@ -110,9 +114,15 @@ def add_product_images(request,pk):
 def product_page(request,pk):
     product = Product.objects.prefetch_related("images","reviews").get(pk=pk)
     variants = ProductVariant.objects.filter(product=product)
-    # print(variants)
-    already_reviewed = product.reviews.filter(user=request.user).exists()
+    if request.user.is_authenticated:
+        already_reviewed = product.reviews.filter(user=request.user).exists()
+    else:
+        already_reviewed = False
     if request.method == "POST":
+        if not request.user.is_authenticated:
+            return redirect(
+                f"{reverse('customer_login')}?next={request.path}"
+            )
         form = ProductReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
